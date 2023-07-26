@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Livewire\Admin\RolesController;
+use App\Models\Role;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,3 +26,4 @@ Route::get('/', function () {
 
 // Route::get('/admin', 'Admin\DashboardController@index')->name('admin.dashboard');
 Route::get('/admin', 'App\Http\Controllers\Admin\DashboardController@index')->name('admin.dashboard');
+Route::get('/admin/roles', RolesController::class)->name('roles');
