@@ -4,28 +4,24 @@ namespace App\Http\Livewire\Admin;
 
 use Livewire\Component;
 use App\Models\Role;
+use Illuminate\Support\Facades\Session;
 
-class RolesController extends Component
+class Roles extends Component
 {
     public $role;
-    public $role_id = 1;
+    public $role_id;
     public $name;
     public $description;
     public $isOpen = false;
-    public $cantidad = 3;
+
+    protected $roles;
 
     public function render()
     {
         $roles = Role::all();
-        $cantidad = $this->cantidad;
-        $role_id = $this->role_id;
-        return view('livewire.admin.roles', compact('roles', 'cantidad', 'role_id'))->layout('layouts.adminlte');
+        return view('livewire.admin.roles', compact('roles'))->layout('layouts.adminlte');
     }
 
-    public function incrementar()
-    {
-        $this->cantidad = $this->cantidad + 1;
-    }
 
     public function create()
     {
@@ -53,8 +49,11 @@ class RolesController extends Component
 
     public function edit($id)
     {
+
         $role = Role::findOrFail($id);
-        $this->role = $role->id;
+        // dd($role);
+        logger("Llego al metodo Edit y obtengo el rol");
+        $this->role_id = $id;
         $this->name = $role->name;
         $this->description = $role->description;
         $this->openModal();

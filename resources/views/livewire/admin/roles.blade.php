@@ -1,50 +1,55 @@
-@section('content')
-    <div>
-        <div class="container mt-4">
-            <div class="row">
-                <div class="col-md-8">
-                    <h3>Roles</h3>
-                </div>
-                <div class="col-md-4 text-right">
-                    <button wire:click="create" class="btn btn-primary" data-toggle="modal" data-target="#roleModal">Agregar
-                        Rol</button>
-                    <button wire:click.prevent="incrementar()">Incrementar</button>
-                </div>
+<div>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-8">
+                <h3>Roles</h3>
             </div>
-
-            <!-- Roles Table -->
-            <h1>Cantidad {{ $cantidad }}</h1>
-            <table class="table table-bordered mt-3">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Nombre</th>
-                        <th>Descripción</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($roles as $role)
-                        <tr>
-                            <td>{{ $role->id }}</td>
-                            <td>{{ $role->name }}</td>
-                            <td>{{ $role->description }}</td>
-                            <td>
-                                <button wire:click="edit({{ $role->id }})" class="btn btn-sm btn-primary"
-                                    data-toggle="modal" data-target="#roleModal">Editar</button>
-                                <button wire:click="delete({{ $role->id }})" class="btn btn-sm btn-danger"
-                                    onclick="return confirm('¿Estás seguro de eliminar este rol?')">Eliminar</button>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
+            <div class="col-md-4 text-right">
+                <button wire:click="create" class="btn btn-primary" data-toggle="modal" data-target="#roleModal">Agregar
+                    Rol</button>
+                <button wire:click="create" class="btn btn-primary">Agregar Rol</button>
+                {{-- <button wire:click.prevent="incrementar()">Incrementar</button> --}}
+            </div>
         </div>
 
+        <!-- Roles Table -->
+        {{-- <h1>Cantidad {{ $cantidad }}</h1> --}}
+        <table class="table table-bordered mt-3">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($roles as $role)
+                    <tr>
+                        <td>{{ $role->id }}</td>
+                        <td>{{ $role->name }}</td>
+                        <td>{{ $role->description }}</td>
+                        <td>
+                            <button wire:click="edit({{ $role->id }})" class="btn btn-sm btn-primary"
+                                data-toggle="modal" data-target="#roleModal">Editar</button>
+                            <button wire:click="delete({{ $role->id }})" class="btn btn-sm btn-danger"
+                                onclick="return confirm('¿Estás seguro de eliminar este rol?')">Eliminar</button>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
 
-        <!-- Role Form Modal -->
-        <div class="modal fade" id="roleModal" tabindex="-1" role="dialog" aria-labelledby="roleModalLabel"
+
+    <!-- Role Form Modal -->
+    @if ($isOpen)
+
+        <h1>Modal abierto</h1>
+
+        <div class="modal" id="roleModal" tabindex="-1" role="dialog" aria-labelledby="roleModalLabel"
             aria-hidden="true">
+            {{-- <div class="modal" tabindex="-1" role="dialog" wire:ignore.self> --}}
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -61,14 +66,14 @@
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="name">Nombre del Rol</label>
+                            <label for="name">Rol</label>
                             <input type="text" class="form-control" wire:model="name">
                             @error('name')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label for="description">Descripción del Rol</label>
+                            <label for="description">Descripción</label>
                             <textarea class="form-control" wire:model="description"></textarea>
                             @error('description')
                                 <span class="text-danger">{{ $message }}</span>
@@ -85,8 +90,8 @@
                     </div>
                 </div>
             </div>
+
         </div>
+    @endif
 
-    </div>
-
-@stop
+</div>

@@ -8,7 +8,7 @@
 
 
 @section('content')
-
+    {{ $slot }}
 @stop
 
 

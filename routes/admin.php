@@ -1,7 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Livewire\Admin\Roles;
+use App\Http\Livewire\Admin\Users;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +16,6 @@ use App\Http\Controllers\HomeController;
 |
 */
 
-Auth::routes();
-
-Route::get('/', [HomeController::class, 'index']);
+Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+Route::get('/roles', Roles::class)->name('roles');
+Route::get('/users', Users::class)->name('users');
