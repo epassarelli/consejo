@@ -13,6 +13,7 @@ class Roles extends Component
     public $name;
     public $description;
     public $isOpen = false;
+    public $muestraModal = 'none';
 
     protected $roles;
 
@@ -86,12 +87,14 @@ class Roles extends Component
 
     public function closeModal()
     {
-        $this->isOpen = false;
+        // $this->isOpen = false;
+        $this->muestraModal = 'none';
     }
 
     public function openModal()
     {
-        $this->isOpen = true;
+        // $this->isOpen = true;
+        $this->muestraModal = 'block';
     }
 
     private function resetInputFields()
