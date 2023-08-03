@@ -33,7 +33,7 @@
         <!-- Header
         ============================================= -->
         {{-- <header> --}}
-        @include('layouts.canvas7.header')
+        @include('layouts.somos.header')
         {{-- </header> --}}
 
 
@@ -43,7 +43,7 @@
         {{-- </main> --}}
 
         {{-- <footer> --}}
-        @include('layouts.canvas7.footer')
+        @include('layouts.somos.footer')
         {{-- </footer> --}}
     </div><!-- #wrapper end -->
 
