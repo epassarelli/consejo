@@ -18,7 +18,8 @@
                                 <img src="images/footer-widget-logo.png" alt="Image" class="footer-logo">
 
                                 <p>We believe in <strong>Simple</strong>, <strong>Creative</strong> &amp;
-                                    <strong>Flexible</strong> Design Standards.</p>
+                                    <strong>Flexible</strong> Design Standards.
+                                </p>
 
                                 <div
                                     style="background: url('images/world-map.png') no-repeat center center; background-size: 100%;">
@@ -40,17 +41,34 @@
 
                             <div class="widget widget_links">
 
-                                <h4>Blogroll</h4>
+                                <h4>Secciones</h4>
 
                                 <ul>
-                                    <li><a href="https://codex.wordpress.org/">Documentation</a></li>
-                                    <li><a href="https://wordpress.org/support/forum/requests-and-feedback">Feedback</a>
+                                    <li>
+                                        <a href="{{ route('home') }}">
+                                            <div>Inicio</div>
+                                        </a>
                                     </li>
-                                    <li><a href="https://wordpress.org/extend/plugins/">Plugins</a></li>
-                                    <li><a href="https://wordpress.org/support/">Support Forums</a></li>
-                                    <li><a href="https://wordpress.org/extend/themes/">Themes</a></li>
-                                    <li><a href="https://wordpress.org/news/">Canvas Blog</a></li>
-                                    <li><a href="https://planet.wordpress.org/">Canvas Planet</a></li>
+                                    <li>
+                                        <a href="{{ route('quienes-somos') }}">
+                                            <div>Quienes somos</div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('haces-falta') }}">
+                                            <div>Haces falta</div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('ellos-tambien-son-otros') }}">
+                                            <div>Ellos también son otros</div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('registrate') }}">
+                                            <div>Registrate</div>
+                                        </a>
+                                    </li>
                                 </ul>
 
                             </div>
@@ -60,7 +78,7 @@
                         <div class="col-md-4">
 
                             <div class="widget">
-                                <h4>Recent Posts</h4>
+                                <h4>Ultimas publicaciones</h4>
 
                                 <div class="posts-sm row col-mb-30" id="post-list-footer">
                                     <div class="entry col-12">
@@ -127,14 +145,14 @@
                                         <div class="counter counter-small"><span data-from="50" data-to="15065421"
                                                 data-refresh-interval="80" data-speed="3000" data-comma="true"></span>
                                         </div>
-                                        <h5 class="mb-0">Total Downloads</h5>
+                                        <h5 class="mb-0">Kms Recorridos</h5>
                                     </div>
 
                                     <div class="col-lg-6">
                                         <div class="counter counter-small"><span data-from="100" data-to="18465"
                                                 data-refresh-interval="50" data-speed="2000" data-comma="true"></span>
                                         </div>
-                                        <h5 class="mb-0">Clients</h5>
+                                        <h5 class="mb-0">Platos de comida</h5>
                                     </div>
                                 </div>
 
@@ -143,8 +161,8 @@
 
                         <div class="col-md-5 col-lg-12">
                             <div class="widget subscribe-widget">
-                                <h5><strong>Subscribe</strong> to Our Newsletter to get Important News, Amazing Offers
-                                    &amp; Inside Scoops:</h5>
+                                <h5><strong>Suscríbase</strong> a nuestro boletín para recibir noticias importantes,
+                                    ofertas increíbles y primicias internas:</h5>
                                 <div class="widget-subscribe-form-result"></div>
                                 <form id="widget-subscribe-form" action="include/subscribe.php" method="post"
                                     class="mb-0">
@@ -152,7 +170,7 @@
                                         <div class="input-group-text"><i class="bi-envelope-plus"></i></div>
                                         <input type="email" id="widget-subscribe-form-email"
                                             name="widget-subscribe-form-email" class="form-control required email"
-                                            placeholder="Enter your Email">
+                                            placeholder="Ingrese su email">
                                         <button class="btn btn-success" type="submit">Subscribe</button>
                                     </div>
                                 </form>
@@ -169,17 +187,17 @@
                                             <i class="fa-brands fa-facebook-f"></i>
                                             <i class="fa-brands fa-facebook-f"></i>
                                         </a>
-                                        <a href="#" class="ms-1"><small class="d-block"><strong>Like
-                                                    Us</strong><br>on Facebook</small></a>
+                                        <a href="#" class="ms-1"><small
+                                                class="d-block"><strong>Seguinos</strong><br>en Facebook</small></a>
                                     </div>
                                     <div class="col-6 col-md-12 col-lg-6 d-flex align-items-center">
                                         <a href="#"
-                                            class="social-icon text-white border-transparent bg-rss me-2 mb-0 float-none">
-                                            <i class="fa-solid fa-rss"></i>
-                                            <i class="fa-solid fa-rss"></i>
+                                            class="social-icon text-white border-transparent bg-twitter me-2 mb-0 float-none">
+                                            <i class="fa-brands fa-twitter"></i>
+                                            <i class="fa-brands fa-twitter"></i>
                                         </a>
                                         <a href="#" class="ms-1"><small
-                                                class="d-block"><strong>Subscribe</strong><br>to RSS Feeds</small></a>
+                                                class="d-block"><strong>Seguinos</strong><br>en Twitter</small></a>
                                     </div>
                                 </div>
 
