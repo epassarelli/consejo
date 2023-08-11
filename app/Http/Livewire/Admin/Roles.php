@@ -76,7 +76,7 @@ class Roles extends Component
 
     public function delete($id)
     {
-        User::find($id)->delete();
+        Role::find($id)->delete();
 
     }
 
