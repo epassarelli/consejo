@@ -22,7 +22,7 @@
 @section('js')
     @stack('modals')
     @livewireScripts
-    <script>
+    {{-- <script>
         console.log('Hi!');
-    </script>
+    </script> --}}
 @stop

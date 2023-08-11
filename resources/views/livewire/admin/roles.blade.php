@@ -40,53 +40,53 @@
 
     </div>
 
+    @if ($muestraModal == 'block')
+        <!-- Role Form Modal -->
+        <div class="modal fade show" id="roleModal" tabindex="-1" role="dialog" aria-labelledby="roleModalLabel"
+            aria-hidden="true" style="display: {{ $muestraModal }}">
+            {{-- <div class="modal" tabindex="-1" role="dialog" wire:ignore.self> --}}
 
-    <!-- Role Form Modal -->
-    <div class="modal fade show" id="roleModal" tabindex="-1" role="dialog" aria-labelledby="roleModalLabel"
-        aria-hidden="true" style="display: {{ $muestraModal }}">
-        {{-- <div class="modal" tabindex="-1" role="dialog" wire:ignore.self> --}}
-
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="roleModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="roleModalLabel">
+                            @if ($role_id)
+                                Editar Rol
+                            @else
+                                Crear Nuevo Rol
+                            @endif
+                        </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="name">Rol</label>
+                            <input type="text" class="form-control" wire:model="name">
+                            @error('name')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Descripción</label>
+                            <textarea class="form-control" wire:model="description"></textarea>
+                            @error('description')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                         @if ($role_id)
-                            Editar Rol
+                            <button wire:click="update" class="btn btn-primary">Actualizar</button>
                         @else
-                            Crear Nuevo Rol
+                            <button wire:click="store" class="btn btn-primary">Guardar</button>
                         @endif
-                    </h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="name">Rol</label>
-                        <input type="text" class="form-control" wire:model="name">
-                        @error('name')
-                            <span class="text-danger">{{ $message }}</span>
-                        @enderror
                     </div>
-                    <div class="form-group">
-                        <label for="description">Descripción</label>
-                        <textarea class="form-control" wire:model="description"></textarea>
-                        @error('description')
-                            <span class="text-danger">{{ $message }}</span>
-                        @enderror
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                    @if ($role_id)
-                        <button wire:click="update" class="btn btn-primary">Actualizar</button>
-                    @else
-                        <button wire:click="store" class="btn btn-primary">Guardar</button>
-                    @endif
                 </div>
             </div>
+
         </div>
-
-    </div>
-
+    @endif
 </div>
