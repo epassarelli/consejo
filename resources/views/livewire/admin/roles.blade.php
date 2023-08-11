@@ -5,20 +5,20 @@
                 <h3>Roles</h3>
             </div>
             <div class="col-md-4 text-right">
-                <button wire:click="create" class="btn btn-primary" data-toggle="modal" data-target="#roleModal">Agregar
+                <button wire:click="create" class="btn btn-success" data-toggle="modal" data-target="#roleModal"><i class="fas fa-plus-circle mr-2" style="color: white;"></i>Agregar
                     Rol</button>
             </div>
         </div>
 
         <!-- Roles Table -->
         {{-- <h1>Cantidad {{ $cantidad }}</h1> --}}
-        <table class="table table-bordered mt-3">
+        <table class="table table-hover table-bordered mt-3">
             <thead>
                 <tr>
-                    <th>#</th>
-                    <th>Nombre</th>
-                    <th>Descripción</th>
-                    <th>Acciones</th>
+                    <th class="text-center">Id</th>
+                    <th class="text-center">Nombre</th>
+                    <th class="text-center">Descripción</th>
+                    <th  style="width: 10%" class="text-center">Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -27,11 +27,10 @@
                         <td>{{ $role->id }}</td>
                         <td>{{ $role->name }}</td>
                         <td>{{ $role->description }}</td>
-                        <td>
+                        <td class="p-1 text-center">
                             <button wire:click="edit({{ $role->id }})" class="btn btn-sm btn-primary"
-                                data-toggle="modal" data-target="#roleModal">Editar</button>
-                            <button wire:click="delete({{ $role->id }})" class="btn btn-sm btn-danger"
-                                onclick="return confirm('¿Estás seguro de eliminar este rol?')">Eliminar</button>
+                                data-toggle="modal" data-target="#roleModal" title="Editar"><i class="fa fa-edit" ></i></button>
+                            <button wire:click="$emit('alertDelete',{{ $role->id }})" class="btn btn-sm btn-danger" title="Eliminar"><i class="fas fa-trash-alt" style="color: white "></i></button>
                         </td>
                     </tr>
                 @endforeach
@@ -77,9 +76,9 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                        @if ($role_id)
-                            <button wire:click="update" class="btn btn-primary">Actualizar</button>
+                        <button type="button" wire:click="closeModal" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        @if ($role_id !==0 )
+                            <button wire:click="store" class="btn btn-primary">Actualizar</button>
                         @else
                             <button wire:click="store" class="btn btn-primary">Guardar</button>
                         @endif

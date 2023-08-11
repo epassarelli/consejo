@@ -16,6 +16,7 @@ class Roles extends Component
     public $muestraModal = 'none';
 
     protected $roles;
+    protected $listeners = ['delete'];
 
     public function render()
     {
@@ -24,65 +25,59 @@ class Roles extends Component
     }
 
 
-    public function create()
+    protected function rules()
     {
-        $this->resetInputFields();
-        $this->openModal();
+        return [
+            'name' => 'required',
+        ];
     }
 
-    public function store()
+    protected function messages()
     {
-        $this->validate([
-            'name' => 'required|unique:roles',
-            'description' => 'nullable',
-        ]);
+        return [
+            'name.required' => 'El nombre del rol es requerido',
+        ];
+    }
 
-        Role::create([
-            'name' => $this->name,
-            'description' => $this->description,
-        ]);
-
-        session()->flash('message', 'Rol creado exitosamente.');
-
-        $this->closeModal();
+    public function create()
+    {
+        $this->role_id = 0;
         $this->resetInputFields();
+        $this->openModal();
     }
 
     public function edit($id)
     {
 
         $role = Role::findOrFail($id);
-        // dd($role);
-        logger("Llego al metodo Edit y obtengo el rol");
         $this->role_id = $id;
         $this->name = $role->name;
         $this->description = $role->description;
         $this->openModal();
     }
 
-    public function update()
+    public function store()
     {
-        $this->validate([
-            'name' => 'required|unique:roles,name,' . $this->role,
-            'description' => 'nullable',
-        ]);
+        $this->validate();
 
-        $role = Role::findOrFail($this->role);
-        $role->update([
-            'name' => $this->name,
-            'description' => $this->description,
-        ]);
 
-        session()->flash('message', 'Rol actualizado exitosamente.');
+        Role::updateOrCreate(
+            ['id' => $this->role_id],
+            [
+                'name' => $this->name,
+                'description' => $this->description
+            ]
+        );
 
         $this->closeModal();
         $this->resetInputFields();
+        $this->emit('mensajePositivo', ['mensaje' => 'Operacion exitosa']);
     }
 
     public function delete($id)
     {
-        Role::find($id)->delete();
-        session()->flash('message', 'Rol eliminado exitosamente.');
+        User::find($id)->delete();
+
     }
 
     public function closeModal()
