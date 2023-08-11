@@ -26,7 +26,6 @@ class Users extends Component
         return view('livewire.admin.users', compact('users'))->layout('layouts.adminlte');
     }
 
-
     protected function rules()
     {
         if ($this->muestraModalPass == 'none') {
@@ -69,7 +68,6 @@ class Users extends Component
         $this->openModal();
     }
 
-
     public function changepass($id)
     {
 
@@ -80,8 +78,6 @@ class Users extends Component
         $this->password = null;
         $this->openModalPass();
     }
-
-
 
     public function store()
     {
@@ -101,7 +97,6 @@ class Users extends Component
         $this->resetInputFields();
         $this->emit('mensajePositivo', ['mensaje' => 'Operacion exitosa']);
     }
-
 
     public function cambiapass()
     {
@@ -143,7 +138,6 @@ class Users extends Component
         $this->email = '';
         $this->password = '';
     }
-
 
     public function closeModalPass()
     {
