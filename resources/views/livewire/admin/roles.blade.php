@@ -5,7 +5,8 @@
                 <h3>Roles</h3>
             </div>
             <div class="col-md-4 text-right">
-                <button wire:click="create" class="btn btn-success" data-toggle="modal" data-target="#roleModal"><i class="fas fa-plus-circle mr-2" style="color: white;"></i>Agregar
+                <button wire:click="create" class="btn btn-success" data-toggle="modal" data-target="#roleModal"><i
+                        class="fas fa-plus-circle mr-2" style="color: white;"></i>Agregar
                     Rol</button>
             </div>
         </div>
@@ -18,7 +19,7 @@
                     <th class="text-center">Id</th>
                     <th class="text-center">Nombre</th>
                     <th class="text-center">Descripción</th>
-                    <th  style="width: 10%" class="text-center">Acciones</th>
+                    <th style="width: 10%" class="text-center">Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -29,8 +30,10 @@
                         <td>{{ $role->description }}</td>
                         <td class="p-1 text-center">
                             <button wire:click="edit({{ $role->id }})" class="btn btn-sm btn-primary"
-                                data-toggle="modal" data-target="#roleModal" title="Editar"><i class="fa fa-edit" ></i></button>
-                            <button wire:click="$emit('alertDelete',{{ $role->id }})" class="btn btn-sm btn-danger" title="Eliminar"><i class="fas fa-trash-alt" style="color: white "></i></button>
+                                data-toggle="modal" data-target="#roleModal" title="Editar"><i
+                                    class="fa fa-edit"></i></button>
+                            <button wire:click="$emit('alertDelete',{{ $role->id }})" class="btn btn-sm btn-danger"
+                                title="Eliminar"><i class="fas fa-trash-alt" style="color: white "></i></button>
                         </td>
                     </tr>
                 @endforeach
@@ -60,6 +63,15 @@
                         </button>
                     </div>
                     <div class="modal-body">
+                        @if ($accion == 'crear')
+                            <div class="form-group">
+                                <label for="role_id">Id</label>
+                                <input type="text" class="form-control" wire:model="role_id">
+                                @error('role_id')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        @endif
                         <div class="form-group">
                             <label for="name">Rol</label>
                             <input type="text" class="form-control" wire:model="name">
@@ -76,8 +88,9 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" wire:click="closeModal" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                        @if ($role_id !==0 )
+                        <button type="button" wire:click="closeModal" class="btn btn-secondary"
+                            data-dismiss="modal">Cerrar</button>
+                        @if ($role_id !== 0)
                             <button wire:click="store" class="btn btn-primary">Actualizar</button>
                         @else
                             <button wire:click="store" class="btn btn-primary">Guardar</button>

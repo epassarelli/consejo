@@ -14,6 +14,7 @@ class Roles extends Component
     public $description;
     public $isOpen = false;
     public $muestraModal = 'none';
+    public $accion;
 
     protected $roles;
     protected $listeners = ['delete'];
@@ -27,21 +28,39 @@ class Roles extends Component
 
     protected function rules()
     {
-        return [
-            'name' => 'required',
-        ];
+        if ($this->accion == 'crear') {
+            return [
+                'role_id' => 'required | not_in:0 | unique:roles,id',
+                'name' => 'required',
+            ];
+        } else {
+            return [
+                'name' => 'required',
+            ];
+        }
     }
 
     protected function messages()
     {
-        return [
-            'name.required' => 'El nombre del rol es requerido',
-        ];
+
+        if ($this->accion == 'crear') {
+            return [
+                'role_id.not_in'   => 'Debe ingresar un id y no puede ser 0',
+                'role_id.required' => 'Debe ingresar un id y no puede ser 0',
+                'role_id.unique'   => 'El id igresado ya existe',
+                'name.required' => 'El nombre del rol es requerido',
+            ];
+        } else {
+            return [
+                'name.required' => 'El nombre del rol es requerido',
+            ];
+        }
     }
 
     public function create()
     {
         $this->role_id = 0;
+        $this->accion = 'crear';
         $this->resetInputFields();
         $this->openModal();
     }
@@ -50,6 +69,7 @@ class Roles extends Component
     {
 
         $role = Role::findOrFail($id);
+        $this->accion = 'editar';
         $this->role_id = $id;
         $this->name = $role->name;
         $this->description = $role->description;
@@ -77,7 +97,6 @@ class Roles extends Component
     public function delete($id)
     {
         Role::find($id)->delete();
-
     }
 
     public function closeModal()
