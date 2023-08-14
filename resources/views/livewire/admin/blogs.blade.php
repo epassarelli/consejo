@@ -128,7 +128,7 @@
                                     @endif
                                 @else
                                     @if ($accion === 'editar')
-                                            <img class="h-20 w-20" src="{{ asset('blogs/' . $imagen) }}"
+                                            <img class="h-20 w-20" src="{{ asset('storage/img/blogs/' . $imagen) }}"
                                                 alt="">
                                     @endif
 

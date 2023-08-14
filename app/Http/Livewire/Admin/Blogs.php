@@ -131,7 +131,7 @@ class Blogs extends Component
 
         if ($this->cambioImg) {
             $imagen_name = $this->imagen->getClientOriginalName();
-            $upload_imagen = $this->imagen->storeAs('blogs', $imagen_name);
+            $upload_imagen = $this->imagen->storeAs('public/img/blogs', $imagen_name);
             $this->cambioImg = false;
         } else {
             $imagen_name = $this->imagen;
