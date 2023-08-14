@@ -326,7 +326,11 @@ return [
             'url' => 'admin/tiposblog',
             'icon' => 'fa fa-book',
         ],
-
+        [
+            'text' => 'Blogs',
+            'url' => 'admin/blogs',
+            'icon' => 'fa fa-comment',
+        ],
 
         // [
         //     'text'        => 'pages',
