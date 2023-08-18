@@ -331,6 +331,13 @@ return [
             'url' => 'admin/blogs',
             'icon' => 'fa fa-comment',
         ],
+        [
+            'text' => 'Eventos',
+            'url' => 'admin/eventos',
+            'icon' => 'fa fa-address-book',
+        ],
+
+
 
         // [
         //     'text'        => 'pages',
