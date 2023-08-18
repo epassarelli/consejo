@@ -4,36 +4,67 @@ namespace App\Http\Livewire\Admin;
 
 use Livewire\Component;
 use App\Models\Evento;
-use App\Models\Tipoblog;
+use App\Models\Evento_asisten;
 use Illuminate\Support\Facades\Session;
 
 class Eventos extends Component
 {
+    //* eventos *//
     public $evento;
     public $evento_id;
     public $titulo,$descripcion,$lugar,$fecha,$link_mapa,$estado;
     public $muestraModal = 'none';
-    public $muestraModalAsisten = 'none';
-
     protected $eventos;
+
+
+    //* asistentes *//
+    public $evento_asisten;
+    public $evento_asisten_id=0;
+    public $nombre,$email,$telefono;
+    public $muestraModalAsisten = 'none';
+    public $muestraModalDatosAsisten = 'none';
+    protected $eventos_asisten;
+
+
+
+
     protected $listeners = ['delete'];
 
     public function render()
     {
         $this->eventos = Evento::paginate(10);
-        return view('livewire.admin.eventos', ['eventos' => $this->eventos])->layout('layouts.adminlte');
+        if ($this->evento_id) {
+            $this->eventos_asisten = Evento_asisten::where('evento_id','=',$this->evento_id)->get();
+        }
+
+        return view('livewire.admin.eventos', [
+            'eventos' => $this->eventos,
+            'eventos_asisten' => $this->eventos_asisten])
+            ->layout('layouts.adminlte');
     }
 
 
+    public function volver()
+    {
+        return redirect()->route('eventos');
+    }
+
     protected function rules()
     {
-        return [
-            'titulo'      => 'required',
-            'descripcion' => 'required',
-            'lugar'       => 'required',
-            'fecha'       => 'required',
-            'link_mapa'   => 'url',
-        ];
+        if ($this->muestraModalDatosAsisten !== 'block') {
+            return [
+                'titulo'      => 'required',
+                'descripcion' => 'required',
+                'lugar'       => 'required',
+                'fecha'       => 'required',
+                'link_mapa'   => 'url',
+            ];
+        }else{
+            return [
+                'nombre'      => 'required',
+                'email'       => 'required | email',
+            ];
+        }
     }
 
     protected function messages()
@@ -42,7 +73,10 @@ class Eventos extends Component
             'titulo.required'      => 'El titulo del evento  es requerido',
             'descripcion.required' => 'La descripcion del evento es requerido',
             'lugar.required'       => 'El lugar del evento es requerido',
-            'link_mapa.url'        => 'El link no es un formato url.'
+            'link_mapa.url'        => 'El link no es un formato url.',
+            'nombre.required'      => 'El nombre del asistente es requerido',
+            'email.required'       => 'El email es requerido',
+            'email.mail'           => 'El mail no tiene un formato valido',
         ];
     }
 
@@ -93,6 +127,13 @@ class Eventos extends Component
 
     }
 
+
+    public function deleteAsisten($id)
+    {
+        Evento_asisten::find($id)->delete();
+
+    }
+
     public function closeModal()
     {
         // $this->isOpen = false;
@@ -120,6 +161,7 @@ class Eventos extends Component
 
 
     //****** metodos asistentes ********/
+
     public function closeModalAsisten()
     {
         // $this->isOpen = false;
@@ -132,11 +174,76 @@ class Eventos extends Component
         $this->muestraModalAsisten = 'block';
     }
 
-    public function Asisten()
+
+    public function closeModalDatosAsisten()
     {
-        $this->eventos = Evento::paginate(10);
-        return view('livewire.admin.eventos', ['eventos' => $this->eventos])->layout('layouts.adminlte');
+        // $this->isOpen = false;
+        $this->muestraModalDatosAsisten = 'none';
     }
+
+
+    public function openModalDatosAsisten()
+    {
+        // $this->isOpen = true;
+        $this->muestraModalDatosAsisten = 'block';
+    }
+
+
+    private function resetInputFieldsDatosAsisten()
+    {
+        $this->evento_asisten_id=0;
+        $this->nombre='';
+        $this->email='';
+        $this->telefono='';
+    }
+
+    public function createAsisten()
+    {
+        $this->resetInputFieldsDatosAsisten();
+        $this->openModalDatosAsisten();
+    }
+
+    public function editAsisten($id)
+    {
+
+        $evento_asisten = Evento_asisten::findOrFail($id);
+        $this->evento_asisten_id=$id;
+        $this->nombre=$evento_asisten->nombre;
+        $this->email=$evento_asisten->email;
+        $this->telefono=$evento_asisten->telefono;
+        $this->openModalDatosAsisten();
+    }
+
+
+    public function asistentes($evento_id)
+    {
+        $this->evento_id = $evento_id;
+        $this->evento = Evento::where('id','=',$evento_id)->first();
+        $this->eventos_asisten = Evento_asisten::where('evento_id','=',$evento_id)->get();
+        $this->openModalAsisten();
+    }
+
+    public function storeAsisten()
+    {
+        $this->validate();
+
+        Evento_asisten::updateOrCreate(
+            [
+                'id' => $this->evento_asisten_id,
+            ],
+            [
+                'evento_id' => $this->evento_id,
+                'nombre' => $this->nombre,
+                'telefono' => $this->telefono,
+                'email' =>  $this->email,
+            ]
+        );
+
+        $this->closeModalDatosAsisten();
+        $this->resetInputFieldsDatosAsisten();
+        $this->emit('mensajePositivo', ['mensaje' => 'Operacion exitosa']);
+    }
+
 
 }
 
