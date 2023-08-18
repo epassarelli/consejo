@@ -49,7 +49,6 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="roleModalLabel2">
-                        <h1>{{ $evento_asisten_id}}</h1>
                         @if ($evento_asisten_id && $evento_asisten_id !==0)
                             Editar Asistente
                         @else
