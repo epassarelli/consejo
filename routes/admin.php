@@ -6,6 +6,7 @@ use App\Http\Livewire\Admin\Roles;
 use App\Http\Livewire\Admin\Users;
 use App\Http\Livewire\Admin\Tiposblog;
 use App\Http\Livewire\Admin\Blogs;
+use App\Http\Livewire\Admin\Contactos;
 use App\Http\Livewire\Admin\Eventos;
 
 /*
@@ -25,3 +26,5 @@ Route::get('/users', Users::class)->name('users');
 Route::get('/tiposblog', Tiposblog::class)->name('tiposblog');
 Route::get('/blogs', Blogs::class)->name('blogs');
 Route::get('/eventos', Eventos::class)->name('eventos');
+Route::get('/contactos', Contactos::class)->name('contactos');
+

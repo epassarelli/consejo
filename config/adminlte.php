@@ -336,7 +336,11 @@ return [
             'url' => 'admin/eventos',
             'icon' => 'fa fa-address-book',
         ],
-
+        [
+            'text' => 'Contactos',
+            'url' => 'admin/contactos',
+            'icon' => 'fa fa-address-card',
+        ],
 
 
         // [
