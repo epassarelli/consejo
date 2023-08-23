@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Admin;
 
 use Livewire\Component;
 use App\Models\Tipoblog;
+use App\Models\Blog;
 use Illuminate\Support\Facades\Session;
 
 class Tiposblog extends Component
@@ -78,7 +79,15 @@ class Tiposblog extends Component
 
     public function delete($id)
     {
-        Tipoblog::find($id)->delete();
+
+        $cantidad = Blog::where('tipoblog_id','=',$id)->count();
+        if ($cantidad  == 0) {
+            Tipoblog::find($id)->delete();
+            $this->emit('mensajePositivo', ['mensaje' => 'Registro eliminado']);
+        }else {
+            $this->emit('mensajeNegativo', ['mensaje' => 'Existen blogs asignados a este tipo de blog. No se eliminara']);
+        }
+
 
     }
 

@@ -14,6 +14,7 @@ class Blog extends Model
     protected $fillable = [
         'id',
         'tipoblog_id',
+        'titulo',
         'subtitulo',
         'volanta',
         'contenido',

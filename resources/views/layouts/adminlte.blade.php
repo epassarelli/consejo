@@ -40,11 +40,11 @@
            }).then((result) => {
                if (result.isConfirmed) {
                    Livewire.emit('delete', id);
-                   Swal.fire(
-                       'Borrado!',
-                       'Ha sido eliminado con éxito.',
-                       'success'
-                   )
+                //    Swal.fire(
+                //        'Borrado!',
+                //        'Ha sido eliminado con éxito.',
+                //        'success'
+                //    )
                }
            })
        })

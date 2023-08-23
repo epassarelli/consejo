@@ -17,7 +17,7 @@ class Blogs extends Component
 
     public $blog;
     public $blog_id;
-    public $name, $tipoblog_id, $subtitulo, $volanta, $contenido, $imagen, $link, $publicado, $usuario_id;
+    public $name, $tipoblog_id,$titulo,$subtitulo, $volanta, $contenido, $imagen, $link, $publicado, $usuario_id;
     public $isOpen = false;
     public $muestraModal = 'none';
     public $cambioImg = false;
@@ -33,6 +33,7 @@ class Blogs extends Component
             'blogs.id',
             'blogs.tipoblog_id',
             'tipos_blog.name',
+            'blogs.titulo',
             'blogs.subtitulo',
             'blogs.volanta',
             'blogs.contenido',
@@ -58,8 +59,9 @@ class Blogs extends Component
         if (($this->cambioImg === true && $this->accion === 'editar') ||  $this->accion === 'crear') {
             return [
                 'tipoblog_id' => 'required | not_in:0',
-                'subtitulo'   => 'required',
-                'volanta'     => 'required',
+                'titulo'   => 'required',
+                //'subtitulo'   => 'required',
+                //'volanta'     => 'required',
                 'contenido'   => 'required',
                 // 'imagen'      => 'required',
                 // 'link'        => 'required',
@@ -70,8 +72,9 @@ class Blogs extends Component
 
             return [
                 'tipoblog_id' => 'required | not_in:0',
-                'subtitulo'   => 'required',
-                'volanta'     => 'required',
+                'titulo'   => 'required',
+                //'subtitulo'   => 'required',
+                //'volanta'     => 'required',
                 'contenido'   => 'required',
                 // 'imagen'      => 'required',
                 // 'link'        => 'required',
@@ -89,8 +92,8 @@ class Blogs extends Component
         return [
             'tipoblog.id.required' => 'Debe seleccionar un tipo de Blog',
             'tipoblog.id.not_in'   => 'Debe seleccionar un tipo de Blog',
-            'subtitulo.required'   => 'Debe cargar un subtitulo',
-            'volanta.required'     => 'Debe cargar una volanta',
+            'titulo.required'   => 'Debe cargar un titulo',
+            //'volanta.required'     => 'Debe cargar una volanta',
             'contenido.required'   => 'Debe cargar un contenido',
             // 'imagen.required'      => 'Debe cargar una imagen',
             // 'link.required'        => 'Debe cargar un  link',
@@ -114,6 +117,7 @@ class Blogs extends Component
         $this->blog_id = $id;
         $this->tipoblog_id = $blog->tipoblog_id;
         $this->subtitulo = $blog->subtitulo;
+        $this->titulo = $blog->titulo;
         $this->volanta = $blog->volanta;
         $this->contenido = $blog->contenido;
         $this->imagen = $blog->imagen;
@@ -142,6 +146,7 @@ class Blogs extends Component
             ['id' => $this->blog_id],
             [
                 'tipoblog_id' => $this->tipoblog_id,
+                'titulo' => $this->titulo,
                 'subtitulo' => $this->subtitulo,
                 'volanta' => $this->volanta,
                 'contenido' => $this->contenido,
@@ -178,6 +183,7 @@ class Blogs extends Component
     {
         $this->blog_id = 0;
         $this->tipoblog_id = 0;
+        $this->titulo = '';
         $this->subtitulo = '';
         $this->volanta = '';
         $this->contenido = '';

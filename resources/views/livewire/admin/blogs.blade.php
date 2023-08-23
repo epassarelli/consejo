@@ -87,6 +87,14 @@
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
 
+                        <div class="form-group">
+                            <label for="titulo">Titulo</label>
+                            <textarea class="form-control" wire:model="titulo"></textarea>
+                            @error('titulo')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+
 
                         <div class="form-group">
                             <label for="subtitulo">Subtitulo</label>
@@ -114,12 +122,18 @@
 
                         <div class="form-group">
                             <label for="imagen">Imagen</label>
-                            <input type="file" id="imagen" wire:model="imagen" wire:change="cambioImagen" class="btn btn-warning">
+                            <input type="file" id="imagen" wire:model="imagen" wire:change="cambioImagen"
+                                class="btn btn-warning">
+                            @if ($imagen)
+                                <div class="form-group">
+                                    {{ $imagen }}
+                                </div>
+                            @endif
                             @error('imagen')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
 
-                            <div class="mb-3">
+                            {{-- <div class="mb-3">
                                 @if ($cambioImg)
                                     @if (gettype($imagen) === 'object')
                                         @if ($imagen->extension() == 'png' || $imagen->extension() == 'jpg' || $imagen->extension() == 'jpeg')
@@ -133,7 +147,7 @@
                                     @endif
 
                                 @endif
-                            </div>
+                            </div> --}}
                         </div>
 
                         <div class="form-group">
