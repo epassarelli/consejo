@@ -19,6 +19,8 @@ class Evento extends Model
         'fecha',
         'link_mapa',
         'estado',
+        'destinatarios',
+
     ];
 
 }

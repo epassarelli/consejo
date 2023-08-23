@@ -19,6 +19,7 @@ return new class extends Migration
             $table->date('fecha');
             $table->text('link_mapa');
             $table->tinyInteger('estado')->default(1);
+            $table->string('destinatarios',200);
             $table->timestamps();
         });
     }

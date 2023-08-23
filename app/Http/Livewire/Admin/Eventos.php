@@ -12,7 +12,7 @@ class Eventos extends Component
     //* eventos *//
     public $evento;
     public $evento_id;
-    public $titulo,$descripcion,$lugar,$fecha,$link_mapa,$estado;
+    public $titulo,$descripcion,$lugar,$fecha,$link_mapa,$estado,$destinatarios;
     public $muestraModal = 'none';
     protected $eventos;
 
@@ -97,6 +97,7 @@ class Eventos extends Component
         $this->fecha       = $evento->fecha;
         $this->link_mapa   = $evento->link_mapa;
         $this->estado      = $evento->estado;
+        $this->destinatarios = $evento->destinatarios;
         $this->openModal();
     }
 
@@ -113,6 +114,7 @@ class Eventos extends Component
                 'fecha' =>  $this->fecha,
                 'link_mapa' =>  $this->link_mapa,
                 'estado' => $this->estado,
+                'destinatarios' => $this->destinatarios,
             ]
         );
 
@@ -156,6 +158,7 @@ class Eventos extends Component
         $this->fecha=null;
         $this->link_mapa='';
         $this->estado=0;
+        $this->destinatarios;
 
     }
 

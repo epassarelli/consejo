@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('blogs', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('tipoblog_id');
+            $table->text('titulo');
             $table->string('subtitulo',100);
             $table->string('volanta',100);
             $table->text('contenido');

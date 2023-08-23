@@ -123,6 +123,10 @@
                             @enderror
                         </div>
 
+                        <div class="form-group">
+                            <label for="destinatarios">Destinatarios</label>
+                            <input type="text" class="form-control" wire:model="destinatarios">
+                        </div>
 
                         <div class="form-group">
                             <div class="form-group">
