@@ -10,15 +10,18 @@
 
             <div class="row col-mb-30">
 
-                <div class="col-md-6 text-center text-md-start">
-                    Viamonte 444, Ciudad Autónoma de Buenos Aires <br>Dirección General de Consejo Superior y Despacho
-                    4510-1100 Int.: 1178/1179, consejosup@rec.uba.ar <br>Dirección Gestión Consejo Superior 4510-1100
-                    Int.:1173 al 1176 gestion-cs@rec.uba.ar <br>
+                <div class="col-md-8 text-center text-md-start">
+                    Viamonte 444, Ciudad Autónoma de Buenos Aires
+                    <br>Dirección General de Consejo Superior y Despacho <i class="fa-solid fa-phone"></i> 4510-1100
+                    Int.: 1178/1179, - <i class="bi-envelope"></i> consejosup@rec.uba.ar
+                    <br>Dirección Gestión Consejo Superior <i class="fa-solid fa-phone"></i> 4510-1100
+                    Int.:1173 al 1176 - <i class="bi-envelope"></i> gestion-cs@rec.uba.ar
+                    <br>
                     {{-- <div class="copyright-links"><a href="#">Terminos de uso</a> / <a href="#">Politicas de
                             privacidad</a></div> --}}
                 </div>
 
-                <div class="col-md-6 text-center text-md-end">
+                {{-- <div class="col-md-4 text-center text-md-end">
                     <div class="d-flex justify-content-center justify-content-md-end mb-2">
                         <a href="#" class="social-icon border-transparent si-small h-bg-facebook">
                             <i class="fa-brands fa-facebook-f"></i>
@@ -64,7 +67,7 @@
                     <i class="bi-envelope"></i> info@canvas.com <span class="middot">&middot;</span> <i
                         class="fa-solid fa-phone"></i> +1-11-6541-6369 <span class="middot">&middot;</span> <i
                         class="bi-skype"></i> CanvasOnSkype
-                </div>
+                </div> --}}
 
             </div>
 
