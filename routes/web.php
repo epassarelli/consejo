@@ -22,7 +22,3 @@ use App\Http\Controllers\HacesFaltaController;
 Auth::routes();
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/quienes-somos', [NosotrosController::class, 'index'])->name('quienes-somos');
-Route::get('/haces_falta', [HacesFaltaController::class, 'index'])->name('haces-falta');
-Route::get('/ellos-tambien-son-otros', [EllosTambienController::class, 'index'])->name('ellos-tambien-son-otros');
-Route::get('/registrate', [RegistrateController::class, 'index'])->name('registrate');

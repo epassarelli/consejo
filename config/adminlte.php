@@ -14,7 +14,7 @@ return [
     |
     */
 
-    'title' => 'LBase 10 - Admin Panel',
+    'title' => 'Consejo Superior - Admin Panel',
     'title_prefix' => '',
     'title_postfix' => '',
 
@@ -63,8 +63,8 @@ return [
     |
     */
 
-    'logo' => '<b>LBase</b>10',
-    'logo_img' => 'img/webpass_ico_400x400.png',
+    'logo' => '<b>Consejo</b> Superior',
+    'logo_img' => 'img/uba.png',
     'logo_img_class' => 'brand-image img-circle elevation-3',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs',
@@ -86,7 +86,7 @@ return [
     'auth_logo' => [
         'enabled' => false,
         'img' => [
-            'path' => 'img/webpass_ico_400x400.png',
+            'path' => 'img/uba.png',
             'alt' => 'Auth Logo',
             'class' => '',
             'width' => 50,
@@ -109,8 +109,8 @@ return [
     'preloader' => [
         'enabled' => true,
         'img' => [
-            'path' => 'img/webpass_ico_400x400.png',
-            'alt' => 'WebPass Preloader Image',
+            'path' => 'img/uba.png',
+            'alt' => 'UBA - Consejo Superior',
             'effect' => 'animation__shake',
             'width' => 60,
             'height' => 60,
@@ -321,26 +321,26 @@ return [
             'url' => 'admin/users',
             'icon' => 'fas fa-fw fa-users',
         ],
-        [
-            'text' => 'Tipos de Blog',
-            'url' => 'admin/tiposblog',
-            'icon' => 'fa fa-book',
-        ],
-        [
-            'text' => 'Blogs',
-            'url' => 'admin/blogs',
-            'icon' => 'fa fa-comment',
-        ],
-        [
-            'text' => 'Eventos',
-            'url' => 'admin/eventos',
-            'icon' => 'fa fa-address-book',
-        ],
-        [
-            'text' => 'Contactos',
-            'url' => 'admin/contactos',
-            'icon' => 'fa fa-address-card',
-        ],
+        // [
+        //     'text' => 'Tipos de Blog',
+        //     'url' => 'admin/tiposblog',
+        //     'icon' => 'fa fa-book',
+        // ],
+        // [
+        //     'text' => 'Blogs',
+        //     'url' => 'admin/blogs',
+        //     'icon' => 'fa fa-comment',
+        // ],
+        // [
+        //     'text' => 'Eventos',
+        //     'url' => 'admin/eventos',
+        //     'icon' => 'fa fa-address-book',
+        // ],
+        // [
+        //     'text' => 'Contactos',
+        //     'url' => 'admin/contactos',
+        //     'icon' => 'fa fa-address-card',
+        // ],
 
 
         // [

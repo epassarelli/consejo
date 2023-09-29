@@ -32,19 +32,14 @@
 
         <!-- Header
         ============================================= -->
-        {{-- <header> --}}
-        @include('layouts.somos.header')
-        {{-- </header> --}}
 
+        @include('layouts.consejo.header')
 
-
-        {{-- <main> --}}
         @yield('content')
-        {{-- </main> --}}
 
-        {{-- <footer> --}}
-        @include('layouts.somos.footer')
-        {{-- </footer> --}}
+        @include('layouts.consejo.footer')
+
+
     </div><!-- #wrapper end -->
 
     <!-- Go To Top
