@@ -1,5 +1,5 @@
 # Imagen base
-FROM php:8.1-apache
+FROM php:8.2-apache
 
 # Instalar dependencias
 RUN apt-get update && apt-get install -y \
@@ -10,11 +10,13 @@ RUN apt-get update && apt-get install -y \
   && docker-php-ext-install zip pdo_mysql
 
 # Configurar Apache
-COPY .docker/vhost.conf /etc/apache2/sites-available/000-default.conf
+COPY ./apache.conf /etc/apache2/sites-available/000-default.conf
+
 RUN a2enmod rewrite
+ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
 
 # Configurar PHP
-COPY .docker/php.ini /usr/local/etc/php/
+# COPY .docker/php.ini /usr/local/etc/php/
 
 # Instalar Composer
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
@@ -26,10 +28,14 @@ WORKDIR /var/www/html
 COPY . /var/www/html
 
 # Instalar dependencias de Composer
-RUN composer install --ignore-platform-reqs --optimize-autoloader --no-dev
+RUN cd /var/www/html && composer install --ignore-platform-reqs --optimize-autoloader --no-dev
 
 # Generar key de Laravel
 RUN php artisan key:generate
+
+RUN php artisan storage:link
+
+RUN composer dump-autoload
 
 # Permiso a carpetas de almacenamiento
 RUN chown -R www-data:www-data \
