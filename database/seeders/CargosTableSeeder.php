@@ -4,71 +4,58 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\Positions;
+use App\Models\Cargo;
 
-class PositionTableSeeder extends Seeder
+class CargosTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-       
-        Positions::create([
+
+        Cargo::create([
             'id' => '1',
-            'title' => 'Decano',
+            'name' => 'Decano',
             'status' => true
         ]);
 
-        Positions::create([
+        Cargo::create([
             'id' => '2',
-            'title' => 'Vicedecano',
+            'name' => 'Vicedecano',
             'status' => true
         ]);
-        Positions::create([
+        Cargo::create([
             'id' => '3',
-            'title' => 'Profesores titulares',
+            'name' => 'Profesores titulares',
             'status' => true
         ]);
-        Positions::create([
+        Cargo::create([
             'id' => '4',
-            'title' => 'Profesores suplentes',
+            'name' => 'Profesores suplentes',
             'status' => true
         ]);
-        Positions::create([
+        Cargo::create([
             'id' => '5',
-            'title' => 'Graduados titulares',
+            'name' => 'Graduados titulares',
             'status' => true
         ]);
-        
-        Positions::create([
+
+        Cargo::create([
             'id' => '6',
-            'title' => 'Graduados suplentes',
+            'name' => 'Graduados suplentes',
             'status' => true
         ]);
-        
-        Positions::create([
+
+        Cargo::create([
             'id' => '7',
-            'title' => 'Estudiantes titulares',
+            'name' => 'Estudiantes titulares',
             'status' => true
         ]);
-        Positions::create([
+        Cargo::create([
             'id' => '8',
-            'title' => 'Estudiantes suplentes',
+            'name' => 'Estudiantes suplentes',
             'status' => true
         ]);
-        
-        
     }
 }
-
-
-
-
-
-
-
-
-
-
-
