@@ -3,6 +3,7 @@ FROM php:8.2-apache
 
 # Instalar dependencias
 RUN apt-get update && apt-get install -y \
+  curl\
   libzip-dev \
   zip \
   unzip \
@@ -42,8 +43,12 @@ RUN chown -R www-data:www-data \
   /var/www/html/storage \
   /var/www/html/bootstrap/cache
 
+RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - \
+  && apt-get install -y nodejs\
+  npm
+
 # Puerto expuesto
-EXPOSE 80
+EXPOSE 80 443 5173
 
 # Comando para ejecutar el servidor Apache
 CMD ["apache2-foreground"]
