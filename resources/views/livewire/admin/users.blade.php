@@ -16,6 +16,7 @@
                 <tr>
                     <th class="text-center">Id</th>
                     <th class="text-center">Nombre</th>
+                    <th class="text-center">Apellido</th>
                     <th class="text-center">E-mail</th>
                     <th style="width: 15%" class="text-center">Acciones</th>
                 </tr>
@@ -25,6 +26,7 @@
                     <tr>
                         <td>{{ $user->id }}</td>
                         <td>{{ $user->name }}</td>
+                        <td>{{ $user->lastname }}</td>
                         <td>{{ $user->email }}</td>
                         <td class="p-1 text-center">
                             <button wire:click="edit({{ $user->id }})" class="btn btn-sm btn-primary"
@@ -52,14 +54,14 @@
             aria-hidden="true" style="display: {{ $muestraModal }}">
             {{-- <div class="modal" tabindex="-1" role="dialog" wire:ignore.self> --}}
 
-            <div class="modal-dialog" role="document">
+            <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="roleModalLabel">
                             @if ($user_id)
-                                Editar User
+                                Editar usuario
                             @else
-                                Crear Nuevo User
+                                Crear usuario
                             @endif
                         </h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -67,20 +69,187 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div class="form-group">
-                            <label for="name">Nombre</label>
-                            <input type="text" class="form-control" wire:model="name">
-                            @error('name')
-                                <span class="text-danger">{{ $message }}</span>
-                            @enderror
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-6 mb-2">
+                                    <label class="sr-only" for="lastname">Apellido <small class="text-danger">
+                                            *</small></label>
+                                    <div class="input-group mb-2 mr-sm-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">Apellido <span class="text-danger"> *</span>
+                                            </div>
+                                        </div>
+                                        <input type="text" class="form-control" name="lastname" id="lastname">
+
+                                    </div>
+                                    @error('lastname')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                <div class="col-6 mb-2">
+                                    <label class="sr-only" for="name">Nombre <small class="text-danger">
+                                            *</small></label>
+                                    <div class="input-group mb-2 mr-sm-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">Nombre <span class="text-danger"> *</span>
+                                            </div>
+                                        </div>
+                                        <input type="text" class="form-control" name="name" id="name">
+
+                                    </div>
+                                    @error('name')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                <div class="col-6 mb-2">
+                                    <label class="sr-only" for="email">E-mail <small class="text-danger">
+                                            *</small></label>
+                                    <div class="input-group mb-2 mr-sm-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">E-mail <span class="text-danger"> *</span>
+                                            </div>
+                                        </div>
+                                        <input type="text" class="form-control" name="email" id="email">
+
+                                    </div>
+                                    @error('email')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                <div class="col-6 mb-2">
+                                    <label class="sr-only" for="phone">Teléfono <small class="text-danger">
+                                            *</small></label>
+                                    <div class="input-group mb-2 mr-sm-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">Teléfono <span class="text-danger"> *</span>
+                                            </div>
+                                        </div>
+                                        <input type="text" class="form-control" name="phone" id="phone">
+
+                                    </div>
+                                    @error('phone')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+
+                                <div class="col-6 mb-2">
+                                    <label class="sr-only" for="phone">Cargo <small class="text-danger">
+                                            *</small></label>
+                                    <div class="input-group mb-2 mr-sm-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">Cargo</span>
+                                            </div>
+                                        </div>
+
+                                        <select class="form-control" id="cargo"
+                                            aria-label="Default select example">
+                                            <option selected hidden disabled>Seleccione un cargo</option>
+                                            @foreach ($cargos as $cargo)
+                                                <option value="{{ $cargo->id }}">{{ $cargo->name }}</option>
+                                            @endforeach
+                                        </select>
+
+                                    </div>
+                                    @error('cargo')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                <div class="col-6 mb-2">
+                                    <label class="sr-only" for="rol">Rol <small class="text-danger">
+                                            *</small></label>
+                                    <div class="input-group mb-2 mr-sm-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">Rol</span>
+                                            </div>
+                                        </div>
+                                        <select class="form-control" id="rol"
+                                            aria-label="Default select example">
+                                            <option selected hidden disabled>Seleccione un cargo</option>
+                                            @foreach ($roles as $rol)
+                                                <option value="{{ $rol->id }}">{{ $rol->name }}</option>
+                                            @endforeach
+                                        </select>
+
+                                    </div>
+                                    @error('rol')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                
+
+                            </div>
+
+                            <div class="row">
+
+                                
+
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label for="facultad">Facultad</label>
+                                        <select class="form-control" id="facultad"
+                                            aria-label="Default select example">
+                                            <option selected hidden disabled>Seleccione una facultad</option>
+                                            @foreach ($facultades as $facultad)
+                                                <option value="{{ $facultad->id }}">{{ $facultad->name }}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('facultad')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label for="web">Conformación del consejo (web)</label>
+                                        <input type="text" class="form-control" wire:model="web">
+                                        @error('web')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label for="orden">Orden</label>
+                                        <input type="text" class="form-control" wire:model="orden">
+                                        @error('orden')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                </div>
+
+
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="password">Contraseña <span class="text-danger"> *</span></label>
+                                        <input type="text" class="form-control" wire:model="password">
+                                        @error('password')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="repassword">Repetir contraseña <span class="text-danger">
+                                                *</span></label>
+                                        <input type="text" class="form-control" wire:model="repassword">
+                                        @error('repassword')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+
                         </div>
-                        <div class="form-group">
-                            <label for="description">E-mail</label>
-                            <textarea class="form-control" wire:model="email"></textarea>
-                            @error('email')
-                                <span class="text-danger">{{ $message }}</span>
-                            @enderror
-                        </div>
+
                     </div>
                     <div class="modal-footer">
                         <button type="button" wire:click="closeModal" class="btn btn-secondary"
@@ -151,11 +320,11 @@
                     </div>
                     <div class="modal-body">
 
-                        <h2>{{ $user_nombre_rol}}</h2>
+                        <h2>{{ $user_nombre_rol }}</h2>
                         <div class="col-md-4 text-right float-right mb-1">
                             <button wire:click="newRole" class="btn btn-success" data-toggle="modal"
                                 data-target="#roleModalRole"><i class="fas fa-plus-circle mr-2"
-                                    style="color: white;"></i>Agregar  Role</button>
+                                    style="color: white;"></i>Agregar Role</button>
                         </div>
 
                         <table class="table table-bordered table-hover">
@@ -194,47 +363,47 @@
 
 
     @if ($muestraModalRole == 'block')
-    <!-- Role Form Modal -->
-    <div class="modal fade show" id="roleModalRole" tabindex="-1" role="dialog" aria-labelledby="roleModalRoleLabel"
-        aria-hidden="true" style="display: {{ $muestraModalRole }}">
-        {{-- <div class="modal" tabindex="-1" role="dialog" wire:ignore.self> --}}
+        <!-- Role Form Modal -->
+        <div class="modal fade show" id="roleModalRole" tabindex="-1" role="dialog"
+            aria-labelledby="roleModalRoleLabel" aria-hidden="true" style="display: {{ $muestraModalRole }}">
+            {{-- <div class="modal" tabindex="-1" role="dialog" wire:ignore.self> --}}
 
-        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="roleModalLabel">
-                        Crear Nuevo Role
-                    </h5>
-                </div>
-                <div class="modal-body">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="roleModalLabel">
+                            Crear Nuevo Role
+                        </h5>
+                    </div>
+                    <div class="modal-body">
 
-                    <label>Role <span class="text-danger">*</span></label>
-                    <select class="form-control" id="user_rol_id" wire:model="user_rol_id">
-                        <option value="0">
-                            Seleccione un Role
-                        </option>
-                        @if ($roles)
-                            @foreach ($roles as $role)
-                                <option value="{{ $role->id }}">
-                                    {{ $role->name }}
-                                </option>
-                            @endforeach
-                        @endif
-                    </select>
-                    @error('user_rol_id')
-                        <span class="text-danger">{{ $message }}</span>
-                    @enderror
+                        <label>Role <span class="text-danger">*</span></label>
+                        <select class="form-control" id="user_rol_id" wire:model="user_rol_id">
+                            <option value="0">
+                                Seleccione un Role
+                            </option>
+                            @if ($roles)
+                                @foreach ($roles as $role)
+                                    <option value="{{ $role->id }}">
+                                        {{ $role->name }}
+                                    </option>
+                                @endforeach
+                            @endif
+                        </select>
+                        @error('user_rol_id')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
 
-                </div>
-                <div class="modal-footer">
-                    <button type="button" wire:click="closeModalRole" class="btn btn-secondary"
-                        data-dismiss="modal">Cerrar</button>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" wire:click="closeModalRole" class="btn btn-secondary"
+                            data-dismiss="modal">Cerrar</button>
                         <button wire:click="storeRole" class="btn btn-primary">Guardar</button>
+                    </div>
                 </div>
             </div>
-        </div>
 
-    </div>
-@endif
+        </div>
+    @endif
 
 </div>
