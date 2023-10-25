@@ -20,11 +20,11 @@ return new class extends Migration
             $table->foreign('facultad_id')->references('id')->on('facultades')->restrictOnDelete();
             $table->enum('web', ['V', 'F'])->after('password')->nullable();
             $table->unsignedTinyInteger('orden')->nullable();
-            $table->unsignedBigInteger('usuarioAlta_id');
+            $table->unsignedBigInteger('usuarioAlta_id')->nullable();
             $table->unsignedBigInteger('usuarioModifica_id')->nullable();
             $table->unsignedBigInteger('usuarioBaja_id')->nullable();
             $table->dateTime('fechaBaja', $precision = 0)->nullable();
-            $table->boolean('estado');
+            $table->boolean('estado')->nullable();
         });
     }
 
