@@ -120,8 +120,7 @@
                                 </div>
 
                                 <div class="col-6 mb-2">
-                                    <label class="sr-only" for="phone">Teléfono <small class="text-danger">
-                                            *</small></label>
+                                    <label class="sr-only" for="phone">Teléfono</label>
                                     <div class="input-group mb-2 mr-sm-2">
                                         <div class="input-group-prepend">
                                             <div class="input-group-text">Teléfono <span class="text-danger"> *</span>
@@ -147,7 +146,7 @@
 
                                         <select class="form-control" id="cargo"
                                             aria-label="Default select example">
-                                            <option selected hidden disabled>Seleccione un cargo</option>
+                                            <option selected>Seleccione un cargo</option>
                                             @foreach ($cargos as $cargo)
                                                 <option value="{{ $cargo->id }}">{{ $cargo->name }}</option>
                                             @endforeach
@@ -160,8 +159,7 @@
                                 </div>
 
                                 <div class="col-6 mb-2">
-                                    <label class="sr-only" for="rol">Rol <small class="text-danger">
-                                            *</small></label>
+                                    <label class="sr-only" for="rol">Rol</label>
                                     <div class="input-group mb-2 mr-sm-2">
                                         <div class="input-group-prepend">
                                             <div class="input-group-text">Rol</span>
@@ -169,7 +167,7 @@
                                         </div>
                                         <select class="form-control" id="rol"
                                             aria-label="Default select example">
-                                            <option selected hidden disabled>Seleccione un cargo</option>
+                                            <option selected>Seleccione un rol</option>
                                             @foreach ($roles as $rol)
                                                 <option value="{{ $rol->id }}">{{ $rol->name }}</option>
                                             @endforeach
@@ -181,70 +179,82 @@
                                     @enderror
                                 </div>
 
-                                
-
-                            </div>
-
-                            <div class="row">
-
-                                
-
-                                <div class="col-4">
-                                    <div class="form-group">
-                                        <label for="facultad">Facultad</label>
+                                <div class="col-5 mb-2">
+                                    <label class="sr-only" for="facultad">Facultad</label>
+                                    <div class="input-group mb-2 mr-sm-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">Facultad</span>
+                                            </div>
+                                        </div>
                                         <select class="form-control" id="facultad"
                                             aria-label="Default select example">
-                                            <option selected hidden disabled>Seleccione una facultad</option>
+                                            <option selected>Seleccione un facultad</option>
                                             @foreach ($facultades as $facultad)
                                                 <option value="{{ $facultad->id }}">{{ $facultad->name }}</option>
                                             @endforeach
                                         </select>
-                                        @error('facultad')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
                                     </div>
-                                </div>
-                                <div class="col-4">
-                                    <div class="form-group">
-                                        <label for="web">Conformación del consejo (web)</label>
-                                        <input type="text" class="form-control" wire:model="web">
-                                        @error('web')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="col-4">
-                                    <div class="form-group">
-                                        <label for="orden">Orden</label>
-                                        <input type="text" class="form-control" wire:model="orden">
-                                        @error('orden')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div>
+                                    @error('facultad')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
                                 </div>
 
+                                <div class="col-5 mb-2">
+                                    <label class="sr-only" for="web">Conformación del consejo (web)</label>
+                                    <div class="input-group mb-2 mr-sm-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">Conformación del consejo (web)</div>
+                                        </div>
+                                        <input type="text" class="form-control" name="web" id="web">
 
-                                <div class="col-6">
-                                    <div class="form-group">
-                                        <label for="password">Contraseña <span class="text-danger"> *</span></label>
+                                    </div>
+                                    @error('web')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                <div class="col-2 mb-2">
+                                    <label class="sr-only" for="orden">Orden</label>
+                                    <div class="input-group mb-2 mr-sm-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">Orden <span class="text-danger"> *</span>
+                                            </div>
+                                        </div>
+                                        <input type="text" class="form-control" name="orden" id="orden">
+
+                                    </div>
+                                    @error('orden')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                <div class="col-6 mb-2">
+                                    <label class="sr-only" for="password">Contraseña</label>
+                                    <div class="input-group mb-2 mr-sm-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">Contraseña <span class="text-danger"> *</span>
+                                            </div>
+                                        </div>
                                         <input type="text" class="form-control" wire:model="password">
-                                        @error('password')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
                                     </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="form-group">
-                                        <label for="repassword">Repetir contraseña <span class="text-danger">
-                                                *</span></label>
-                                        <input type="text" class="form-control" wire:model="repassword">
-                                        @error('repassword')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div>
+                                    @error('repassword')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
                                 </div>
 
-
+                                <div class="col-6 mb-2">
+                                    <label class="sr-only" for="password">Repetir contraseña</label>
+                                    <div class="input-group mb-2 mr-sm-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">Repetir contraseña <span class="text-danger"> *</span>
+                                            </div>
+                                        </div>
+                                        <input type="text" class="form-control" wire:model="password">
+                                    </div>
+                                    @error('repassword')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
 
                             </div>
 

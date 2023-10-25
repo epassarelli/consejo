@@ -76,8 +76,6 @@ class Users extends Component
         }
     }
 
-
-
     protected function messages()
     {
         return [
