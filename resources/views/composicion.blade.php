@@ -24,7 +24,7 @@
 
 
     <!-- Content
-                                                                                                                                      ============================================= -->
+                                                                                                                                                                                      ============================================= -->
     <section id="content">
         <div class="content-wrap">
             <div class="container">
@@ -32,11 +32,11 @@
                 <div class="single-post mb-0">
 
                     <!-- Single Post
-                                                                                                                                          ============================================= -->
+                                                                                                                                                                                          ============================================= -->
                     <div class="entry">
 
                         <!-- Entry Title
-                                                                                                                                           ============================================= -->
+                                                                                                                                                                                           ============================================= -->
                         <div class="entry-title">
                             <h2>COMPOSICIÓN</h2>
                         </div><!-- .entry-title end -->
@@ -48,7 +48,7 @@
 
 
                         <!-- Entry Content
-                                                                                                                                           ============================================= -->
+                                                                                                                                                                                           ============================================= -->
                         <div class="entry-content mt-0">
                             <hr>
 
@@ -56,12 +56,12 @@
                             @foreach ($facultades as $facultad)
                                 <div class="d-flex  ">
                                     <div class="col">
-                                        <P>{{ $facultad->name }}</P>
+                                        <P>{{ $facultad }}</P>
                                     </div>
                                     <div class="col">
-                                        @foreach ($users as $user)
+                                        {{-- @foreach ($users as $user)
                                             <P>{{ $user->name }}</P>
-                                        @endforeach
+                                        @endforeach --}}
                                     </div>
 
 
