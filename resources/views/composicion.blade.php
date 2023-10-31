@@ -24,7 +24,7 @@
 
 
     <!-- Content
-                                  ============================================= -->
+                                                                                                                                      ============================================= -->
     <section id="content">
         <div class="content-wrap">
             <div class="container">
@@ -32,22 +32,46 @@
                 <div class="single-post mb-0">
 
                     <!-- Single Post
-                                      ============================================= -->
+                                                                                                                                          ============================================= -->
                     <div class="entry">
 
                         <!-- Entry Title
-                                       ============================================= -->
+                                                                                                                                           ============================================= -->
                         <div class="entry-title">
-                            <h2>Autonomía, democracia y participación: El gobierno de la Universidad de Buenos Aires</h2>
+                            <h2>COMPOSICIÓN</h2>
+                        </div><!-- .entry-title end -->
+                        <hr>
+                        <div class="entry-title">
+                            <h2>DECANOS</h2>
                         </div><!-- .entry-title end -->
 
 
 
                         <!-- Entry Content
-                                       ============================================= -->
+                                                                                                                                           ============================================= -->
                         <div class="entry-content mt-0">
+                            <hr>
 
-                            <p>El gobierno de la Universidad de Buenos Aires está constituido por el Rector y el Consejo
+
+                            @foreach ($facultades as $facultad)
+                                <div class="d-flex  ">
+                                    <div class="col">
+                                        <P>{{ $facultad->name }}</P>
+                                    </div>
+                                    <div class="col">
+                                        @foreach ($users as $user)
+                                            <P>{{ $user->name }}</P>
+                                        @endforeach
+                                    </div>
+
+
+                                </div>
+                                <hr>
+                            @endforeach
+
+
+
+                            {{-- <p>El gobierno de la Universidad de Buenos Aires está constituido por el Rector y el Consejo
                                 Superior. Y el órgano supremo es la Asamblea Universitaria, que representa a los claustros y
                                 las facultades. El Rector es elegido por la Asamblea Universitaria y dura cuatro años en sus
                                 funciones.</p>
@@ -72,7 +96,7 @@
 
                             <p>Los candidatos deben ser presentados por agrupaciones integradas exclusivamente por miembros
                                 de cada claustro y las listas deben ser acompañadas por un programa de acción universitaria.
-                            </p>
+                            </p> --}}
 
 
                             <div class="clear"></div>
