@@ -10,7 +10,7 @@
         </li>
 
         <li class="menu-item">
-            <a class="menu-link" href="#">
+            <a class="menu-link" href="{{ route('composicion') }}">
                 <div>Composición</div>
             </a>
         </li>
