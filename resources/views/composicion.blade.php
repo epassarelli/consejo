@@ -24,7 +24,7 @@
 
 
     <!-- Content
-                                                                                                                                                                                      ============================================= -->
+                                                                                                                                                                                                                          ============================================= -->
     <section id="content">
         <div class="content-wrap">
             <div class="container">
@@ -32,11 +32,11 @@
                 <div class="single-post mb-0">
 
                     <!-- Single Post
-                                                                                                                                                                                          ============================================= -->
+                                                                                                                                                                                                                              ============================================= -->
                     <div class="entry">
 
                         <!-- Entry Title
-                                                                                                                                                                                           ============================================= -->
+                                                                                                                                                                                                                               ============================================= -->
                         <div class="entry-title">
                             <h2>COMPOSICIÓN</h2>
                         </div><!-- .entry-title end -->
@@ -48,7 +48,7 @@
 
 
                         <!-- Entry Content
-                                                                                                                                                                                           ============================================= -->
+                                                                                                                                                                                                                               ============================================= -->
                         <div class="entry-content mt-0">
                             <hr>
 
@@ -56,12 +56,12 @@
                             @foreach ($facultades as $facultad)
                                 <div class="d-flex  ">
                                     <div class="col">
-                                        <P>{{ $facultad }}</P>
+                                        <P>{{ $facultad->name }}</P>
                                     </div>
                                     <div class="col">
-                                        {{-- @foreach ($users as $user)
-                                            <P>{{ $user->name }}</P>
-                                        @endforeach --}}
+                                        @foreach ($users as $user)
+                                            <p>{{ $user->name }}</P>
+                                        @endforeach
                                     </div>
 
 
@@ -71,32 +71,7 @@
 
 
 
-                            {{-- <p>El gobierno de la Universidad de Buenos Aires está constituido por el Rector y el Consejo
-                                Superior. Y el órgano supremo es la Asamblea Universitaria, que representa a los claustros y
-                                las facultades. El Rector es elegido por la Asamblea Universitaria y dura cuatro años en sus
-                                funciones.</p>
 
-                            <p>El Consejo Superior, por su parte, está integrado por el Rector, los decanos de las trece
-                                facultades y cinco representantes por cada uno de los claustros: profesores, graduados y
-                                estudiantes.</p>
-
-                            <p>Cada Consejero tiene a su vez, un suplente, por lo tanto, hay quince consejeros suplentes a
-                                razón de cinco por claustro. En el caso de los trece decanos, son sus vicedecanos quienes
-                                los suplantan.</p>
-
-                            <p>En tanto, cada Facultad posee un gobierno compuesto por el Decano y el Consejo Directivo,
-                                que está integrado por ocho representantes de los profesores, cuatro de los graduados y
-                                cuatro de los estudiantes, todos elegidos por votación directa y obligatoria de sus
-                                respectivos pares. El Consejo Directivo es el que designa al Decano y Vicedecano, cargos que
-                                deben ser ejercidos por profesores de la misma facultad.</p>
-
-                            <p>Para la elección de representantes ante los órganos de gobierno de la Universidad de Buenos
-                                Aires (Asamblea Universitaria, por ejemplo) están previstas las disposiciones reglamentarias
-                                para los claustros de profesores, graduados y estudiantes.</p>
-
-                            <p>Los candidatos deben ser presentados por agrupaciones integradas exclusivamente por miembros
-                                de cada claustro y las listas deben ser acompañadas por un programa de acción universitaria.
-                            </p> --}}
 
 
                             <div class="clear"></div>
@@ -105,12 +80,84 @@
 
                         </div>
                     </div><!-- .entry end -->
+                    <div class="entry-title">
+                        <h2>CLAUSTRO PROFESROES</h2>
+                    </div><!-- .entry-title end -->
+
+
+
+                    <!-- Entry Content
+                                                                                                                                                                                                                               ============================================= -->
+                    <div class="entry-content mt-0">
+                        <hr>
+
+
+                        @foreach ($facultades as $facultad)
+                            <div class="d-flex  ">
+                                <div class="col">
+                                    <P>{{ $facultad }}</P>
+                                </div>
+                                <div class="col">
+                                    {{-- @foreach ($users as $user)
+                                            <P>{{ $user->name }}</P>
+                                        @endforeach --}}
+                                </div>
+
+
+                            </div>
+                            <hr>
+                        @endforeach
+
+
+
+
+
+
+                        <div class="clear"></div>
+
+
+
+                    </div>
+                </div><!-- .entry end -->
+                <div class="entry-title">
+                    <h2>CLAUSTRO GRADUADOS</h2>
+                </div><!-- .entry-title end -->
+
+
+
+                <!-- Entry Content
+                                                                                                                                                                                                                               ============================================= -->
+                <div class="entry-content mt-0">
+                    <hr>
+
+
+                    @foreach ($facultades as $facultad)
+                        <div class="d-flex  ">
+                            <div class="col">
+                                <P>{{ $facultad }}</P>
+                            </div>
+                            <div class="col">
+                                {{-- @foreach ($users as $user)
+                                            <P>{{ $user->name }}</P>
+                                        @endforeach --}}
+                            </div>
+
+
+                        </div>
+                        <hr>
+                    @endforeach
+
+                    <div class="clear"></div>
 
 
 
                 </div>
+            </div><!-- .entry end -->
 
-            </div>
+
+        </div>
+
+        </div>
 
     </section><!-- #content end -->
 @endsection
