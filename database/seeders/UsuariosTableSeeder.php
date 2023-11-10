@@ -110,5 +110,28 @@ class UsuariosTableSeeder extends Seeder
         $user_rol->created_at = now();
         $user_rol->updated_at = now();
         $user_rol->save();
+
+        $contrasenaHasheada = bcrypt('agronomia');
+        //Inserto usuario decano agronomia
+        $user = new User();
+        $user->name = "Juan Pepito";
+        $user->lastname = "Perez Perez";
+        $user->email = "jperez@consejo.com";
+        $user->phone = "1111111111";
+        $user->cargo_id = "1";
+        $user->facultad_id = "1";
+        $user->password = $contrasenaHasheada;
+        $user->email_verified_at = now();
+        $user->created_at = now();
+        $user->updated_at = now();
+        $user->save();
+
+        //inserto rol sadmin del usuario creado
+        $user_rol = new User_rol();
+        $user_rol->user_id = $user->id;
+        $user_rol->rol_id = 5;
+        $user_rol->created_at = now();
+        $user_rol->updated_at = now();
+        $user_rol->save();
     }
 }

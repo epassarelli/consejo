@@ -16,23 +16,11 @@ class ComposicionController extends Controller
      */
     public function index()
     {
-        $facultades = Facultad::all();
 
         $users = User::all();
-
-        /* Destination::addSelect([
-            'last_flight' => Flight::select('name')
-            ->whereColumn('destination_id', 'destinations.id')
-            ->orderByDesc('arrived_at')
-            ->limit(1)
-        ])->get(); */
-        /* $facultades = User::addSelect(['name' =>
-        Facultad::select('name')
-            ->whereColumn('facultad_id', 'id')
-            ->limit(1)])->get(); */
-        return view('composicion', compact('facultades', 'users'));
-        /* $this->data['usuarios'] = User::all();
-        dd($this->data['usuarios']);
-        return view('composicion', $this->data); */
+        //$users = User::find(1);
+        // dd($users->getCargo());
+        $facultades = Facultad::all();
+        return view('composicion', compact('users', 'facultades'));
     }
 }
