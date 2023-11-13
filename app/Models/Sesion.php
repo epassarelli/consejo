@@ -22,4 +22,9 @@ class Sesion extends Model
         'estado',
         'usuarioAlta_id'
     ];
+
+    public function comision()
+    {
+        return $this->belongsTo(Comision::class, 'comision_id');
+    }
 }
