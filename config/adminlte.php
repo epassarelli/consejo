@@ -321,6 +321,12 @@ return [
             'url' => 'admin/users',
             'icon' => 'fas fa-fw fa-users',
         ],
+        [
+            'text' => 'Comisiones',
+            'url' => 'admin/comisiones',
+            'icon' => 'fas fa-book',
+            
+        ],
         // [
         //     'text' => 'Tipos de Blog',
         //     'url' => 'admin/tiposblog',
@@ -453,7 +459,7 @@ return [
 
     'plugins' => [
         'Datatables' => [
-            'active' => false,
+            'active' => true,
             'files' => [
                 [
                     'type' => 'js',
@@ -498,7 +504,7 @@ return [
             ],
         ],
         'Sweetalert2' => [
-            'active' => false,
+            'active' => true,
             'files' => [
                 [
                     'type' => 'js',

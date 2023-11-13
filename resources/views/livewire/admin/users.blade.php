@@ -11,40 +11,45 @@
             </div>
         </div>
 
-        <table class="table table-hover table-bordered mt-3">
-            <thead>
-                <tr>
-                    <th class="text-center">Id</th>
-                    <th class="text-center">Nombre</th>
-                    <th class="text-center">Apellido</th>
-                    <th class="text-center">E-mail</th>
-                    <th style="width: 15%" class="text-center">Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($users as $user)
-                    <tr>
-                        <td>{{ $user->id }}</td>
-                        <td>{{ $user->name }}</td>
-                        <td>{{ $user->lastname }}</td>
-                        <td>{{ $user->email }}</td>
-                        <td class="p-1 text-center">
-                            <button wire:click="edit({{ $user->id }})" class="btn btn-sm btn-primary"
-                                data-toggle="modal" data-target="#roleModal" title="Editar"><i
-                                    class="fa fa-edit"></i></button>
-                            <button wire:click="$emit('alertDelete',{{ $user->id }})" class="btn btn-sm btn-danger"
-                                title="Eliminar"><i class="fas fa-trash-alt" style="color: white "></i></button>
-                            <button wire:click="changepass({{ $user->id }})" class="btn btn-sm btn-info"
-                                data-toggle="modal" data-target="#roleModal" title="Cambia Password"><i
-                                    class="fas fa-key" style="color: white "></i></button>
-                            <button wire:click="roles({{ $user->id }})" class="btn btn-sm btn-warning"
-                                data-toggle="modal" data-target="#roleModal" title="Roles"><i
-                                    class="fa fa-bars"></i></button>
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
+        <div class="row mt-3">
+            <div class="col-12">
+                <table id="basic-table" class="table table-hover table-bordered mt-3">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Id</th>
+                            <th class="text-center">Nombre</th>
+                            <th class="text-center">Apellido</th>
+                            <th class="text-center">E-mail</th>
+                            <th style="width: 15%" class="text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($users as $user)
+                            <tr>
+                                <td>{{ $user->id }}</td>
+                                <td>{{ $user->name }}</td>
+                                <td>{{ $user->lastname }}</td>
+                                <td>{{ $user->email }}</td>
+                                <td class="p-1 text-center">
+                                    <button wire:click="edit({{ $user->id }})" class="btn btn-sm btn-primary"
+                                        data-toggle="modal" data-target="#roleModal" title="Editar"><i
+                                            class="fa fa-edit"></i></button>
+                                    <button wire:click="$emit('alertDelete',{{ $user->id }})"
+                                        class="btn btn-sm btn-danger" title="Eliminar"><i class="fas fa-trash-alt"
+                                            style="color: white "></i></button>
+                                    <button wire:click="changepass({{ $user->id }})" class="btn btn-sm btn-info"
+                                        data-toggle="modal" data-target="#roleModal" title="Cambia Password"><i
+                                            class="fas fa-key" style="color: white "></i></button>
+                                    <button wire:click="roles({{ $user->id }})" class="btn btn-sm btn-warning"
+                                        data-toggle="modal" data-target="#roleModal" title="Roles"><i
+                                            class="fa fa-bars"></i></button>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
     </div>
 
@@ -79,7 +84,8 @@
                                             <div class="input-group-text">Apellido <span class="text-danger"> *</span>
                                             </div>
                                         </div>
-                                        <input type="text" class="form-control" name="lastname" id="lastname" wire:model="lastname">
+                                        <input type="text" class="form-control" name="lastname" id="lastname"
+                                            wire:model="lastname">
 
                                     </div>
                                     @error('lastname')
@@ -95,7 +101,8 @@
                                             <div class="input-group-text">Nombre <span class="text-danger"> *</span>
                                             </div>
                                         </div>
-                                        <input type="text" class="form-control" name="name" id="name" wire:model="name">
+                                        <input type="text" class="form-control" name="name" id="name"
+                                            wire:model="name">
 
                                     </div>
                                     @error('name')
@@ -111,7 +118,8 @@
                                             <div class="input-group-text">E-mail <span class="text-danger"> *</span>
                                             </div>
                                         </div>
-                                        <input type="mail" class="form-control" name="email" id="email" wire:model="email">
+                                        <input type="mail" class="form-control" name="email" id="email"
+                                            wire:model="email">
 
                                     </div>
                                     @error('email')
@@ -125,7 +133,8 @@
                                         <div class="input-group-prepend">
                                             <div class="input-group-text">Teléfono</div>
                                         </div>
-                                        <input type="text" class="form-control" name="phone" id="phone" wire:model="phone">
+                                        <input type="text" class="form-control" name="phone" id="phone"
+                                            wire:model="phone">
 
                                     </div>
                                     @error('phone')
@@ -135,14 +144,15 @@
 
 
                                 <div class="col-6 mb-2">
-                                    <label class="sr-only" for="cargo">Cargo</label>
+                                    <label class="sr-only" for="cargo_id">Cargo</label>
                                     <div class="input-group mb-2 mr-sm-2">
                                         <div class="input-group-prepend">
                                             <div class="input-group-text">Cargo</div>
                                         </div>
 
-                                        <select class="form-control" id="cargo"
-                                            aria-label="Default select example" name="cargo"  wire:model="cargo">
+                                        <select class="form-control" id="cargo_id"
+                                            aria-label="Default select example" name="cargo_id"
+                                            wire:model="cargo_id">
                                             <option selected>Seleccione un cargo</option>
                                             @foreach ($cargos as $cargo)
                                                 <option value="{{ $cargo->id }}">{{ $cargo->name }}</option>
@@ -150,73 +160,44 @@
                                         </select>
 
                                     </div>
-                                    @error('cargo')
+                                    @error('cargo_id')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
+
+
 
                                 <div class="col-6 mb-2">
-                                    <label class="sr-only" for="rol">Rol</label>
-                                    <div class="input-group mb-2 mr-sm-2">
-                                        <div class="input-group-prepend">
-                                            <div class="input-group-text">Rol
-                                            </div>
-                                        </div>
-                                        <select class="form-control" id="rol"
-                                            aria-label="Default select example" name="rol" wire:model="rol">
-                                            <option selected>Seleccione un rol</option>
-                                            @foreach ($roles as $rol)
-                                                <option value="{{ $rol->id }}">{{ $rol->name }}</option>
-                                            @endforeach
-                                        </select>
-
-                                    </div>
-                                    @error('rol')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
-                                </div>
-
-                                <div class="col-5 mb-2">
-                                    <label class="sr-only" for="facultad">Facultad</label>
+                                    <label class="sr-only" for="facultad_id">Facultad</label>
                                     <div class="input-group mb-2 mr-sm-2">
                                         <div class="input-group-prepend">
                                             <div class="input-group-text">Facultad</span>
                                             </div>
                                         </div>
-                                        <select class="form-control" id="facultad"
-                                            aria-label="Default select example" name="facultad" wire:model="facultad">
+                                        <select class="form-control" id="facultad_id"
+                                            aria-label="Default select example" name="facultad_id"
+                                            wire:model="facultad_id">
                                             <option selected>Seleccione un facultad</option>
                                             @foreach ($facultades as $facultad)
                                                 <option value="{{ $facultad->id }}">{{ $facultad->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
-                                    @error('facultad')
+                                    @error('facultad_id')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
 
-                                <div class="col-5 mb-2">
-                                    <label class="sr-only" for="web">Conformación del consejo (web)</label>
-                                    <div class="input-group mb-2 mr-sm-2">
-                                        <div class="input-group-prepend">
-                                            <div class="input-group-text">Conformación del consejo (web)</div>
-                                        </div>
-                                        <input type="text" class="form-control" name="web" id="web" wire:model="web">
 
-                                    </div>
-                                    @error('web')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
-                                </div>
 
-                                <div class="col-2 mb-2">
+                                <div class="col-3 mb-2">
                                     <label class="sr-only" for="orden">Orden</label>
                                     <div class="input-group mb-2 mr-sm-2">
                                         <div class="input-group-prepend">
                                             <div class="input-group-text">Orden</div>
                                         </div>
-                                        <input type="text" class="form-control" name="orden" id="orden" wire:model="orden">
+                                        <input type="number" class="form-control" name="orden" id="orden"
+                                            wire:model="orden">
 
                                     </div>
                                     @error('orden')
@@ -224,33 +205,87 @@
                                     @enderror
                                 </div>
 
-                                <div class="col-6 mb-2">
-                                    <label class="sr-only" for="password">Contraseña</label>
+                                <div class="col-3 mb-2">
+                                    <label class="sr-only" for="web">Conformación del consejo (web)</label>
                                     <div class="input-group mb-2 mr-sm-2">
                                         <div class="input-group-prepend">
-                                            <div class="input-group-text">Contraseña <span class="text-danger"> *</span>
+                                            <div class="input-group-text" wire:click="changeToggle">
+                                                @if ($togleWeb)
+                                                    <i class="fas fa-toggle-on text-success fa-lg"></i>
+                                                    <input type="hidden" name="web" value="V"
+                                                        wire:model="web">
+                                                @else
+                                                    <i class="fas fa-toggle-off text-default fa-lg"></i>
+                                                    <input type="hidden" name="web" value="F"
+                                                        wire:model="web">
+                                                @endif
+                                                &nbsp;&nbsp; Conformación del consejo
+                                                (web)
                                             </div>
                                         </div>
-                                        <input type="password" class="form-control" name="password" wire:model="password">
                                     </div>
-                                    @error('repassword')
+                                    @error('web')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
+                                @if ($user_id == 0)
+                                    <div class="col-6 mb-2">
+                                        <label class="sr-only" for="rol_id">Rol</label>
+                                        <div class="input-group mb-2 mr-sm-2">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">Rol
+                                                    <span class="text-danger"> *</span>
+                                                </div>
+                                            </div>
+                                            <select class="form-control" id="rol_id"
+                                                aria-label="Default select example" name="rol"
+                                                wire:model="rol_id">
+                                                <option selected>Seleccione un rol</option>
+                                                @foreach ($roles as $rol)
+                                                    <option value="{{ $rol->id }}">{{ $rol->name }}</option>
+                                                @endforeach
+                                            </select>
 
-                                <div class="col-6 mb-2">
-                                    <label class="sr-only" for="repassword">Repetir contraseña</label>
-                                    <div class="input-group mb-2 mr-sm-2">
-                                        <div class="input-group-prepend">
-                                            <div class="input-group-text">Repetir contraseña <span class="text-danger"> *</span>
-                                            </div>
                                         </div>
-                                        <input type="text" class="form-control" id="repassword" name="repassword" wire:model="password">
+                                        @error('rol_id')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
                                     </div>
-                                    @error('repassword')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
-                                </div>
+                                @endif
+                                @if ($user_id == 0)
+                                    <div class="col-6 mb-2">
+                                        <label class="sr-only" for="password">Contraseña</label>
+                                        <div class="input-group mb-2 mr-sm-2">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">Contraseña
+                                                    <span class="text-danger"> *</span>
+                                                </div>
+                                            </div>
+                                            <input type="password" class="form-control" name="password"
+                                                wire:model="password">
+                                        </div>
+                                        @error('password')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+
+                                    <div class="col-6 mb-2">
+                                        <label class="sr-only" for="repassword">Repetir contraseña</label>
+                                        <div class="input-group mb-2 mr-sm-2">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">Repetir contraseña
+
+                                                    <span class="text-danger"> *</span>
+                                                </div>
+                                            </div>
+                                            <input type="password" class="form-control" id="repassword"
+                                                name="repassword" wire:model="repassword">
+                                        </div>
+                                        @error('repassword')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                @endif
 
                             </div>
 
@@ -261,9 +296,9 @@
                         <button type="button" wire:click="closeModal" class="btn btn-secondary"
                             data-dismiss="modal">Cerrar</button>
                         @if ($user_id !== 0)
-                            <button wire:click="store" class="btn btn-primary">Actualizar</button>
+                            <button wire:click="updateUser" class="btn btn-primary">Actualizar</button>
                         @else
-                            <button wire:click="store" class="btn btn-primary">Guardar</button>
+                            <button wire:click="storeUser" class="btn btn-primary">Guardar</button>
                         @endif
                     </div>
                 </div>
@@ -292,8 +327,9 @@
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="password">Nueva Password</label>
-                            <input type="password" class="form-control" wire:model="password">
+                            <label for="password" for="password">Nueva Password</label>
+                            <input type="password" id="password" class="form-control" wire:model="password"
+                                name="password">
                             @error('password')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
@@ -378,7 +414,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="roleModalLabel">
-                            Crear Nuevo Role
+                            Asignar Nuevo Role
                         </h5>
                     </div>
                     <div class="modal-body">

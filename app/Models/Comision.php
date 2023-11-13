@@ -8,4 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Comision extends Model
 {
     use HasFactory;
+
+    protected $table = 'comisiones';
+
+    protected $fillable = [
+        'id',
+        'name',
+        'orden',
+        'status',
+        'usuarioAlta_id'
+    ];
 }
