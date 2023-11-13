@@ -14,7 +14,12 @@ return new class extends Migration
         Schema::create('comisiones', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->integer('orden');
             $table->boolean('status');
+            $table->unsignedBigInteger('usuarioAlta_id')->nullable();
+            $table->unsignedBigInteger('usuarioModifica_id')->nullable();
+            $table->unsignedBigInteger('usuarioBaja_id')->nullable();
+            $table->dateTime('fechaBaja', $precision = 0)->nullable();
             $table->timestamps();
         });
     }
