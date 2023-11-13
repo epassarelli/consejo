@@ -17,9 +17,15 @@ class Users extends Component
     public $facultades;
     public $cargos;
     public $user_id, $user_nombre_rol, $user_rol_id;
+    public $orden;
     public $name;
+    public $lastname;
     public $email;
+    public $phone;
     public $password;
+    public $facultad_id;
+    public $cargo_id;
+    public $web;
     public $muestraModal     = 'none';
     public $muestraModalPass = 'none';
     public $muestraModalRoles = 'none';
@@ -34,22 +40,22 @@ class Users extends Component
         $this->roles = Role::all();
         $this->facultades = Facultad::all();
         $this->cargos = Cargo::all();
-        if ($this->user_id) {
-            $this->users_roles = User_rol::select([
-                'users_roles.id',
-                'roles.name as rol_nombre'
-            ])
-                ->leftJoin('roles', 'roles.id', '=', 'users_roles.rol_id')
-                ->where('users_roles.user_id', '=', $this->user_id)
-                ->get();
-        }
+        // if ($this->user_id) {
+        //     $this->users_roles = User_rol::select([
+        //         'users_roles.id',
+        //         'roles.name as rol_nombre'
+        //     ])
+        //         ->leftJoin('roles', 'roles.id', '=', 'users_roles.rol_id')
+        //         ->where('users_roles.user_id', '=', $this->user_id)
+        //         ->get();
+        // }
 
         return view('livewire.admin.users', [
             'users' => $this->users,
             'roles' => $this->roles,
-            'users_roles' => $this->users_roles,
             'facultades' => $this->facultades,
             'cargos' => $this->cargos,
+            // 'users_roles' => $this->users_roles,
         ])->layout('layouts.adminlte');
     }
 
@@ -59,7 +65,11 @@ class Users extends Component
         if ($this->muestraModal == 'block') {
             return [
                 'name' => 'required',
+                'lastname' => 'required',
                 'email' => 'required | email',
+                'password' => 'required',
+                'repassword' => 'required',
+
             ];
         }
 
@@ -97,12 +107,16 @@ class Users extends Component
 
     public function edit($id)
     {
-
         $user = User::findOrFail($id);
         $this->user_id = $id;
+        $this->lastname = $user->lastname;
         $this->name = $user->name;
         $this->email = $user->email;
-        $this->password = $user->password;
+        $this->phone = $user->phone;
+        $this->facultad_id = $user->facultad_id;
+        $this->cargo_id = $user->cargo_id;
+        $this->orden = $user->orden;
+        $this->web = $user->web;
         $this->openModal();
     }
 
@@ -117,7 +131,7 @@ class Users extends Component
         $this->openModalPass();
     }
 
-    public function store()
+    public function storeUser()
     {
         $this->validate();
 
@@ -125,9 +139,42 @@ class Users extends Component
         User::updateOrCreate(
             ['id' => $this->user_id],
             [
+                'lastname' => $this->lastname,
                 'name' => $this->name,
                 'email' => $this->email,
-                'password' => $this->password,
+                'phone' => $this->phone,
+                'cargo_id' => $this->cargo,
+                'facultad_id' => $this->facultad,
+                'password' => bcrypt($this->password),
+                'web' => $this->web,
+                'orden' => $this->orden,
+            ]
+        );
+
+        $this->closeModal();
+        $this->resetInputFields();
+        $this->emit('mensajePositivo', ['mensaje' => 'Operacion exitosa']);
+    }
+
+    public function updateUser()
+    {
+
+
+        $this->validate();
+
+
+        User::updateOrCreate(
+            ['id' => $this->user_id],
+            [
+                'lastname' => $this->lastname,
+                'name' => $this->name,
+                'email' => $this->email,
+                'phone' => $this->phone,
+                'cargo_id' => $this->cargo,
+                'facultad_id' => $this->facultad,
+                'password' => bcrypt($this->password),
+                'web' => $this->web,
+                'orden' => $this->orden,
             ]
         );
 

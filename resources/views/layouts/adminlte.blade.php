@@ -25,7 +25,7 @@
     {{-- <script>
         console.log('Hi!');
     </script> --}}
-    <script src="sweetalert2.all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
         Livewire.on('alertDelete', id => {

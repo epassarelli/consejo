@@ -79,7 +79,8 @@
                                             <div class="input-group-text">Apellido <span class="text-danger"> *</span>
                                             </div>
                                         </div>
-                                        <input type="text" class="form-control" name="lastname" id="lastname" wire:model="lastname">
+                                        <input type="text" class="form-control" name="lastname" id="lastname"
+                                            wire:model="lastname">
 
                                     </div>
                                     @error('lastname')
@@ -95,7 +96,8 @@
                                             <div class="input-group-text">Nombre <span class="text-danger"> *</span>
                                             </div>
                                         </div>
-                                        <input type="text" class="form-control" name="name" id="name" wire:model="name">
+                                        <input type="text" class="form-control" name="name" id="name"
+                                            wire:model="name">
 
                                     </div>
                                     @error('name')
@@ -111,7 +113,8 @@
                                             <div class="input-group-text">E-mail <span class="text-danger"> *</span>
                                             </div>
                                         </div>
-                                        <input type="mail" class="form-control" name="email" id="email" wire:model="email">
+                                        <input type="mail" class="form-control" name="email" id="email"
+                                            wire:model="email">
 
                                     </div>
                                     @error('email')
@@ -125,7 +128,8 @@
                                         <div class="input-group-prepend">
                                             <div class="input-group-text">Teléfono</div>
                                         </div>
-                                        <input type="text" class="form-control" name="phone" id="phone" wire:model="phone">
+                                        <input type="text" class="form-control" name="phone" id="phone"
+                                            wire:model="phone">
 
                                     </div>
                                     @error('phone')
@@ -142,7 +146,7 @@
                                         </div>
 
                                         <select class="form-control" id="cargo"
-                                            aria-label="Default select example" name="cargo"  wire:model="cargo">
+                                            aria-label="Default select example" name="cargo" wire:model="cargo_id">
                                             <option selected>Seleccione un cargo</option>
                                             @foreach ($cargos as $cargo)
                                                 <option value="{{ $cargo->id }}">{{ $cargo->name }}</option>
@@ -155,7 +159,7 @@
                                     @enderror
                                 </div>
 
-                                <div class="col-6 mb-2">
+                                {{-- <div class="col-6 mb-2">
                                     <label class="sr-only" for="rol">Rol</label>
                                     <div class="input-group mb-2 mr-sm-2">
                                         <div class="input-group-prepend">
@@ -174,9 +178,9 @@
                                     @error('rol')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
-                                </div>
+                                </div> --}}
 
-                                <div class="col-5 mb-2">
+                                <div class="col-6 mb-2">
                                     <label class="sr-only" for="facultad">Facultad</label>
                                     <div class="input-group mb-2 mr-sm-2">
                                         <div class="input-group-prepend">
@@ -184,7 +188,8 @@
                                             </div>
                                         </div>
                                         <select class="form-control" id="facultad"
-                                            aria-label="Default select example" name="facultad" wire:model="facultad">
+                                            aria-label="Default select example" name="facultad"
+                                            wire:model="facultad_id">
                                             <option selected>Seleccione un facultad</option>
                                             @foreach ($facultades as $facultad)
                                                 <option value="{{ $facultad->id }}">{{ $facultad->name }}</option>
@@ -196,13 +201,14 @@
                                     @enderror
                                 </div>
 
-                                <div class="col-5 mb-2">
+                                <div class="col-6 mb-2">
                                     <label class="sr-only" for="web">Conformación del consejo (web)</label>
                                     <div class="input-group mb-2 mr-sm-2">
                                         <div class="input-group-prepend">
                                             <div class="input-group-text">Conformación del consejo (web)</div>
                                         </div>
-                                        <input type="text" class="form-control" name="web" id="web" wire:model="web">
+                                        <input type="checkbox" class="form-control" name="web" id="web"
+                                            wire:model="web">
 
                                     </div>
                                     @error('web')
@@ -210,13 +216,14 @@
                                     @enderror
                                 </div>
 
-                                <div class="col-2 mb-2">
+                                <div class="col-6 mb-2">
                                     <label class="sr-only" for="orden">Orden</label>
                                     <div class="input-group mb-2 mr-sm-2">
                                         <div class="input-group-prepend">
                                             <div class="input-group-text">Orden</div>
                                         </div>
-                                        <input type="text" class="form-control" name="orden" id="orden" wire:model="orden">
+                                        <input type="number" class="form-control" name="orden" id="orden"
+                                            wire:model="orden">
 
                                     </div>
                                     @error('orden')
@@ -228,12 +235,13 @@
                                     <label class="sr-only" for="password">Contraseña</label>
                                     <div class="input-group mb-2 mr-sm-2">
                                         <div class="input-group-prepend">
-                                            <div class="input-group-text">Contraseña <span class="text-danger"> *</span>
+                                            <div class="input-group-text">Contraseña <span class="text-danger">
+                                                    *</span>
                                             </div>
                                         </div>
-                                        <input type="password" class="form-control" name="password" wire:model="password">
+                                        <input type="password" class="form-control" name="password">
                                     </div>
-                                    @error('repassword')
+                                    @error('password')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
@@ -242,10 +250,12 @@
                                     <label class="sr-only" for="repassword">Repetir contraseña</label>
                                     <div class="input-group mb-2 mr-sm-2">
                                         <div class="input-group-prepend">
-                                            <div class="input-group-text">Repetir contraseña <span class="text-danger"> *</span>
+                                            <div class="input-group-text">Repetir contraseña <span
+                                                    class="text-danger"> *</span>
                                             </div>
                                         </div>
-                                        <input type="text" class="form-control" id="repassword" name="repassword" wire:model="password">
+                                        <input type="password" class="form-control" id="repassword"
+                                            name="repassword">
                                     </div>
                                     @error('repassword')
                                         <span class="text-danger">{{ $message }}</span>
@@ -261,9 +271,9 @@
                         <button type="button" wire:click="closeModal" class="btn btn-secondary"
                             data-dismiss="modal">Cerrar</button>
                         @if ($user_id !== 0)
-                            <button wire:click="store" class="btn btn-primary">Actualizar</button>
+                            <button wire:click="updateUser" class="btn btn-primary">Actualizar</button>
                         @else
-                            <button wire:click="store" class="btn btn-primary">Guardar</button>
+                            <button wire:click="storeUser" class="btn btn-primary">Guardar</button>
                         @endif
                     </div>
                 </div>
