@@ -27,51 +27,52 @@
     </script> --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    <script src="{{ asset('js/datatables/basictable.js') }}"></script>
+
     <script>
         Livewire.on('alertDelete', id => {
-           Swal.fire({
-               title: '¿Confirma la eliminación?',
-               text: "La acción no podrá ser revertida!",
-               icon: 'warning',
-               showCancelButton: true,
-               confirmButtonColor: '#3085d6',
-               cancelButtonColor: '#d33',
-               confirmButtonText: 'Si, borrar!'
-           }).then((result) => {
-               if (result.isConfirmed) {
-                   Livewire.emit('delete', id);
-                //    Swal.fire(
-                //        'Borrado!',
-                //        'Ha sido eliminado con éxito.',
-                //        'success'
-                //    )
-               }
-           })
-       })
+            Swal.fire({
+                title: '¿Confirma la eliminación?',
+                text: "La acción no podrá ser revertida!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Si, borrar!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Livewire.emit('delete', id);
+                    //    Swal.fire(
+                    //        'Borrado!',
+                    //        'Ha sido eliminado con éxito.',
+                    //        'success'
+                    //    )
+                }
+            })
+        })
 
 
 
-       //emit mensaje negativo
-       Livewire.on('mensajeNegativo', function(mensaje) {
-           Swal.fire({
-               title: 'Atencion',
-               text: mensaje['mensaje'],
-               icon: 'warning',
-               showCloseButton: true
-           })
-       });
+        //emit mensaje negativo
+        Livewire.on('mensajeNegativo', function(mensaje) {
+            Swal.fire({
+                title: 'Atencion',
+                text: mensaje['mensaje'],
+                icon: 'warning',
+                showCloseButton: true
+            })
+        });
 
 
-       //emit mensaje positivo
-       Livewire.on('mensajePositivo', function(mensaje) {
-           Swal.fire({
-               title: 'Excelente!',
-               text: mensaje['mensaje'],
-               icon: 'success',
-               showCloseButton: true
-           })
-       });
-
-       </script>
+        //emit mensaje positivo
+        Livewire.on('mensajePositivo', function(mensaje) {
+            Swal.fire({
+                title: 'Excelente!',
+                text: mensaje['mensaje'],
+                icon: 'success',
+                showCloseButton: true
+            })
+        });
+    </script>
 
 @stop

@@ -24,6 +24,7 @@ class UsuariosTableSeeder extends Seeder
         $user->email_verified_at = now();
         $user->created_at = now();
         $user->updated_at = now();
+        $user->estado = true;
         $user->save();
 
         //inserto rol sadmin del usuario creado
@@ -44,6 +45,7 @@ class UsuariosTableSeeder extends Seeder
         $user->email_verified_at = now();
         $user->created_at = now();
         $user->updated_at = now();
+        $user->estado = true;
         $user->save();
 
         //inserto rol sadmin del usuario creado
@@ -63,6 +65,7 @@ class UsuariosTableSeeder extends Seeder
         $user->email_verified_at = now();
         $user->created_at = now();
         $user->updated_at = now();
+        $user->estado = true;
         $user->save();
 
         //inserto rol sadmin del usuario creado
@@ -82,6 +85,7 @@ class UsuariosTableSeeder extends Seeder
         $user->email_verified_at = now();
         $user->created_at = now();
         $user->updated_at = now();
+        $user->estado = true;
         $user->save();
 
         //inserto rol sadmin del usuario creado
@@ -101,6 +105,7 @@ class UsuariosTableSeeder extends Seeder
         $user->email_verified_at = now();
         $user->created_at = now();
         $user->updated_at = now();
+        $user->estado = true;
         $user->save();
 
         //inserto rol sadmin del usuario creado
