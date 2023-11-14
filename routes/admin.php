@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Livewire\Admin\Roles;
 use App\Http\Livewire\Admin\Users;
 use App\Http\Livewire\Admin\GestionComisiones;
+use App\Http\Livewire\Admin\GestionSesiones;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,3 +22,4 @@ Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('/roles', Roles::class)->name('roles');
 Route::get('/users', Users::class)->name('users');
 Route::get('/comisiones', GestionComisiones::class)->name('comisiones');
+Route::get('/sesiones', GestionSesiones::class)->name('sesiones');

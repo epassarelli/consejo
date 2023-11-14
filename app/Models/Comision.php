@@ -18,4 +18,9 @@ class Comision extends Model
         'status',
         'usuarioAlta_id'
     ];
+
+    public function sesiones()
+    {
+        return $this->hasMany(Sesion::class, 'comision_id');
+    }
 }

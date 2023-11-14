@@ -17,8 +17,11 @@ return new class extends Migration
             $table->integer('orden');
             $table->boolean('status');
             $table->unsignedBigInteger('usuarioAlta_id')->nullable();
+            $table->foreign('usuarioAlta_id')->references('id')->on('users')->restrictOnDelete();
             $table->unsignedBigInteger('usuarioModifica_id')->nullable();
+            $table->foreign('usuarioModifica_id')->references('id')->on('users')->restrictOnDelete();
             $table->unsignedBigInteger('usuarioBaja_id')->nullable();
+            $table->foreign('usuarioBaja_id')->references('id')->on('users')->restrictOnDelete();
             $table->dateTime('fechaBaja', $precision = 0)->nullable();
             $table->timestamps();
         });

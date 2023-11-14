@@ -325,7 +325,12 @@ return [
             'text' => 'Comisiones',
             'url' => 'admin/comisiones',
             'icon' => 'fas fa-book',
-            
+
+        ],
+        [
+            'text' => 'Sesiones',
+            'url' => 'admin/sesiones',
+            'icon' => 'fas fa-file-signature',
         ],
         // [
         //     'text' => 'Tipos de Blog',

@@ -14,7 +14,7 @@ class GestionComisiones extends Component
     public $orden;
     public $muestraModal = 'none';
 
-    protected $comisiones, $roles, $users_roles;
+    protected $comisiones;
     protected $listeners = ['delete'];
 
     public function render()
