@@ -17,7 +17,7 @@ class ComposicionController extends Controller
     public function index()
     {
 
-        $users = User::all();
+        $users = User::where("cargo_id", 1)->orderBy("id", "desc")->paginate(10);
         //$users = User::find(1);
         // dd($users->getCargo());
         $facultades = Facultad::all();
