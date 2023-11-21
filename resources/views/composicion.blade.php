@@ -24,7 +24,7 @@
 
 
     <!-- Content
-                                                                                                                                                                                                                                                                                                  ============================================= -->
+                                                                                                                                                                                                                                                                                                                                              ============================================= -->
     <section id="content">
         <div class="content-wrap">
             <div class="container">
@@ -32,11 +32,11 @@
                 <div class="single-post mb-0">
 
                     <!-- Single Post
-                                                                                                                                                                                                                                                                                                      ============================================= -->
+                                                                                                                                                                                                                                                                                                                                                  ============================================= -->
                     <div class="entry">
 
                         <!-- Entry Title
-                                                                                                                                                                                                                                                                                                       ============================================= -->
+                                                                                                                                                                                                                                                                                                                                                   ============================================= -->
                         <div class="entry-title">
                             <h2>COMPOSICIÓN</h2>
                         </div><!-- .entry-title end -->
@@ -48,7 +48,7 @@
 
 
                         <!-- Entry Content
-                                                                                                                                                                                                                                                                                                       ============================================= -->
+                                                                                                                                                                                                                                                                                                                                                   ============================================= -->
                         <div class="entry-content mt-0">
                             <hr>
 
@@ -60,8 +60,10 @@
 
                                     </div>
                                     <div class="col">
-                                        @foreach ($users as $user)
-                                            <p>{{ $user }}</P>
+                                        @foreach ($facultad->users as $user)
+                                            @if ($user->web == 'V' && $user->estado)
+                                                <p>{{ $user->lastname . ', ' . $user->name }}</P>
+                                            @endif
                                         @endforeach
                                     </div>
 
@@ -88,26 +90,161 @@
 
 
                     <!-- Entry Content
-                                                                                                                                                                                                                                                                                                       ============================================= -->
+                                                                                                                                                                                                                                                                                                                                                   ============================================= -->
                     <div class="entry-content mt-0">
                         <hr>
 
 
-                        @foreach ($facultades as $facultad)
-                            <div class="d-flex  ">
-                                <div class="col">
-                                    <P>{{ $facultad }}</P>
-                                </div>
-                                <div class="col">
-                                    {{-- @foreach ($users as $user)
-                                            <P>{{ $user->name }}</P>
-                                        @endforeach --}}
-                                </div>
-
-
+                        <div class="d-flex  ">
+                            <div class="col">
+                                Titulares
                             </div>
-                            <hr>
-                        @endforeach
+                            <div class="col">
+                                @foreach ($profesoresT as $profesorT)
+                                    <p>{{ $profesorT->lastname . ',' . $profesorT->name }}
+                                @endforeach
+                            </div>
+                        </div>
+                        <hr>
+
+
+
+
+
+
+                        <div class="clear"></div>
+
+
+
+                    </div>
+                    <div class="entry-content mt-0">
+                        <div class="d-flex  ">
+                            <div class="col">
+                                Suplentes
+                            </div>
+                            <div class="col">
+                                @foreach ($profesoresS as $profesorS)
+                                    <p>{{ $profesorS->lastname . ',' . $profesorS->name }}
+                                @endforeach
+                            </div>
+                        </div>
+                        <hr>
+
+
+
+
+
+
+                        <div class="clear"></div>
+
+
+
+                    </div>
+
+                    <div class="entry-title">
+                        <h2>CLAUSTRO GRADUADOS</h2>
+                    </div><!-- .entry-title end -->
+
+
+
+                    <!-- Entry Content
+                                                                                                                                                                                                                                                                                                                                                   ============================================= -->
+                    <div class="entry-content mt-0">
+                        <hr>
+
+
+                        <div class="d-flex  ">
+                            <div class="col">
+                                Titulares
+                            </div>
+                            <div class="col">
+                                @foreach ($graduadosT as $graduadosT)
+                                    <p>{{ $graduadosT->lastname . ',' . $graduadosT->name }}
+                                @endforeach
+                            </div>
+                        </div>
+                        <hr>
+
+
+
+
+
+
+                        <div class="clear"></div>
+
+
+
+                    </div>
+                    <div class="entry-content mt-0">
+                        <div class="d-flex  ">
+                            <div class="col">
+                                Suplentes
+                            </div>
+                            <div class="col">
+                                @foreach ($graduadosS as $graduadosS)
+                                    <p>{{ $graduadosS->lastname . ',' . $graduadosS->name }}
+                                @endforeach
+                            </div>
+                        </div>
+                        <hr>
+
+
+
+
+
+
+                        <div class="clear"></div>
+
+
+
+                    </div>
+
+                    <div class="entry-title">
+                        <h2>CLAUSTRO ESTUDIANTES</h2>
+                    </div><!-- .entry-title end -->
+
+
+
+                    <!-- Entry Content
+                                                                                                                                                                                                                                                                                                                                                   ============================================= -->
+                    <div class="entry-content mt-0">
+                        <hr>
+
+
+                        <div class="d-flex  ">
+                            <div class="col">
+                                Titulares
+                            </div>
+                            <div class="col">
+                                @foreach ($estudiantesT as $estudianteT)
+                                    <p>{{ $estudianteT->lastname . ',' . $estudianteT->name }}
+                                @endforeach
+                            </div>
+                        </div>
+                        <hr>
+
+
+
+
+
+
+                        <div class="clear"></div>
+
+
+
+                    </div>
+                    <div class="entry-content mt-0">
+                        <div class="d-flex  ">
+                            <div class="col">
+                                Suplentes
+                            </div>
+                            <div class="col">
+                                @foreach ($estudiantesS as $estudianteS)
+                                    <p>{{ $estudianteS->lastname . ',' . $estudianteS->name }}
+                                @endforeach
+                            </div>
+                        </div>
+                        <hr>
 
 
 
@@ -120,45 +257,8 @@
 
                     </div>
                 </div><!-- .entry end -->
-                <div class="entry-title">
-                    <h2>CLAUSTRO GRADUADOS</h2>
-                </div><!-- .entry-title end -->
 
-
-
-                <!-- Entry Content
-                                                                                                                                                                                                                                                                                                       ============================================= -->
-                <div class="entry-content mt-0">
-                    <hr>
-
-
-                    @foreach ($facultades as $facultad)
-                        <div class="d-flex  ">
-                            <div class="col">
-                                <P>{{ $facultad }}</P>
-                            </div>
-                            <div class="col">
-                                {{-- @foreach ($users as $user)
-                                            <P>{{ $user->name }}</P>
-                                        @endforeach --}}
-                            </div>
-
-
-                        </div>
-                        <hr>
-                    @endforeach
-
-                    <div class="clear"></div>
-
-
-
-                </div>
-            </div><!-- .entry end -->
-
-
+            </div>
         </div>
-
-        </div>
-
     </section><!-- #content end -->
 @endsection

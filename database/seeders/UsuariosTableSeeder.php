@@ -68,7 +68,7 @@ class UsuariosTableSeeder extends Seeder
         $user->estado = true;
         $user->save();
 
-        //inserto rol sadmin del usuario creado
+        //inserto rol consejero del usuario creado
         $user_rol = new User_rol();
         $user_rol->user_id = $user->id;
         $user_rol->rol_id = 3;
@@ -88,7 +88,7 @@ class UsuariosTableSeeder extends Seeder
         $user->estado = true;
         $user->save();
 
-        //inserto rol sadmin del usuario creado
+        //inserto rol observador del usuario creado
         $user_rol = new User_rol();
         $user_rol->user_id = $user->id;
         $user_rol->rol_id = 4;
@@ -97,7 +97,7 @@ class UsuariosTableSeeder extends Seeder
         $user_rol->save();
 
         $contrasenaHasheada = bcrypt('secretaria');
-        //Inserto usuario sevretaría
+        //Inserto usuario secretaria
         $user = new User();
         $user->name = "secretaria";
         $user->email = "secretaria@consejo.com";
@@ -108,7 +108,7 @@ class UsuariosTableSeeder extends Seeder
         $user->estado = true;
         $user->save();
 
-        //inserto rol sadmin del usuario creado
+        //inserto rol secretaria del usuario creado
         $user_rol = new User_rol();
         $user_rol->user_id = $user->id;
         $user_rol->rol_id = 5;
@@ -116,27 +116,125 @@ class UsuariosTableSeeder extends Seeder
         $user_rol->updated_at = now();
         $user_rol->save();
 
-        $contrasenaHasheada = bcrypt('agronomia');
-        //Inserto usuario decano agronomia
-        $user = new User();
-        $user->name = "Juan Pepito";
-        $user->lastname = "Perez Perez";
-        $user->email = "jperez@consejo.com";
-        $user->phone = "1111111111";
-        $user->cargo_id = "1";
-        $user->facultad_id = "1";
-        $user->password = $contrasenaHasheada;
-        $user->email_verified_at = now();
-        $user->created_at = now();
-        $user->updated_at = now();
-        $user->save();
 
-        //inserto rol sadmin del usuario creado
-        $user_rol = new User_rol();
-        $user_rol->user_id = $user->id;
-        $user_rol->rol_id = 5;
-        $user_rol->created_at = now();
-        $user_rol->updated_at = now();
-        $user_rol->save();
+        /* INSERTO USUARIOS DECANOS Y VICEDECANOS QUE VAN A APARECER EN LA WEB */
+        //Inserto usuarios Decanos y vicedecanos x cada facultad
+        for ($i = 1; $i <= 16; $i++) {
+            for ($j = 1; $j <= 2; $j++) {
+                $contrasenaHasheada = bcrypt('usuarioweb');
+                $user = new User();
+                $user->name = "usuario " . ($j % 2 == 0 ? 'Vicedecano' : 'Decano');
+                $user->lastname = "web_" . $i . "_" . $j;
+                $user->email = "usuario_" . $i . "_" . $j . "@consejo.com";
+                $user->phone = "1111111111";
+                $user->cargo_id = $j;
+                $user->facultad_id = $i;
+                $user->web = "V";
+                $user->orden = $j;
+                $user->password = $contrasenaHasheada;
+                $user->email_verified_at = now();
+                $user->created_at = now();
+                $user->updated_at = now();
+                $user->estado = true;
+                $user->save();
+
+                //inserto rol sadmin del usuario creado
+                $user_rol = new User_rol();
+                $user_rol->user_id = $user->id;
+                $user_rol->rol_id = 2;
+                $user_rol->created_at = now();
+                $user_rol->updated_at = now();
+                $user_rol->save();
+            }
+        }
+
+        /* INSERTO USUARIOS QUE VAN A APARECER EN LA WEB */
+        //Inserto usuarios Decanos y vicedecanos x cada facultad
+        for ($i = 1; $i <= 5; $i++) {
+            for ($j = 1; $j <= 2; $j++) {
+                $contrasenaHasheada = bcrypt('usuarioweb');
+                $user = new User();
+                $user->name = "usuario " . ($j % 2 == 0 ? 'Suplente' : 'Titular');
+                $user->lastname = "web_profesor_" . $i . "_" . $j;
+                $user->email = "usuario_profesor" . $i . "_" . $j . "@consejo.com";
+                $user->phone = "1111111111";
+                $user->cargo_id = $j % 2 == 0 ? 4 : 3;
+                $user->facultad_id = NULL;
+                $user->web = "V";
+                $user->orden = $j;
+                $user->password = $contrasenaHasheada;
+                $user->email_verified_at = now();
+                $user->created_at = now();
+                $user->updated_at = now();
+                $user->estado = true;
+                $user->save();
+
+                //inserto rol sadmin del usuario creado
+                $user_rol = new User_rol();
+                $user_rol->user_id = $user->id;
+                $user_rol->rol_id = 2;
+                $user_rol->created_at = now();
+                $user_rol->updated_at = now();
+                $user_rol->save();
+            }
+        }
+
+        for ($i = 1; $i <= 5; $i++) {
+            for ($j = 1; $j <= 2; $j++) {
+                $contrasenaHasheada = bcrypt('usuarioweb');
+                $user = new User();
+                $user->name = "usuario " . ($j % 2 == 0 ? 'Suplente' : 'Titular');
+                $user->lastname = "web_graduado_" . $i . "_" . $j;
+                $user->email = "usuario_graduado" . $i . "_" . $j . "@consejo.com";
+                $user->phone = "1111111111";
+                $user->cargo_id = $j % 2 == 0 ? 6 : 5;
+                $user->facultad_id = NULL;
+                $user->web = "V";
+                $user->orden = $j;
+                $user->password = $contrasenaHasheada;
+                $user->email_verified_at = now();
+                $user->created_at = now();
+                $user->updated_at = now();
+                $user->estado = true;
+                $user->save();
+
+                //inserto rol sadmin del usuario creado
+                $user_rol = new User_rol();
+                $user_rol->user_id = $user->id;
+                $user_rol->rol_id = 2;
+                $user_rol->created_at = now();
+                $user_rol->updated_at = now();
+                $user_rol->save();
+            }
+        }
+
+        for ($i = 1; $i <= 5; $i++) {
+            for ($j = 1; $j <= 2; $j++) {
+                $contrasenaHasheada = bcrypt('usuarioweb');
+                $user = new User();
+                $user->name = "usuario " . ($j % 2 == 0 ? 'Suplente' : 'Titular');
+                $user->lastname = "web_estudiante_" . $i . "_" . $j;
+                $user->email = "usuario_estudiante" . $i . "_" . $j . "@consejo.com";
+                $user->phone = "1111111111";
+                $user->cargo_id = $j % 2 == 0 ? 8 : 7;
+                $user->facultad_id = NULL;
+                $user->web = "V";
+                $user->orden = $j;
+                $user->password = $contrasenaHasheada;
+                $user->email_verified_at = now();
+                $user->created_at = now();
+                $user->updated_at = now();
+                $user->estado = true;
+                $user->save();
+
+                //inserto rol sadmin del usuario creado
+                $user_rol = new User_rol();
+                $user_rol->user_id = $user->id;
+                $user_rol->rol_id = 2;
+                $user_rol->created_at = now();
+                $user_rol->updated_at = now();
+                $user_rol->save();
+            }
+        }
     }
 }
