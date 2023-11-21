@@ -86,12 +86,6 @@ class ComposicionController extends Controller
             ->orderBy('cargos.id')
             ->get();
         $facultades = Facultad::all();
-        // foreach ($facultades as $facultad) {
-        //     foreach($facultad->users as $user){
-        //         dump($user->name);
-        //     }
-        // }
-        // die();
         return view('composicion', [
             'profesoresT' => $profesoresT,
             'graduadosT' => $graduadosT,
