@@ -12,7 +12,7 @@ class Temas extends Component
     public $loading = false;
     public $showActionModal = false;
     public $titulo;
-    protected $listeners = ['errorTitulo' => 'manejarErrorTitulo', 'refreshParent' => '$refresh'];
+    protected $listeners = ['errorTitulo' => 'handleErrorTitulo', 'delete'];
     public $errorTitulo = [];
 
 
@@ -48,7 +48,6 @@ class Temas extends Component
             $this->reset(['titulo']);
             $this->closeModal();
             $this->emit('mensajePositivo', ['mensaje' => 'El tema se agregó correctamente']);
-            $this->emit('refreshParent'); // Emite un evento para que el componente padre se actualice
         }
         catch (\Illuminate\Validation\ValidationException $e) {
             $errors = $e->validator->getMessageBag();
@@ -62,7 +61,7 @@ class Temas extends Component
         }
     }
 
-    public function manejarErrorTitulo($errores)
+    public function handleErrorTitulo($errores)
     {
         $this->errorTitulo = $errores['errores']['titulo'];
     }
@@ -103,7 +102,6 @@ class Temas extends Component
             $this->reset(['titulo']);
             $this->closeModal();
             $this->emit('mensajePositivo', ['mensaje' => 'El tema se modificó correctamente']);
-            $this->emit('refreshParent'); // Emite un evento para que el componente padre se actualice
         }
         catch (\Illuminate\Validation\ValidationException $e) {
             $errors = $e->validator->getMessageBag();
@@ -114,6 +112,24 @@ class Temas extends Component
         } finally {
             // Independientemente de si hubo un error o no, cierra el modal y restablece el estado del loader
             $this->loading = false;
+        }
+    }
+
+    public function delete($id)
+    {
+        try {
+            $temaToDelete = ModelTemas::find($id);
+
+            // Verifica si el tema existe antes de intentar eliminarlo
+            if (!empty($temaToDelete)) {
+                $temaToDelete->delete();
+            }
+
+            $this->emit('mensajePositivo', ['mensaje' => 'El tema se eliminó correctamente']);
+        }
+        catch (\Exception $e) {
+            // Manejar otros errores
+            $this->emit('mensajeNegativo', ['mensaje' => 'Error al eliminar el tema: ' . $e->getMessage()]);
         }
     }
 
