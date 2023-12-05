@@ -129,6 +129,7 @@ class UsuariosTableSeeder extends Seeder
         $user->email_verified_at = now();
         $user->cargo_id = 1;
         $user->facultad_id = 7;
+        $user->web = "V";
         $user->created_at = now();
         $user->updated_at = now();
         $user->orden = 1;
@@ -152,6 +153,7 @@ class UsuariosTableSeeder extends Seeder
         $user->email_verified_at = now();
         $user->cargo_id = 2;
         $user->facultad_id = 7;
+        $user->web = "V";
         $user->created_at = now();
         $user->updated_at = now();
         $user->orden = 2;
@@ -175,6 +177,7 @@ class UsuariosTableSeeder extends Seeder
         $user->email_verified_at = now();
         $user->cargo_id = 1;
         $user->facultad_id = 1;
+        $user->web = "V";
         $user->created_at = now();
         $user->updated_at = now();
         $user->orden = 3;
@@ -198,6 +201,7 @@ class UsuariosTableSeeder extends Seeder
         $user->email_verified_at = now();
         $user->cargo_id = 2;
         $user->facultad_id = 1;
+        $user->web = "V";
         $user->created_at = now();
         $user->updated_at = now();
         $user->orden = 4;
@@ -221,6 +225,7 @@ class UsuariosTableSeeder extends Seeder
         $user->email_verified_at = now();
         $user->cargo_id = 1;
         $user->facultad_id = 9;
+        $user->web = "V";
         $user->created_at = now();
         $user->updated_at = now();
         $user->orden = 5;
@@ -244,6 +249,7 @@ class UsuariosTableSeeder extends Seeder
         $user->email_verified_at = now();
         $user->cargo_id = 2;
         $user->facultad_id = 9;
+        $user->web = "V";
         $user->created_at = now();
         $user->updated_at = now();
         $user->orden = 6;
@@ -266,6 +272,7 @@ class UsuariosTableSeeder extends Seeder
         $user->password = $contrasenaHasheada;
         $user->email_verified_at = now();
         $user->cargo_id = 3;
+        $user->web = "V";
         $user->created_at = now();
         $user->updated_at = now();
         $user->orden = 30;
@@ -288,6 +295,7 @@ class UsuariosTableSeeder extends Seeder
         $user->password = $contrasenaHasheada;
         $user->email_verified_at = now();
         $user->cargo_id = 3;
+        $user->web = "V";
         $user->created_at = now();
         $user->updated_at = now();
         $user->orden = 31;
@@ -310,6 +318,7 @@ class UsuariosTableSeeder extends Seeder
         $user->password = $contrasenaHasheada;
         $user->email_verified_at = now();
         $user->cargo_id = 4;
+        $user->web = "V";
         $user->created_at = now();
         $user->updated_at = now();
         $user->orden = 40;
@@ -332,6 +341,7 @@ class UsuariosTableSeeder extends Seeder
         $user->password = $contrasenaHasheada;
         $user->email_verified_at = now();
         $user->cargo_id = 4;
+        $user->web = "V";
         $user->created_at = now();
         $user->updated_at = now();
         $user->orden = 41;
@@ -354,6 +364,7 @@ class UsuariosTableSeeder extends Seeder
         $user->password = $contrasenaHasheada;
         $user->email_verified_at = now();
         $user->cargo_id = 5;
+        $user->web = "V";
         $user->created_at = now();
         $user->updated_at = now();
         $user->orden = 50;
@@ -376,6 +387,7 @@ class UsuariosTableSeeder extends Seeder
        $user->password = $contrasenaHasheada;
        $user->email_verified_at = now();
        $user->cargo_id = 5;
+       $user->web = "V";
        $user->created_at = now();
        $user->updated_at = now();
        $user->orden = 51;
@@ -398,6 +410,7 @@ class UsuariosTableSeeder extends Seeder
        $user->password = $contrasenaHasheada;
        $user->email_verified_at = now();
        $user->cargo_id = 6;
+       $user->web = "V";
        $user->created_at = now();
        $user->updated_at = now();
        $user->orden = 60;
@@ -420,6 +433,7 @@ class UsuariosTableSeeder extends Seeder
        $user->password = $contrasenaHasheada;
        $user->email_verified_at = now();
        $user->cargo_id = 6;
+       $user->web = "V";
        $user->created_at = now();
        $user->updated_at = now();
        $user->orden = 61;
