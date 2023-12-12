@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire\Admin;
 
-use App\Models\Temas as ModelTemas;
+use App\Models\Tema as ModelTemas;
 use Livewire\Component;
 
 class Temas extends Component
