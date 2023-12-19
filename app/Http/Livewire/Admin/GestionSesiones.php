@@ -3,8 +3,10 @@
 namespace App\Http\Livewire\Admin;
 
 use App\Models\Sesion;
+use Exception;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class GestionSesiones extends Component
 {
@@ -55,18 +57,27 @@ class GestionSesiones extends Component
             'fecha' => 'required|date',
             'urlYoutube' => 'string|nullable',
         ]);
-
-        Sesion::create([
-            'usuarioAlta_id' => Auth::user()->id,
-            'fecha' => $validatedData['fecha'],
-            'urlYoutube' => $validatedData['urlYoutube'],
-            'consejo' => 'V',
-            'estado' => 1 //estados: 1 = En revision, 2 = publicada, 3 = Cerrada
-        ]);
-
-        $this->closeModal();
-        $this->resetInputFields();
-        $this->emit('mensajePositivo', ['mensaje' => 'Operacion exitosa']);
+        
+        try{
+            DB::transaction(function () use ($validatedData) {
+                $sesion = Sesion::create([
+                    'usuarioAlta_id' => Auth::user()->id,
+                    'fecha' => $validatedData['fecha'],
+                    'urlYoutube' => $validatedData['urlYoutube'],
+                    'consejo' => 'V',
+                    'estado' => 1 //estados: 1 = En revision, 2 = publicada, 3 = Cerrada
+                ]);
+        
+                $sesion->ordenDia()->create();
+        
+                $this->closeModal();
+                $this->resetInputFields();
+                $this->emit('mensajePositivo', ['mensaje' => 'Operacion exitosa']);
+            });
+        }catch(\Exception){
+            $this->emit('mensajeNegativo', ['mensaje' => 'Error al crear la sesión y la orden del día']);
+        }
+       
     }
 
     public function updateSesion()
@@ -87,11 +98,6 @@ class GestionSesiones extends Component
         $this->emit('mensajePositivo', ['mensaje' => 'Operacion exitosa']);
     }
 
-
-    public function ordenDelDia()
-    {
-        echo 'A la espera de sprint';
-    }
     public function notificar()
     {
         echo 'A la espera de sprint';
@@ -116,6 +122,10 @@ class GestionSesiones extends Component
     {
         // $this->isOpen = true;
         $this->muestraModal = 'block';
+    }
+
+    public function openOrdenModal($id_sesion){
+        $this->emit('openOrdenModal', $id_sesion);
     }
 
     private function resetInputFields()

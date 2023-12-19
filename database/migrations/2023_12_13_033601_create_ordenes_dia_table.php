@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('ordenes_dia', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('id_sesion')->nullable(false);
+            $table->unsignedBigInteger('id_sesion');
             $table->unsignedBigInteger('id_estado')->default(1);
             $table->timestamps();
 

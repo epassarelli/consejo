@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Temas;
+use App\Models\Tema;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -26,7 +26,7 @@ class TemasTableSeeder extends Seeder
         ];
         
         foreach ($titulos as $titulo) {
-            Temas::create(['titulo' => $titulo]);
+            Tema::create(['titulo' => $titulo]);
         }
     }
 }

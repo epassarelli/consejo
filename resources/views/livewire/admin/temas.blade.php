@@ -41,7 +41,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="temaModalLabel">{{empty($tema_id) ? "Crear" : "Editar"}} Tema</h5>
+                        <h5 class="modal-title" id="temaModalLabel">{{empty($id_tema) ? "Crear" : "Editar"}} Tema</h5>
                         <button type="button" class="close" wire:click="closeModal" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -85,7 +85,7 @@
                         </div>
                         <!-- Contenido del modal -->
                         <div class="d-flex justify-content-end">
-                        @if(empty($tema_id))
+                        @if(empty($id_tema))
                             <button type="button" wire:click="createTema" wire:loading.attr="disabled" class="btn btn-primary">Crear</button>
                         @else
                             <button type="button" wire:click="updateTema" wire:loading.attr="disabled" class="btn btn-primary">Editar</button>

@@ -27,4 +27,9 @@ class Sesion extends Model
     {
         return $this->belongsTo(Comision::class, 'comision_id');
     }
+
+    public function ordenDia()
+    {
+        return $this->hasOne(OrdenDia::class, 'id_sesion');
+    }
 }
