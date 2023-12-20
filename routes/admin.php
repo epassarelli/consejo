@@ -6,6 +6,7 @@ use App\Http\Livewire\Admin\Roles;
 use App\Http\Livewire\Admin\Users;
 use App\Http\Livewire\Admin\GestionComisiones;
 use App\Http\Livewire\Admin\GestionSesiones;
+use App\Http\Livewire\Admin\Temas;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,3 +24,4 @@ Route::get('/roles', Roles::class)->name('roles');
 Route::get('/users', Users::class)->name('users');
 Route::get('/comisiones', GestionComisiones::class)->name('comisiones');
 Route::get('/sesiones', GestionSesiones::class)->name('sesiones');
+Route::get('/temas', Temas::class)->name('temas');

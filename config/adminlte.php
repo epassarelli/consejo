@@ -332,6 +332,11 @@ return [
             'url' => 'admin/sesiones',
             'icon' => 'fas fa-file-signature',
         ],
+        [
+            'text' => 'Temas',
+            'url' => 'admin/temas',
+            'icon' => 'fas fa-file-signature',
+        ],
         // [
         //     'text' => 'Tipos de Blog',
         //     'url' => 'admin/tiposblog',

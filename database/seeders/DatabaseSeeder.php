@@ -20,7 +20,8 @@ class DatabaseSeeder extends Seeder
             CargosTableSeeder::class,
             FacultadesTableSeeder::class,
             UsuariosTableSeeder::class,
-            ComisionesTableSeeder::class
+            ComisionesTableSeeder::class,
+            TemasTableSeeder::class
         ]);
     }
 }
