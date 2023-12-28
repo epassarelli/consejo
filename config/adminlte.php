@@ -337,6 +337,11 @@ return [
             'url' => 'admin/temas',
             'icon' => 'fas fa-file-signature',
         ],
+        [
+            'text' => 'Items',
+            'url' => 'admin/items',
+            'icon' => 'fas fa-file-signature',
+        ],
         // [
         //     'text' => 'Tipos de Blog',
         //     'url' => 'admin/tiposblog',
