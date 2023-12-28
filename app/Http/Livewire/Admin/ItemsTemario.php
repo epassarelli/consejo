@@ -12,9 +12,11 @@ use Livewire\Component;
 
 class ItemsTemario extends Component
 {
-    private $facultades;
-    private $comisiones;
+    protected $facultades;
+    protected $comisiones;
+    protected $items;
 
+    public $id_tema;
     public $item_id;
     public $facultad_id;
     public $comision_id;
@@ -25,10 +27,9 @@ class ItemsTemario extends Component
     public $showModal = 'none';
     public $showActionModal = false;
     public $loading = false;
+    public $readonly = false;
 
-    protected $items;
     protected $listeners = ['delete', 'update'];
-
 
     public function render()
     {
@@ -45,33 +46,34 @@ class ItemsTemario extends Component
         return view('livewire.admin.items-temario', [
                 'items' => $this->items,
                 'facultades' => $this->facultades,
-                'comisiones' => $this->comisiones
+                'comisiones' => $this->comisiones,
             ])->layout('layouts.adminlte');
     }
 
-
-
-    public function createItem()
+    public function storeItem()
     {
         $this->loading = true;
-
         try {
 
             $params = $this->validate([
-                'numero' => 'required',
+                'numero' => 'required|string',
                 'resolucion' => 'required',
                 'resumen' => 'required',
                 'comision_id' => 'required',
                 'facultad_id' => 'required',
-            ], [
+                'tipo' => 'required',
+            ]
+            , [
                 'numero.required' => 'El campo Número es obligatorio.',
                 'resolucion.required' => 'El campo resolución es obligatorio.',
                 'resumen.required' => 'El campo resumen es obligatorio.',
                 'comision_id.required' => 'El campo comisión es obligatorio.',
                 'facultad_id.required' => 'El campo facultad es obligatorio.',
-            ]);
+                'tipo.required' => 'El campo tipo es obligatorio.',
+            ]
+        );
 
-
+        $this->emit('mensajePositivo', ['mensaje' => 'El Item se agregó correctamente']);
 
             ModelItemsTemario::create([
                 'id_tema' => 1,
@@ -79,13 +81,67 @@ class ItemsTemario extends Component
                 'comision_id' => $params["comision_id"],
                 'facultad_id' => $params["facultad_id"],
                 'resolucion' => $params["resolucion"],
-                'resumen' => $params["resumen"]
+                'resumen' => $params["resumen"],
+                'tipo' => $params["tipo"]
             ]);
-
 
             $this->reset(['numero']);
             $this->closeModal();
             $this->emit('mensajePositivo', ['mensaje' => 'El Item se agregó correctamente']);
+
+        }catch (\Illuminate\Validation\ValidationException $e){
+            $errors = $e->validator->getMessageBag();
+            $this->emit('errores', ['errores' => $errors]);
+        } catch (\Exception $e) {
+            // Manejar otros errores
+            $this->emit('mensajeNegativo', ['mensaje' => 'Error al agregar el item: ' . $e->getMessage()]);
+        } finally {
+            // Independientemente de si hubo un error o no, cierra el modal y restablece el estado del loader
+            $this->loading = false;
+        }
+
+    }
+
+
+    public function updateItem()
+    {
+        $this->loading = true;
+
+
+        try {
+
+            $params = $this->validate([
+                'numero' => 'required',
+    //            'resolucion' => 'required',
+    //            'resumen' => 'required',
+    //            'comision_id' => 'required',
+    //            'facultad_id' => 'required',
+    //            'tipo' => 'required',
+            ], [
+                'numero.required' => 'El campo Número es obligatorio.',
+    //            'resolucion.required' => 'El campo resolución es obligatorio.',
+    //            'resumen.required' => 'El campo resumen es obligatorio.',
+    //            'comision_id.required' => 'El campo comisión es obligatorio.',
+    //            'facultad_id.required' => 'El campo facultad es obligatorio.',
+    //            'tipo.required' => 'El campo tipo es obligatorio.',
+            ]);
+
+            $ItemToUpdate = ModelItemsTemario::find($this->item_id);
+
+            if(!empty($ItemToUpdate)){
+                $ItemToUpdate->id_tema =  1;
+                $ItemToUpdate->numero = $params["numero"];
+                $ItemToUpdate->comision_id = $params["comision_id"];
+                $ItemToUpdate->facultad_id = $params["facultad_id"];
+                $ItemToUpdate->resolucion = $params["resolucion"];
+                $ItemToUpdate->resumen = $params["resumen"];
+                $ItemToUpdate->tipo = $params["tipo"];
+                $ItemToUpdate->save();
+            }
+
+            $this->reset(['numero', 'id_tema', 'comision_id', 'facultad_id', 'facultad_id', 'resolucion', 'resumen', 'tipo']);
+            $this->closeModal();
+            $this->emit('mensajePositivo', ['mensaje' => 'El item se modificó correctamente']);
 
         }catch (\Illuminate\Validation\ValidationException $e){
             $errors = $e->validator->getMessageBag();
@@ -97,48 +153,8 @@ class ItemsTemario extends Component
             // Independientemente de si hubo un error o no, cierra el modal y restablece el estado del loader
             $this->loading = false;
         }
-
-
     }
 
-
-
-    public function openEditModal($id){
-        $this->item_id = $id;
-        $ItemToUpdate = ModelItemsTemario::find($id);
-        // Verifica si el tema existe antes de asignar el título
-        if (!empty($ItemToUpdate)) {
-            $this->facultad_id = $ItemToUpdate->facultad_id;
-            $this->numero = $ItemToUpdate->numero;
-        }
-        $this->openModal();
-    }
-
-    public function openModal()
-    {
-        $this->showActionModal = true;
-    }
-
-    public function closeModal()
-    {
-        $this->item_id = 0;
-        $this->showActionModal = false;
-        $this->loading = false;
-    }
-
-    public function storeItem()
-    {
-        $this->emit('mensajeNegativo', ['mensaje' => 'Error al agregar el item: ' . $this->item_id]);
-        $this->closeModal();
-        $this->resetInputFields();
-    }
-
-    public function updateItem()
-    {
-        $this->emit('mensajeNegativo', ['mensaje' => 'Actualizar: ' . $this->item_id]);
-        $this->closeModal();
-        $this->resetInputFields();
-    }
 
     public function delete($id)
     {
@@ -158,9 +174,46 @@ class ItemsTemario extends Component
         }
     }
 
+
+    public function openEditModal($id, $readonly){
+        $this->readonly = $readonly;
+        $this->item_id = $id;
+        $ItemToUpdate = ModelItemsTemario::find($id);
+
+        if($id===0){
+            $this->readonly = true;
+        }
+
+        if (!empty($ItemToUpdate)) {
+            $this->facultad_id = $ItemToUpdate->facultad_id;
+            $this->numero = $ItemToUpdate->numero;
+            $this->resolucion = $ItemToUpdate->resolucion;
+            $this->tipo = $ItemToUpdate->tipo;
+            $this->resumen = $ItemToUpdate->resumen;
+            $this->comision_id = $ItemToUpdate->comision_id;
+        }
+
+        $this->openModal();
+    }
+
+
+    public function openModal()
+    {
+        $this->showActionModal = true;
+    }
+
+    public function closeModal()
+    {
+        $this->resetInputFields();
+        $this->showActionModal = false;
+        $this->readonly = false;
+        $this->loading = false;
+    }
+
+
     private function resetInputFields()
     {
-        $this->item_id = 0;
+        $this->item_id = '';
         $this->facultad_id = '';
         $this->comision_id = '';
         $this->tipo = '';
