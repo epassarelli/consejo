@@ -4,11 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
 class OrdenDia extends Model
 {
     use HasFactory;
 
+    protected $table = 'ordenes_dia';
     protected $fillable = ['id_sesion', 'id_estado'];
 
     public function sesion()
@@ -21,8 +21,8 @@ class OrdenDia extends Model
         return $this->belongsTo(EstadoOrdenDia::class, 'id_estado');
     }
 
-    public function temario()
+    public function temarioOrdenDia()
     {
-        return $this->hasMany(TemarioOrdenDia::class, 'id_orden_dia')->cascadeOnDelete();
+        return $this->hasMany(TemarioOrdenDia::class, 'id_orden_dia');
     }
 }

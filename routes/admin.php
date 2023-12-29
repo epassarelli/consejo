@@ -7,6 +7,7 @@ use App\Http\Livewire\Admin\Users;
 use App\Http\Livewire\Admin\GestionComisiones;
 use App\Http\Livewire\Admin\GestionSesiones;
 use App\Http\Livewire\Admin\Temas;
+use App\http\Livewire\Admin\ItemsTemario;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,3 +26,4 @@ Route::get('/users', Users::class)->name('users');
 Route::get('/comisiones', GestionComisiones::class)->name('comisiones');
 Route::get('/sesiones', GestionSesiones::class)->name('sesiones');
 Route::get('/temas', Temas::class)->name('temas');
+Route::get('/items', ItemsTemario::class)->name('items');

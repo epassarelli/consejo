@@ -10,4 +10,7 @@ class Tema extends Model
     use HasFactory;
 
     protected $fillable = ['titulo'];
+
+
+    
 }

@@ -8,7 +8,7 @@ use Livewire\Component;
 class Temas extends Component
 {
     public $temas;
-    public $tema_id;
+    public $id_tema;
     public $loading = false;
     public $showActionModal = false;
     public $titulo;
@@ -67,7 +67,7 @@ class Temas extends Component
     }
 
     public function openEditModal($id){
-        $this->tema_id = $id;
+        $this->id_tema = $id;
         $temaToUpdate = ModelTemas::find($id);
 
         // Verifica si el tema existe antes de asignar el título
@@ -92,7 +92,7 @@ class Temas extends Component
 
             ]);
 
-            $temaToUpdate = ModelTemas::find($this->tema_id);
+            $temaToUpdate = ModelTemas::find($this->id_tema);
 
             if(!empty($temaToUpdate)){
                 $temaToUpdate->titulo =  $params["titulo"];

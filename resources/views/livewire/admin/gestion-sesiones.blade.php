@@ -39,7 +39,7 @@
                                         data-toggle="modal" data-target="#roleModal" title="Editar"><i
                                             class="fa fa-edit"></i></button>
 
-                                    <button wire:click="ordenDelDia({{ $sesion->id }})" class="btn btn-sm btn-info"
+                                    <button wire:click="openOrdenModal({{ $sesion->id }})" class="btn btn-sm btn-info"
                                         data-toggle="modal" data-target="#roleModal" title="Orden del dia"><i
                                             class="fas fa-file-alt"></i></button>
 
@@ -143,4 +143,6 @@
         </div>
     @endif
 
+
+    @livewire('admin.ordenes-del-dia')
 </div>
