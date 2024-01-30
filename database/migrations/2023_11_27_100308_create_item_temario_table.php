@@ -13,8 +13,7 @@ return new class extends Migration
     {
         Schema::create('items_temario', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('id_tema');
-            //$table->foreign('id_tema')->references('id')->on('temas')->onDelete();
+            $table->unsignedBigInteger('temario_id');
             $table->unsignedBigInteger('comision_id');
             $table->foreign('comision_id')->references('id')->on('comisiones')->restrictOnDelete();
             $table->unsignedBigInteger('facultad_id');
