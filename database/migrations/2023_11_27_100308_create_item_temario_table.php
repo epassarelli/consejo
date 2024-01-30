@@ -20,6 +20,7 @@ return new class extends Migration
             $table->foreign('facultad_id')->references('id')->on('facultades')->restrictOnDelete();
             $table->enum('tipo', ['EXPEDIENTE', 'NOTA']);
             $table->string('numero')->nullable(false);
+            $table->integer('anio');
             $table->string('resolucion')->nullable(false);
             $table->longText('resumen');
             $table->timestamps();
