@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Admin;
 
 use App\Models\TemarioOrdenDia as modelTemarioOrdenDia;
+use App\Models\ItemsTemario as ModelItemsTemario;
 use App\Models\Tema as ModelTemas;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
@@ -14,9 +15,12 @@ class TemarioOrdenDia extends Component
     public $loading = false;
     public $showActionModal = false;
     public $readonly = false;
+    public $id_temario = 0;
     public $id_tema;
     public $orden;
-    public $web = 0;
+    public $web;
+
+    protected $listeners = ['delete', 'update'];
 
     public function openModal()
     {
@@ -85,77 +89,91 @@ class TemarioOrdenDia extends Component
             $this->loading = false;
         }
 
-
     }
 
 
-    public function items($id){
-        return redirect()->route('items', ['id' => $id]);
+    public function items($id, $tema=1){
+        return redirect()->route('items', ['id' => $id, 'tema' => $tema]);
     }
 
 
-}
-
-
-
-
-
-
-
-
-/*
-
-    public $id_orden;
-    public $showAddTemarioModal = false;
-    protected $listeners = ['openAddTemarioModal'];
-    public $temas;
-    public $loading = false;
-    public $ultimo_orden;
-
-public function render()
-    {
-
-        $this->temas = Temas::all();
-        $this->ultimo_orden = TemarioOrdenDia
-
-        return view('livewire.admin.temario-orden-dia', ['temas' => $this->temas]);
-    }
-
-
-    public function openAddTemarioModal($id_orden){
-        $this->id_orden = $id_orden;
-        $this->showAddTemarioModal = true;
-    }
-
-    public function addTemario(){
+    public function updateTemario(){
         $this->loading = true;
+
         try {
+
             $params = $this->validate([
-                'titulo' => 'required|string|unique:temas,titulo',
-            ], [
-                'titulo.required' => 'El campo título es obligatorio.',
-                'titulo.string' => 'El campo título debe ser una cadena de texto.',
-                'titulo.unique' => 'El campo título no debe repetirse.',
+                    'id_tema' => 'required',
+                    'orden' => 'required'
+                ]
+                , [
+                    'id_tema.required' => 'El campo Tema es obligatorio.',
+                    'orden.required' => "el orden es obligatorio"
+                ]
+            );
 
-            ]);
 
-            ModelsTemarioOrdenDia::create([
-                'titulo' => $params["titulo"],
-            ]);
+            $temarioToUpdate = modelTemarioOrdenDia::find($this->id_temario);
 
-            $this->reset(['titulo']);
+            if(!empty($temarioToUpdate)){
+                $temarioToUpdate->id_tema =  $this->id_tema;
+                $temarioToUpdate->orden = $params["orden"];
+                $temarioToUpdate->web = $this->web;
+                $temarioToUpdate->save();
+            }
+            $this->reset(['id_temario', 'orden', 'web']);
             $this->closeModal();
-            $this->emit('mensajePositivo', ['mensaje' => 'El tema se agregó correctamente']);
-        }
-        catch (\Illuminate\Validation\ValidationException $e) {
-            $errors = $e->validator->getMessageBag();
-            $this->emit('errorTitulo', ['errores' => $errors]);
+
+            $this->emit('mensajePositivo', ['mensaje' => "El temario se agrego correctamente"]);
         } catch (\Exception $e) {
             // Manejar otros errores
-            $this->emit('mensajeNegativo', ['mensaje' => 'Error al agregar el tema: ' . $e->getMessage()]);
+            $this->emit('mensajeNegativo', ['mensaje' => 'Error al agregar el temario: ' . $e->getMessage()]);
         } finally {
             // Independientemente de si hubo un error o no, cierra el modal y restablece el estado del loader
             $this->loading = false;
         }
     }
-*/
+
+    public function delete($id)
+    {
+
+        try {
+            $temarioToDelete = modelTemarioOrdenDia::find($id);
+            $items = ModelItemsTemario::where('id_tema', $id)->count();
+
+            // Verifica si el tema existe antes de intentar eliminarlo
+            if (!empty($temarioToDelete && $items == 0)) {
+                $temarioToDelete->delete();
+                $this->emit('mensajePositivo', ['mensaje' => 'El temario se elimino correctamente']);
+            }else if($items > 0){
+                $this->emit('mensajeNegativo', ['mensaje' => 'El temario no pudo ser eliminado, por favor verifique que no tenga items y vuelva a intentarlo']);
+            }
+        }
+        catch (\Exception $e) {
+            // Manejar otros errores
+            $this->emit('mensajeNegativo', ['mensaje' => 'Error al eliminar el temario: ' . $e->getMessage()]);
+        }
+    }
+
+    public function openEditModal($id, $readonly){
+        $this->readonly = $readonly;
+        $this->id_temario = $id;
+
+        $temarioToUpdate = modelTemarioOrdenDia::find($id);
+
+        if($id===0){
+            $this->readonly = true;
+        }
+
+        if (!empty($temarioToUpdate)) {
+            $this->id_tema = $temarioToUpdate->id_tema;
+            $this->orden = $temarioToUpdate->orden;
+            $this->web = $temarioToUpdate->web;
+        }
+
+        $this->openModal();
+    }
+
+}
+
+

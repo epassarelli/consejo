@@ -25,12 +25,15 @@
                         <tbody>
                             @foreach ($temarios as $temario)
                                 <tr>
-                                    <td class="text-center">{{$temario->tema}}</td>
+                                    <td class="">{{$temario->tema}}</td>
                                     <td class="text-center">{{$temario->orden}}</td>
                                     <td class="text-center">{{$temario->items}}</td>
                                     <td class="text-center">{{$temario->web}}</td>
                                     <td class="p-1 text-center">
-                                        <button wire:click="items({{$temario->id}})" class="btn btn-sm btn-info" title="items"><i class="fas fa-file-alt""></i></button>
+                                        <button wire:click="items({{$temario->id}}, {{$temario->id_tema}})" class="btn btn-sm btn-info" title="items"><i class="fas fa-file-alt""></i></button>
+                                        <button wire:click="openEditModal({{ $temario->id }}, true)"  class="btn btn-sm btn-secondary" title="Editar"><i class="fa fa-eye"></i></button>
+                                        <button wire:click="openEditModal({{ $temario->id }}, false)"  class="btn btn-sm btn-primary" title="Editar"><i class="fa fa-edit"></i></button>
+                                        <button wire:click="$emit('alertDelete',{{ $temario->id }})" class="btn btn-sm btn-danger" title="Eliminar"><i class="fas fa-trash-alt" style="color: white "></i></button>
                                     </td>
                                 </tr>
                             @endforeach
@@ -87,7 +90,7 @@
                                     <div class="input-group mb-2 mr-sm-2">
                                         <div class="col-8 input-group-prepend">
                                             <label class="input-group-text">Web</label>
-                                            <input type="checkbox" class="form-check-input" name="web" id="web" wire:model="web" style="margin-left:200px" readonly checked='true'>
+                                            <input type="checkbox" class="" name="web" id="web" wire:model="web" style="margin-left:10px" @if($readonly) disabled @endif checked="{{$web == 1 ? 'true':'false' }}">
                                         </div>
                                     </div>
                                 </div>
@@ -98,12 +101,11 @@
                                 <button type="button" wire:click="closeModal" class="btn btn-secondary"
                                     data-dismiss="modal">Cerrar</button>
                                     @if (!$readonly)
-                                    <button wire:click="storeItemTemario" class="btn btn-primary">Guardar</button>
-                                    {{--@if ($tema_id)
-                                            <button wire:click="updateItem" class="btn btn-primary">Actualizar</button>
+                                        @if ($id_temario)
+                                            <button wire:click="updateTemario" class="btn btn-primary">Actualizar</button>
                                         @else
-                                            <button wire:click="storeItem" class="btn btn-primary">Guardar</button>
-                                        @endif --}}
+                                            <button wire:click="storeItemTemario" class="btn btn-primary">Guardar</button>
+                                        @endif
                                     @endif
                             </div>
                         </div>

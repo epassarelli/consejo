@@ -32,5 +32,5 @@ Route::get('/comisiones', GestionComisiones::class)->name('comisiones');
 Route::get('/sesiones', GestionSesiones::class)->name('sesiones');
 Route::get('/temas', Temas::class)->name('temas');
 Route::get('/temarios', TemarioOrdenDia::class)->name('temarios');
-Route::get('/items/{id}', ItemsTemario::class, 'getParams')->name('items');
+Route::get('/items/{id}/{tema}', ItemsTemario::class)->name('items');
 Route::get('/ordenes', OrdenesDelDia::class)->name('ordenes');

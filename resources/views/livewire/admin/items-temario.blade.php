@@ -3,10 +3,11 @@
     <div class="container mt-4">
         <div class="row">
             <div class="col-md-8">
-                <h3>Items {{$id_temario}}</h3>
+                <h3>Items</h3>
             </div>
 
             <div class="col-md-4 text-right">
+                <button class="btn btn-secondary" wire:click="volver" data-target="#itemModal"><i class="fas fa-arrow-circle-left  mr-2" style="color: white;"></i>Volver</button>
                 <button class="btn btn-success" wire:click="openModal" data-target="#itemModal"><i class="fas fa-plus-circle mr-2" style="color: white;"></i>Agregar</button>
             </div>
 
@@ -30,10 +31,10 @@
 
                             <tr>
                                 <td>{{$item->tema}}</td>
-                                <td>{{$item->comision}}</td>
-                                <td>{{$item->facultad}}</td>
-                                <td>{{$item->numero}}</td>
-                                <td>{{$item->resolucion}}</td>
+                                <td class="">{{$item->comision}}</td>
+                                <td class="">{{$item->facultad}}</td>
+                                <td class="text-center">{{$item->numero}}</td>
+                                <td class="text-center">{{$item->resolucion}}</td>
                                 <td></td>
                                 <td class="p-1 text-center">
                                     <button wire:click="openEditModal({{ $item->id }}, true)"  class="btn btn-sm btn-secondary" title="Editar"><i class="fa fa-eye"></i></button>
@@ -103,7 +104,7 @@
                                         <div class="row">
                                             <div class="input-group mb-2 mr-sm-2">
                                                 <div class="col-3 input-group-prepend">
-                                                    <label class="input-group-text">Facultad</label>
+                                                    <label class="input-group-text">Tipo</label>
                                                     <select class="form-control" name="tipo" id="tipo" wire:model="tipo" @if($readonly) disabled @endif>
                                                         <option value="">Seleccionar...</option>
                                                         <option value="EXPEDIENTE">Expediente</option>
