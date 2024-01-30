@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             FacultadesTableSeeder::class,
             UsuariosTableSeeder::class,
             ComisionesTableSeeder::class,
+            EstadosOrdenDiaTableSeeder:: class,
             TemasTableSeeder::class
         ]);
     }
