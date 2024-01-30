@@ -22,6 +22,7 @@ return new class extends Migration
             $table->dateTime('fComunicacion', $precision = 0)->nullable();
             $table->dateTime('fFinalizada', $precision = 0)->nullable();
             $table->string('urlYoutube')->nullable();
+            $table->string('pdf')->nullable();
             $table->integer('estado')->default(1);//estados: 1 = En revision, 2 = publicada, 3 = Cerrada
             $table->unsignedBigInteger('usuarioAlta_id')->nullable();
             $table->foreign('usuarioAlta_id')->references('id')->on('users')->restrictOnDelete();
