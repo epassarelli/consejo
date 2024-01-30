@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreign('comision_id')->references('id')->on('comisiones')->restrictOnDelete();
             $table->unsignedBigInteger('facultad_id');
             $table->foreign('facultad_id')->references('id')->on('facultades')->restrictOnDelete();
-            $table->enum('tipo', ['EXPEDIENTE', 'NOTA']);
+            $table->enum('tipo', ['EXPEDIENTE', 'NOTA', 'RESOLUCION']);
             $table->string('numero')->nullable(false);
             $table->string('resolucion')->nullable(false);
             $table->longText('resumen');
