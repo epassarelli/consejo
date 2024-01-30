@@ -72,14 +72,7 @@
                                 <hr>
                             @endforeach
 
-
-
-
-
-
                             <div class="clear"></div>
-
-
 
                         </div>
                     </div><!-- .entry end -->

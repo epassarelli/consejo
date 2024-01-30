@@ -19,13 +19,6 @@ class ItemsTemario extends Model
                             'resolucion',
                             'resumen'];
 
-    // public function tema()
-    // {
-    //     return $this->belongsTo(Tema::class, 'id_tema');
-    // }
 
-    // public function comision(){
-    //     return $this->belongsTo(comision::class, 'comision_id');
-    // }
 
 }
