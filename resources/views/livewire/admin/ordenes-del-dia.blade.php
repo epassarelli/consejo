@@ -26,7 +26,9 @@
                         @endif
                         <!-- Contenido del modal -->
                         <div class="d-flex justify-content-end">
+
                         @if(($orden->temarioOrdenDia)->count() > 0)
+
                         <table id="basic-table" class="table table-hover table-bordered mt-3">
                         <thead>
                             <tr>
@@ -38,8 +40,9 @@
                             </tr>
                         </thead>
                         <tbody>
+
                             @foreach ($orden->temarioOrdenDia as $temario)
-                
+
                             <tr>
                                 <td class="text-center">{{ $temario->tema->titulo }}</td>
                                 <td class="text-center">{{ $temario->orden }}</td>
@@ -59,6 +62,6 @@
             </div>
         </div>
     @endif
-    
-    @livewire('admin.temario-orden-dia')
+
+  {{-- @livewire('admin.temario-orden-dia') --}}
 </div>

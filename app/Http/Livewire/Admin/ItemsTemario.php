@@ -5,17 +5,15 @@ namespace App\Http\Livewire\Admin;
 use App\Models\ItemsTemario as ModelItemsTemario;
 use App\Models\Facultad as ModelsFacultad;
 use App\Models\Comision as ModelsComision;
-// use App\Models\Comision;
 use Livewire\Component;
-// use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Http\Request;
 
 class ItemsTemario extends Component
 {
+    public $id_temario=100;
     protected $facultades;
     protected $comisiones;
     protected $items;
-
     public $id_tema;
     public $item_id;
     public $facultad_id;
@@ -31,8 +29,23 @@ class ItemsTemario extends Component
 
     protected $listeners = ['delete', 'update'];
 
+    public $errors = [];
+
+    public function getParams($id)
+    {
+        // Acceder al valor del parámetro "id" desde la URL
+        $this->id_temario = $id;
+
+        // También puedes acceder a otros parámetros de la solicitud si es necesario
+      //  $valorQuery = $request->query('nombre_del_parametro_query', 'valor_predeterminado');
+      //  echo "El valor del parámetro de la consulta es: " . $valorQuery;
+
+        // Resto de la lógica del controlador...
+    }
+
     public function render()
     {
+
         $itemsController = new ModelItemsTemario();
         $this->items = $itemsController->join('facultades', 'items_temario.facultad_id', '=' , 'facultades.id')
                                         ->join('comisiones', 'items_temario.comision_id', '=', 'comisiones.id')
@@ -56,24 +69,24 @@ class ItemsTemario extends Component
         try {
 
             $params = $this->validate([
-                'numero' => 'required|string',
-                'resolucion' => 'required',
-                'resumen' => 'required',
-                'comision_id' => 'required',
-                'facultad_id' => 'required',
-                'tipo' => 'required',
-            ]
-            , [
-                'numero.required' => 'El campo Número es obligatorio.',
-                'resolucion.required' => 'El campo resolución es obligatorio.',
-                'resumen.required' => 'El campo resumen es obligatorio.',
-                'comision_id.required' => 'El campo comisión es obligatorio.',
-                'facultad_id.required' => 'El campo facultad es obligatorio.',
-                'tipo.required' => 'El campo tipo es obligatorio.',
-            ]
-        );
+                    'numero' => 'required|string',
+                    'resolucion' => 'required',
+                    'resumen' => 'required',
+                    'comision_id' => 'required',
+                    'facultad_id' => 'required',
+                    'tipo' => 'required',
+                ]
+                , [
+                    'numero.required' => 'El campo Número es obligatorio.',
+                    'resolucion.required' => 'El campo resolución es obligatorio.',
+                    'resumen.required' => 'El campo resumen es obligatorio.',
+                    'comision_id.required' => 'El campo comisión es obligatorio.',
+                    'facultad_id.required' => 'El campo facultad es obligatorio.',
+                    'tipo.required' => 'El campo tipo es obligatorio.',
+                ]
+            );
 
-        $this->emit('mensajePositivo', ['mensaje' => 'El Item se agregó correctamente']);
+
 
             ModelItemsTemario::create([
                 'id_tema' => 1,
@@ -90,11 +103,14 @@ class ItemsTemario extends Component
             $this->emit('mensajePositivo', ['mensaje' => 'El Item se agregó correctamente']);
 
         }catch (\Illuminate\Validation\ValidationException $e){
-            $errors = $e->validator->getMessageBag();
-            $this->emit('errores', ['errores' => $errors]);
+
+           $errors = $e->validator->getMessageBag();
+           $this->emit('errores', ['errors' => $errors]);
+
+    //       $this->emit('mensajeNegativo', ['mensaje' => 'Error al agregar el item 2: ' . $errors]);
         } catch (\Exception $e) {
             // Manejar otros errores
-            $this->emit('mensajeNegativo', ['mensaje' => 'Error al agregar el item: ' . $e->getMessage()]);
+           // $this->emit('mensajeNegativo', ['mensaje' => 'Error al agregar el item1: ' . $e->getMessage()]);
         } finally {
             // Independientemente de si hubo un error o no, cierra el modal y restablece el estado del loader
             $this->loading = false;
@@ -144,11 +160,11 @@ class ItemsTemario extends Component
             $this->emit('mensajePositivo', ['mensaje' => 'El item se modificó correctamente']);
 
         }catch (\Illuminate\Validation\ValidationException $e){
-            $errors = $e->validator->getMessageBag();
-            $this->emit('errorTitulo', ['errores' => $errors]);
+          //  $errors = $e->validator->getMessageBag();
+            $this->emit('errores', ['errores' => $errors]);
         } catch (\Exception $e) {
             // Manejar otros errores
-            $this->emit('mensajeNegativo', ['mensaje' => 'Error al agregar el item: ' . $e->getMessage()]);
+            $this->emit('mensajeNegativo', ['mensaje' => 'Error al agregar el item2: ' . $e->getMessage()]);
         } finally {
             // Independientemente de si hubo un error o no, cierra el modal y restablece el estado del loader
             $this->loading = false;

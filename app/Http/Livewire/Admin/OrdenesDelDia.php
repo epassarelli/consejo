@@ -19,13 +19,6 @@ class OrdenesDelDia extends Component
     protected $listeners = ['errorTitulo' => 'handleErrorTitulo', 'delete', 'openOrdenModal'];
     public $errorTitulo = [];
 
-
-    public function openOrdenModal($id_sesion)
-    {
-        $this->id_sesion = $id_sesion;
-        $this->showActionModal = true;
-    }
-
     public function render()
     {
         $this->orden = ModelsOrdenDia::with(["estado"])->where('id_sesion', $this->id_sesion)->first();
@@ -38,4 +31,16 @@ class OrdenesDelDia extends Component
         $this->emit('openAddTemarioModal', $id_orden);
     }
 
+    /*
+    public function openOrdenModal($id_sesion)
+    {
+        $this->id_sesion = $id_sesion;
+        $this->showActionModal = true;
+    }
+
+
+
+
+
+    */
 }

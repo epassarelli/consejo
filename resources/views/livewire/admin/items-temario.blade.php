@@ -3,7 +3,7 @@
     <div class="container mt-4">
         <div class="row">
             <div class="col-md-8">
-                <h3>Items</h3>
+                <h3>Items {{$id_temario}}</h3>
             </div>
 
             <div class="col-md-4 text-right">
@@ -76,27 +76,28 @@
                                     <div class="container-fluid">
                                         <div class="row">
                                             <div class="input-group mb-2 mr-sm-2">
-                                            <div class="col-6 input-group-prepend">
-                                                <label class="input-group-text">Comisión</label>
-                                                <select class="form-control" name="comision" id="comision" wire:model="comision_id" @if($readonly) disabled @endif>
-                                                    <option value="">Seleccionar...</option>
-                                                    @foreach ($comisiones as $comision)
-                                                        <option value={{$comision->id}}>{{$comision->name}}</option>
-                                                    @endforeach
-                                                </select>
-
-                                            </div>
-
-                                            <div class="col-6 input-group-prepend">
-                                                <label class="input-group-text">Facultad</label>
-                                                <select class="form-control" name="facultad" id="facultad" wire:model="facultad_id" @if($readonly) disabled @endif>
-                                                    <option value="">Seleccionar...</option>
-                                                    @foreach ($facultades as $facultad)
-                                                        <option value={{$facultad->id}}>{{$facultad->name}}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                            </div>
+                                                <div class="col-6 input-group-prepend">
+                                                    <label class="input-group-text">Comisión</label>
+                                                    <select class="form-control" name="comision" id="comision" wire:model="comision_id" @if($readonly) disabled @endif>
+                                                        <option value="">Seleccionar...</option>
+                                                        @foreach ($comisiones as $comision)
+                                                            <option value={{$comision->id}}>{{$comision->name}}</option>
+                                                        @endforeach
+                                                    </select>
+                                                    @error('comision_id')
+                                                        <span class="text-danger">{{ $message }}</span>
+                                                    @enderror
+                                                </div>
+                                                <div class="col-6 input-group-prepend">
+                                                    <label class="input-group-text">Facultad</label>
+                                                    <select class="form-control" name="facultad" id="facultad" wire:model="facultad_id" @if($readonly) disabled @endif>
+                                                        <option value="">Seleccionar...</option>
+                                                        @foreach ($facultades as $facultad)
+                                                            <option value={{$facultad->id}}>{{$facultad->name}}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                           </div>
                                         </div>
 
                                         <div class="row">
@@ -130,7 +131,11 @@
                                                 <div class="col-12 input-group-prepend">
                                                     <label class="input-group-text">Resumen</label>
                                                     <textarea class="form-control" name="resumen" id="resumen" cols="30" rows="3" wire:model="resumen" @if($readonly) disabled @endif></textarea>
-                                                /</div>
+
+                                                    @error('resumen')
+                                                        <span class="text-danger">{{ $message }}</span>
+                                                    @enderror
+                                                </div>
                                             </div>
                                         </div>
 

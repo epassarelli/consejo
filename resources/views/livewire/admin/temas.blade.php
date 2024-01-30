@@ -1,9 +1,11 @@
 <div>
+
     <div class="container mt-4">
         <div class="row">
             <div class="col-md-8">
                 <h3>Temas</h3>
             </div>
+
             <div class="col-md-4 text-right">
                 <button class="btn btn-success" wire:click="openModal"><i class="fas fa-plus-circle mr-2" style="color: white;"></i>Agregar</button>
             </div>
@@ -68,11 +70,11 @@
                                     <div class="col-12">
                                         @if(!empty($errorTitulo))
                                         <div class="text-danger">
-                                            
+
                                                 @foreach($errorTitulo as $error)
                                                 <p>{{ $error }}</p>
                                                 @endforeach
-                                            
+
                                         </div>
                                         @endif
                                     </div>
@@ -80,7 +82,7 @@
                                 @endif
                             </div>
 
-                            
+
 
                         </div>
                         <!-- Contenido del modal -->
@@ -96,6 +98,7 @@
                 </div>
             </div>
         </div>
+
         @endif
     </div>
 </div>

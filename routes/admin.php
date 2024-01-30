@@ -6,8 +6,13 @@ use App\Http\Livewire\Admin\Roles;
 use App\Http\Livewire\Admin\Users;
 use App\Http\Livewire\Admin\GestionComisiones;
 use App\Http\Livewire\Admin\GestionSesiones;
+use App\http\Livewire\Admin\OrdenesDelDia;
+use App\http\Livewire\Admin\TemarioOrdenDia;
 use App\Http\Livewire\Admin\Temas;
 use App\http\Livewire\Admin\ItemsTemario;
+
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -26,4 +31,6 @@ Route::get('/users', Users::class)->name('users');
 Route::get('/comisiones', GestionComisiones::class)->name('comisiones');
 Route::get('/sesiones', GestionSesiones::class)->name('sesiones');
 Route::get('/temas', Temas::class)->name('temas');
-Route::get('/items', ItemsTemario::class)->name('items');
+Route::get('/temarios', TemarioOrdenDia::class)->name('temarios');
+Route::get('/items/{id}', ItemsTemario::class, 'getParams')->name('items');
+Route::get('/ordenes', OrdenesDelDia::class)->name('ordenes');
