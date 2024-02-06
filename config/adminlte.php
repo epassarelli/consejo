@@ -332,11 +332,11 @@ return [
             'url' => 'admin/sesiones',
             'icon' => 'fas fa-file-signature',
         ],
-        [
-            'text' => 'Temarios',
-            'url' => 'admin/temarios',
-            'icon' => 'fas fa-file-signature',
-        ],
+        // [
+        //     'text' => 'Temarios',
+        //     'url' => 'admin/temarios',
+        //    'icon' => 'fas fa-file-signature',
+        // ],
         [
             'text' => 'Temas',
             'url' => 'admin/temas',
