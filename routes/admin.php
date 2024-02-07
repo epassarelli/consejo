@@ -6,10 +6,10 @@ use App\Http\Livewire\Admin\Roles;
 use App\Http\Livewire\Admin\Users;
 use App\Http\Livewire\Admin\GestionComisiones;
 use App\Http\Livewire\Admin\GestionSesiones;
-use App\http\Livewire\Admin\OrdenesDelDia;
-use App\http\Livewire\Admin\TemarioOrdenDia;
+use App\Http\Livewire\Admin\OrdenesDelDia;
+use App\Http\Livewire\Admin\TemarioOrdenDia;
 use App\Http\Livewire\Admin\Temas;
-use App\http\Livewire\Admin\ItemsTemario;
+use App\Http\Livewire\Admin\ItemsTemario;
 
 
 
