@@ -8,6 +8,7 @@ use App\Models\Comision as ModelsComision;
 use Livewire\Component;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class ItemsTemario extends Component
 {
@@ -38,18 +39,18 @@ class ItemsTemario extends Component
         // Acceder al valor del parámetro "id" desde la URL
         $this->id_temario = $id;
         $this->tema = $tema;
-
     }
 
     public function render()
     {
 
         $itemsController = new ModelItemsTemario();
+
         $this->items = $itemsController->join('facultades', 'items_temario.facultad_id', '=' , 'facultades.id')
                                         ->join('comisiones', 'items_temario.comision_id', '=', 'comisiones.id')
-                                        ->join('temas', DB::raw($this->tema), '=', 'temas.id')
-            ->select('items_temario.*', 'facultades.name as facultad', 'comisiones.name as comision', 'temas.titulo as tema')
-            ->where('items_temario.id_tema', $this->id_temario)
+                                        ->leftjoin('temas', DB::raw(session('tema')), '=', 'temas.id')
+            ->select('items_temario.*', 'facultades.name as facultad', 'comisiones.name as comision', 'temas.titulo as tema') //
+            ->where('items_temario.id_tema', session('id_temario'))
             ->get();
 
         $this->facultades = ModelsFacultad::all();
@@ -85,11 +86,8 @@ class ItemsTemario extends Component
                 ]
             );
 
-
-
             ModelItemsTemario::create([
-                'id_tema' => $this->id_temario,
-                'numero' => $params["numero"],
+                'id_tema' => session('id_temario'),
                 'comision_id' => $params["comision_id"],
                 'facultad_id' => $params["facultad_id"],
                 'resolucion' => $params["resolucion"],
@@ -106,10 +104,9 @@ class ItemsTemario extends Component
            $errors = $e->validator->getMessageBag();
            $this->emit('errores', ['errors' => $errors]);
 
-    //       $this->emit('mensajeNegativo', ['mensaje' => 'Error al agregar el item 2: ' . $errors]);
         } catch (\Exception $e) {
             // Manejar otros errores
-           // $this->emit('mensajeNegativo', ['mensaje' => 'Error al agregar el item1: ' . $e->getMessage()]);
+           $this->emit('mensajeNegativo', ['mensaje' => 'Error al agregar el item: ' . $e->getMessage()]);
         } finally {
             // Independientemente de si hubo un error o no, cierra el modal y restablece el estado del loader
             $this->loading = false;
@@ -126,15 +123,24 @@ class ItemsTemario extends Component
         try {
 
             $params = $this->validate([
-                'numero' => 'required',
+                'numero' => 'required|string',
+                'resolucion' => 'required',
+                'resumen' => 'required',
+                'comision_id' => 'required',
+                'facultad_id' => 'required',
+                'tipo' => 'required',
             ], [
                 'numero.required' => 'El campo Número es obligatorio.',
+                'resolucion.required' => 'El campo resolución es obligatorio.',
+                'resumen.required' => 'El campo resumen es obligatorio.',
+                'comision_id.required' => 'El campo comisión es obligatorio.',
+                'facultad_id.required' => 'El campo facultad es obligatorio.',
+                'tipo.required' => 'El campo tipo es obligatorio.',
             ]);
 
             $ItemToUpdate = ModelItemsTemario::find($this->item_id);
 
             if(!empty($ItemToUpdate)){
-                $ItemToUpdate->id_tema =  1;
                 $ItemToUpdate->numero = $params["numero"];
                 $ItemToUpdate->comision_id = $params["comision_id"];
                 $ItemToUpdate->facultad_id = $params["facultad_id"];
@@ -185,7 +191,7 @@ class ItemsTemario extends Component
         $this->item_id = $id;
         $ItemToUpdate = ModelItemsTemario::find($id);
 
-        if($id===0){
+        if($id==0){
             $this->readonly = true;
         }
 
@@ -229,6 +235,7 @@ class ItemsTemario extends Component
 
 
     public function volver(){
+
         return redirect()->route('temarios');
     }
 
