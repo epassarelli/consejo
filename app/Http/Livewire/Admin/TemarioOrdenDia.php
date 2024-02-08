@@ -63,30 +63,19 @@ class TemarioOrdenDia extends Component
             ])->layout('layouts.adminlte');
     }
 
-    protected function messages()
-    {
-        return [
-            'orden.required' => 'el orden es obligatorio.',
-        ];
-    }
-
     public function storeItemTemario()
     {
         $this->loading = true;
 
         try {
 
-
-
             $params = $this->validate([
-//                    'id_tema' => 'required',
+                    'id_tema' => 'required',
                     'orden' => 'required'
+            ] ,[
+                    'id_tema.in' => 'El campo Tema es obligatorio.',
+                    'orden.required' => "el orden es obligatorio."
             ]);
-//                , [
-//                    'id_tema.in' => 'El campo Tema es obligatorio.',
-//                    'orden.required' => "el orden es obligatorio."
-//                ]
-
 
             $this->emit('mensajePositivo', ['mensaje' => $this->orden]);
 
@@ -109,7 +98,7 @@ class TemarioOrdenDia extends Component
     //       $this->emit('mensajeNegativo', ['mensaje' => 'Error al agregar el item 2: ' . $errors]);
         } catch (\Exception $e) {
             // Manejar otros errores
-            $this->emit('mensajeNegativo', ['mensaje' => 'Error al agregar el item1: ' . $e->getMessage()]);
+            $this->emit('mensajeNegativo', ['mensaje' => 'Error al agregar el item: ' . $e->getMessage()]);
         } finally {
             // Independientemente de si hubo un error o no, cierra el modal y restablece el estado del loader
             $this->loading = false;
