@@ -5,10 +5,14 @@ namespace App\Http\Livewire\Admin;
 use App\Models\ItemsTemario as ModelItemsTemario;
 use App\Models\Facultad as ModelsFacultad;
 use App\Models\Comision as ModelsComision;
+use App\Models\FileUpload as ModelFileUpload;
+
 use Livewire\Component;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
+use Livewire\WithFileUploads;
 
 class ItemsTemario extends Component
 {
@@ -27,18 +31,59 @@ class ItemsTemario extends Component
     public $resumen;
     public $showModal = 'none';
     public $showActionModal = false;
+    public $showAttachModal = false;
     public $loading = false;
     public $readonly = false;
-
     protected $listeners = ['delete', 'update'];
-
+    public $archivos = [];
+    public $archivo = [];
     public $errors = [];
 
-    public function mount($id, $tema = 0)
+    // para adjuntos
+    public $titulo = '';
+
+    use WithFileUploads;
+
+
+    public function guardarArchivos()
     {
-        // Acceder al valor del parámetro "id" desde la URL
-        $this->id_temario = $id;
-        $this->tema = $tema;
+
+        foreach ($this->archivo as $arch) {
+
+            if ($arch->getClientOriginalExtension() == 'pdf') {
+                $rutaArchivo = $arch->store('archivos');
+                $newAdjunto = new ModelFileUpload();
+
+                $newAdjunto->id_temario = $this->item_id;
+                $newAdjunto->title = $this->titulo;
+
+                $newAdjunto->name =  $arch->getClientOriginalName();
+                $newAdjunto->type = $arch->getClientMimeType();
+                $newAdjunto->size = $arch->getSize();
+                $newAdjunto->path = $rutaArchivo;
+
+                $newAdjunto->save();
+
+            }
+
+        }
+
+        $this->reset('archivo');
+        $this->titulo = '';
+        $this->archivo = [];
+
+       // $this->archivos = ModelFileUpload::find($id);
+
+        if(is_null($this->archivos)){
+            $this->archivos = [];
+        }
+
+        $filesUpload = new ModelFileUpload();
+        $this->archivos = $filesUpload->select('*')
+        ->where('id_temario', '=', $this->item_id)
+        ->get();
+
+        $this->emit('mensajePositivo', ['mensaje' => 'Archivos PDF subidos correctamente.']);
     }
 
     public function render()
@@ -65,6 +110,7 @@ class ItemsTemario extends Component
 
     public function storeItem()
     {
+
         $this->loading = true;
         try {
 
@@ -119,7 +165,7 @@ class ItemsTemario extends Component
     {
         $this->loading = true;
 
-
+        Storage::disk('local')->put('archivo.txt', 'Contenido del archivo');
         try {
 
             $params = $this->validate([
@@ -155,7 +201,7 @@ class ItemsTemario extends Component
             $this->emit('mensajePositivo', ['mensaje' => 'El item se modificó correctamente']);
 
         }catch (\Illuminate\Validation\ValidationException $e){
-          //  $errors = $e->validator->getMessageBag();
+            $errors = $e->validator->getMessageBag();
             $this->emit('errores', ['errores' => $errors]);
         } catch (\Exception $e) {
             // Manejar otros errores
@@ -207,6 +253,46 @@ class ItemsTemario extends Component
         $this->openModal();
     }
 
+
+    public function deleteAdj($id){
+        // $this->emit('mensajePositivo', ['mensaje' => $id]);
+        $f = ModelFileUpload::find($id);
+
+        Storage::delete($f->path);
+        $f->delete();
+
+        $filesUpload = new ModelFileUpload();
+        $this->archivos = $filesUpload->select('*')
+        ->where('id_temario', '=', $this->item_id)
+        ->get();
+
+
+//        $this->emit('mensajePositivo', ['mensaje' => $f]);
+
+
+    }
+
+    public function openAttachModal($id){
+        $this->item_id = $id;
+
+        $filesUpload = new ModelFileUpload();
+
+        $this->archivos = $filesUpload->select('*')
+        ->where('id_temario', '=', $id)
+        ->get();
+
+
+
+        if(is_null($this->archivos)){
+            $this->archivos = [];
+        }
+
+        $this->showAttachModal = true;
+    }
+
+    public function closeAttachModal(){
+        $this->showAttachModal = false;
+    }
 
     public function openModal()
     {
