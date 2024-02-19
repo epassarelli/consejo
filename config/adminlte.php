@@ -295,6 +295,7 @@ return [
             'type'         => 'navbar-search',
             'text'         => 'search',
             'topnav_right' => true,
+            'can'          => ['admin-user']
         ],
         [
             'type'         => 'fullscreen-widget',
@@ -315,16 +316,19 @@ return [
             'text' => 'Roles',
             'url' => 'admin/roles',
             'icon' => 'fas fa-fw fa-user',
+            'can'          => ['admin-user']
         ],
         [
             'text' => 'Usuarios',
             'url' => 'admin/users',
             'icon' => 'fas fa-fw fa-users',
+            'can'          => ['admin-user']
         ],
         [
             'text' => 'Comisiones',
             'url' => 'admin/comisiones',
             'icon' => 'fas fa-book',
+            'can'          => ['admin-user']
 
         ],
         [
@@ -341,6 +345,7 @@ return [
             'text' => 'Temas',
             'url' => 'admin/temas',
             'icon' => 'fas fa-file-signature',
+            'can'          => ['admin-user']
         ],
         // [
         //     'text' => 'Items',
