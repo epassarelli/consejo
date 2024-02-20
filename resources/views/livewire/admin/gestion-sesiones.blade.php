@@ -5,8 +5,10 @@
                 <h3>Sesiones del Consejo</h3>
             </div>
             <div class="col-md-4 text-right">
+                @if($esAdmin)
                 <button wire:click="create" class="btn btn-success" data-toggle="modal" data-target="#roleModal"><i class="fas fa-plus-circle mr-2" style="color: white;"></i>Agregar
                     Sesión</button>
+                @endif
             </div>
         </div>
 

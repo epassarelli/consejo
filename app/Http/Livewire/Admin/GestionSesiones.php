@@ -8,6 +8,7 @@ use Exception;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Session;
 
 class GestionSesiones extends Component
@@ -23,10 +24,11 @@ class GestionSesiones extends Component
 
     public function render()
     {
-        $this->sesiones = Sesion::all();
+        $esAdmin = Gate::allows("admin-sesion");
+        $this->sesiones = $esAdmin  ? Sesion::all() : Sesion::whereIn("estado", [2,3,4])->get() ;
         return view('livewire.admin.gestion-sesiones', [
             'sesiones' => $this->sesiones,
-            'esAdmin' => User::where("id", auth()->user()->id)->has("roles")->where("id", 1)->exists(),
+            'esAdmin' => $esAdmin
         ])->layout('layouts.adminlte');
     }
 

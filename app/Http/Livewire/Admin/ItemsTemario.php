@@ -5,9 +5,11 @@ namespace App\Http\Livewire\Admin;
 use App\Models\ItemsTemario as ModelItemsTemario;
 use App\Models\Facultad as ModelsFacultad;
 use App\Models\Comision as ModelsComision;
+use App\Models\Sesion;
 use Livewire\Component;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Session;
 
 class ItemsTemario extends Component
@@ -22,6 +24,7 @@ class ItemsTemario extends Component
     public $facultad_id;
     public $comision_id;
     public $tipo;
+    public $sesion;
     public $numero;
     public $resolucion;
     public $resumen;
@@ -44,11 +47,13 @@ class ItemsTemario extends Component
     public function render()
     {
 
+        $this->sesion = Sesion::find(session("id_sesion"));
         $itemsController = new ModelItemsTemario();
+        $esAdmin = Gate::allows("admin-sesion");
 
-        $this->items = $itemsController->join('facultades', 'items_temario.facultad_id', '=' , 'facultades.id')
-                                        ->join('comisiones', 'items_temario.comision_id', '=', 'comisiones.id')
-                                        ->leftjoin('temas', DB::raw(session('tema')), '=', 'temas.id')
+        $this->items = $itemsController->join('facultades', 'items_temario.facultad_id', '=', 'facultades.id')
+            ->join('comisiones', 'items_temario.comision_id', '=', 'comisiones.id')
+            ->leftjoin('temas', DB::raw(session('tema')), '=', 'temas.id')
             ->select('items_temario.*', 'facultades.name as facultad', 'comisiones.name as comision', 'temas.titulo as tema') //
             ->where('items_temario.id_tema', session('id_temario'))
             ->get();
@@ -57,10 +62,11 @@ class ItemsTemario extends Component
         $this->comisiones = ModelsComision::all();
 
         return view('livewire.admin.items-temario', [
-                'items' => $this->items,
-                'facultades' => $this->facultades,
-                'comisiones' => $this->comisiones,
-            ])->layout('layouts.adminlte');
+            'items' => $this->items,
+            'facultades' => $this->facultades,
+            'comisiones' => $this->comisiones,
+            'esAdmin' => $esAdmin
+        ])->layout('layouts.adminlte');
     }
 
     public function storeItem()
@@ -68,15 +74,16 @@ class ItemsTemario extends Component
         $this->loading = true;
         try {
 
-            $params = $this->validate([
+            $params = $this->validate(
+                [
                     'numero' => 'required|string',
                     'resolucion' => 'required',
                     'resumen' => 'required',
                     'comision_id' => 'required',
                     'facultad_id' => 'required',
                     'tipo' => 'required',
-                ]
-                , [
+                ],
+                [
                     'numero.required' => 'El campo Número es obligatorio.',
                     'resolucion.required' => 'El campo resolución es obligatorio.',
                     'resumen.required' => 'El campo resumen es obligatorio.',
@@ -88,30 +95,28 @@ class ItemsTemario extends Component
 
             ModelItemsTemario::create([
                 'id_tema' => session('id_temario'),
-                'comision_id' => $params["comision_id"],
-                'facultad_id' => $params["facultad_id"],
-                'resolucion' => $params["resolucion"],
-                'resumen' => $params["resumen"],
-                'tipo' => $params["tipo"]
+                'numero' =>$this->numero,
+                'comision_id' => $this->comision_id,
+                'facultad_id' => $this->facultad_id,
+                'resolucion' => $this->resolucion,
+                'resumen' => $this->resumen,
+                'tipo' => $this->tipo
             ]);
 
             $this->reset(['numero']);
             $this->closeModal();
             $this->emit('mensajePositivo', ['mensaje' => 'El Item se agregó correctamente']);
+        } catch (\Illuminate\Validation\ValidationException $e) {
 
-        }catch (\Illuminate\Validation\ValidationException $e){
-
-           $errors = $e->validator->getMessageBag();
-           $this->emit('errores', ['errors' => $errors]);
-
+            $errors = $e->validator->getMessageBag();
+            $this->emit('errores', ['errors' => $errors]);
         } catch (\Exception $e) {
             // Manejar otros errores
-           $this->emit('mensajeNegativo', ['mensaje' => 'Error al agregar el item: ' . $e->getMessage()]);
+            $this->emit('mensajeNegativo', ['mensaje' => 'Error al agregar el item: ' . $e->getMessage()]);
         } finally {
             // Independientemente de si hubo un error o no, cierra el modal y restablece el estado del loader
             $this->loading = false;
         }
-
     }
 
 
@@ -140,7 +145,7 @@ class ItemsTemario extends Component
 
             $ItemToUpdate = ModelItemsTemario::find($this->item_id);
 
-            if(!empty($ItemToUpdate)){
+            if (!empty($ItemToUpdate)) {
                 $ItemToUpdate->numero = $params["numero"];
                 $ItemToUpdate->comision_id = $params["comision_id"];
                 $ItemToUpdate->facultad_id = $params["facultad_id"];
@@ -153,9 +158,8 @@ class ItemsTemario extends Component
             $this->reset(['numero', 'id_tema', 'comision_id', 'facultad_id', 'facultad_id', 'resolucion', 'resumen', 'tipo']);
             $this->closeModal();
             $this->emit('mensajePositivo', ['mensaje' => 'El item se modificó correctamente']);
-
-        }catch (\Illuminate\Validation\ValidationException $e){
-          //  $errors = $e->validator->getMessageBag();
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            //  $errors = $e->validator->getMessageBag();
             $this->emit('errores', ['errores' => $errors]);
         } catch (\Exception $e) {
             // Manejar otros errores
@@ -178,20 +182,20 @@ class ItemsTemario extends Component
             }
 
             $this->emit('mensajePositivo', ['mensaje' => 'El item se eliminó correctamente']);
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             // Manejar otros errores
             $this->emit('mensajeNegativo', ['mensaje' => 'Error al eliminar el item: ' . $e->getMessage()]);
         }
     }
 
 
-    public function openEditModal($id, $readonly){
+    public function openEditModal($id, $readonly)
+    {
         $this->readonly = $readonly;
         $this->item_id = $id;
         $ItemToUpdate = ModelItemsTemario::find($id);
 
-        if($id==0){
+        if ($id == 0) {
             $this->readonly = true;
         }
 
@@ -234,9 +238,9 @@ class ItemsTemario extends Component
     }
 
 
-    public function volver(){
+    public function volver()
+    {
 
         return redirect()->route('temarios');
     }
-
 }
