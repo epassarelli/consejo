@@ -19,7 +19,7 @@ class Sesion extends Model
         'fPublicada',
         'fFinalizada',
         'urlYoutube',
-        'estado',
+        'estado', # 1 = En revision, 2 = Publicada, 3 = Cerrada, 4 = En Sesión
         'usuarioAlta_id'
     ];
 
