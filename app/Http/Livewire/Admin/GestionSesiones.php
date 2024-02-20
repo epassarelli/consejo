@@ -16,7 +16,7 @@ class GestionSesiones extends Component
     public $fecha;
     public $urlYoutube;
     public $muestraModal = 'none';
-    public $estados = ['En revisión', 'Publicada', 'Cerrada'];
+    public $estados = ['En revisión', 'Publicada', 'Cerrada', 'En sesión'];
 
     protected $sesiones;
     protected $listeners = ['delete'];
@@ -109,7 +109,7 @@ class GestionSesiones extends Component
     }
     public function iniciarSesion(Sesion $sesion)
     {
-        $sesion->estado = 1;
+        $sesion->estado = 4;
         $sesion->save();
 
         $this->emit('mensajePositivo', ['mensaje' => "La sesion cambio a estado '{$this->estados[$sesion->estado - 1]}'"]);
