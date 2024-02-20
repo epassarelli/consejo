@@ -295,6 +295,7 @@ return [
             'type'         => 'navbar-search',
             'text'         => 'search',
             'topnav_right' => true,
+            'can' => ['admin-usuario']
         ],
         [
             'type'         => 'fullscreen-widget',
@@ -315,22 +316,26 @@ return [
             'text' => 'Roles',
             'url' => 'admin/roles',
             'icon' => 'fas fa-fw fa-user',
+            'can' => ['admin-usuario']
         ],
         [
             'text' => 'Usuarios',
             'url' => 'admin/users',
             'icon' => 'fas fa-fw fa-users',
+            'can' => ['admin-usuario']
         ],
         [
             'text' => 'Comisiones',
             'url' => 'admin/comisiones',
             'icon' => 'fas fa-book',
+            'can' => ['admin-usuario']
 
         ],
         [
             'text' => 'Sesiones',
             'url' => 'admin/sesiones',
             'icon' => 'fas fa-file-signature',
+            'can' => ['admin-usuario', 'votante', 'observador']
         ],
         // [
         //     'text' => 'Temarios',
@@ -341,6 +346,7 @@ return [
             'text' => 'Temas',
             'url' => 'admin/temas',
             'icon' => 'fas fa-file-signature',
+            'can' => ['admin-usuario']
         ],
         // [
         //     'text' => 'Items',

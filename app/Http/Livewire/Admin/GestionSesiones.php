@@ -3,10 +3,12 @@
 namespace App\Http\Livewire\Admin;
 
 use App\Models\Sesion;
+use App\Models\User;
 use Exception;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Session;
 
 class GestionSesiones extends Component
@@ -15,17 +17,18 @@ class GestionSesiones extends Component
     public $fecha;
     public $urlYoutube;
     public $muestraModal = 'none';
-    public $estados = ['En revisión', 'Publicada', 'Cerrada'];
+    public $estados = ['En revisión', 'Publicada', 'Cerrada', 'En sesión'];
 
     protected $sesiones;
     protected $listeners = ['delete'];
 
     public function render()
     {
-        $this->sesiones = Sesion::all();
-
+        $esAdmin = Gate::allows("admin-sesion");
+        $this->sesiones = $esAdmin  ? Sesion::all() : Sesion::whereIn("estado", [2,3,4])->get() ;
         return view('livewire.admin.gestion-sesiones', [
             'sesiones' => $this->sesiones,
+            'esAdmin' => $esAdmin
         ])->layout('layouts.adminlte');
     }
 
@@ -59,7 +62,7 @@ class GestionSesiones extends Component
             'urlYoutube' => 'string|nullable',
         ]);
 
-        try{
+        try {
             DB::transaction(function () use ($validatedData) {
                 $sesion = Sesion::create([
                     'usuarioAlta_id' => Auth::user()->id,
@@ -75,10 +78,9 @@ class GestionSesiones extends Component
                 $this->resetInputFields();
                 $this->emit('mensajePositivo', ['mensaje' => 'Operacion exitosa']);
             });
-        }catch(\Exception){
+        } catch (\Exception) {
             $this->emit('mensajeNegativo', ['mensaje' => 'Error al crear la sesión y la orden del día']);
         }
-
     }
 
     public function updateSesion()
@@ -107,9 +109,12 @@ class GestionSesiones extends Component
     {
         echo 'A la espera de sprint';
     }
-    public function iniciarSesion()
+    public function iniciarSesion(Sesion $sesion)
     {
-        echo 'A la espera de sprint';
+        $sesion->estado = 4;
+        $sesion->save();
+
+        $this->emit('mensajePositivo', ['mensaje' => "La sesion cambio a estado '{$this->estados[$sesion->estado - 1]}'"]);
     }
 
 
@@ -125,7 +130,8 @@ class GestionSesiones extends Component
         $this->muestraModal = 'block';
     }
 
-    public function openOrdenModal($id_sesion){
+    public function openOrdenModal($id_sesion)
+    {
         Session::put('id_sesion', $id_sesion);
         return redirect()->route('temarios');
     }
