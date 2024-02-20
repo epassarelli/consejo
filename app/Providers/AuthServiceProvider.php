@@ -24,10 +24,18 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Gate::define("admin-user", function (User $user) {
+        Gate::define("admin-usuario", function (User $user) {
             return $user->roles()->whereIn("roles.id", [1, 2])->exists();
         });
-
+        Gate::define("admin-sesion", function (User $user) {
+            return $user->roles()->whereIn("roles.id", [1, 2])->exists();
+        });
+        Gate::define("votante", function (User $user) {
+            return $user->roles()->whereIn("roles.id", [3])->exists();
+        });
+        Gate::define("observador", function (User $user) {
+            return $user->roles()->whereIn("roles.id", [4,5])->exists();
+        });
         //
     }
 }
