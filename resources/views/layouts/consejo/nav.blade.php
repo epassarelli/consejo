@@ -16,7 +16,7 @@
         </li>
 
         <li class="menu-item">
-            <a class="menu-link" href="#">
+            <a class="menu-link" href="{{ route('OrdendelDia') }}">
                 <div>Orden del día</div>
             </a>
         </li>

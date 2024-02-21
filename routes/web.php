@@ -8,6 +8,7 @@ use App\Http\Controllers\NosotrosController;
 use App\Http\Controllers\RegistrateController;
 use App\Http\Controllers\EllosTambienController;
 use App\Http\Controllers\HacesFaltaController;
+use App\Http\Controllers\OrdendeldiaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,3 +25,4 @@ Auth::routes();
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/composicion', [ComposicionController::class, 'index'])->name('composicion');
+Route::get('/orden-del-dia', [OrdendeldiaController::class, 'index'])->name('OrdendelDia');

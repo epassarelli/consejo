@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use App\Models\EstadoOrdenDia;
 use Illuminate\Database\Seeder;
 use App\Models\Role;
 use App\Models\Positions;
@@ -21,7 +23,9 @@ class DatabaseSeeder extends Seeder
             FacultadesTableSeeder::class,
             UsuariosTableSeeder::class,
             ComisionesTableSeeder::class,
-            TemasTableSeeder::class
+            TemasTableSeeder::class,
+            EstadosOrdenDiaTableSeeder::class,
+            SesionesTableSeeder::class
         ]);
     }
 }
