@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class FileUpload extends Model
+class Adjunto extends Model
 {
     use HasFactory;
 
@@ -13,13 +13,12 @@ class FileUpload extends Model
 
     protected $fillable = [
         'id',
-        'id_temario',
+        'id_item_temario',
         'name',
         'size',
         'path',
         'id_item',
         'title',
-
     ];
 
 

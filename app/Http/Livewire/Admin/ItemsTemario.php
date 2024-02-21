@@ -5,18 +5,17 @@ namespace App\Http\Livewire\Admin;
 use App\Models\ItemsTemario as ModelItemsTemario;
 use App\Models\Facultad as ModelsFacultad;
 use App\Models\Comision as ModelsComision;
-use App\Models\FileUpload as ModelFileUpload;
+use App\Models\Adjunto as ModelAdjunto;
 
 use Livewire\Component;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Livewire\WithFileUploads;
 
+
 class ItemsTemario extends Component
 {
-    public $id_temario;
+    public $id_item_temario;
     public $tema; // id del tema que viene desde el temario
     protected $facultades;
     protected $comisiones;
@@ -36,55 +35,57 @@ class ItemsTemario extends Component
     public $readonly = false;
     protected $listeners = ['delete', 'update'];
     public $archivos = [];
-    public $archivo = [];
+    public $archivo;
     public $errors = [];
 
     // para adjuntos
     public $titulo = '';
 
     use WithFileUploads;
-
+    public $file;
 
     public function guardarArchivos()
     {
 
-        foreach ($this->archivo as $arch) {
+        $this->validate([
+            'archivo' => 'required|file|max:2048',// 1024 kilobytes = 1 MB
+            'titulo' => 'required'
+        ]);
 
-            if ($arch->getClientOriginalExtension() == 'pdf') {
-                $rutaArchivo = $arch->store('archivos');
-                $newAdjunto = new ModelFileUpload();
 
-                $newAdjunto->id_temario = $this->item_id;
-                $newAdjunto->title = $this->titulo;
+        if ($this->archivo && $this->archivo->getClientOriginalExtension() == 'pdf') {
 
-                $newAdjunto->name =  $arch->getClientOriginalName();
-                $newAdjunto->type = $arch->getClientMimeType();
-                $newAdjunto->size = $arch->getSize();
-                $newAdjunto->path = $rutaArchivo;
+            $rutaArchivo = $this->archivo->store('archivos');
+            $newAdjunto = new ModelAdjunto();
+            $newAdjunto->id_item_temario = $this->item_id;
+            $newAdjunto->title = $this->titulo;
+            $newAdjunto->name =  $this->archivo->getClientOriginalName();
+            $newAdjunto->type = $this->archivo->getClientMimeType();
+            $newAdjunto->size = $this->archivo->getSize();
+            $newAdjunto->path = $rutaArchivo;
 
-                $newAdjunto->save();
-
-            }
-
+            $newAdjunto->save();
         }
 
-        $this->reset('archivo');
-        $this->titulo = '';
-        $this->archivo = [];
 
-       // $this->archivos = ModelFileUpload::find($id);
+        $this->reset('file');
+        $this->titulo = '';
+        $this->archivo = null;
 
         if(is_null($this->archivos)){
             $this->archivos = [];
         }
 
-        $filesUpload = new ModelFileUpload();
+        $filesUpload = new ModelAdjunto();
         $this->archivos = $filesUpload->select('*')
-        ->where('id_temario', '=', $this->item_id)
+        ->where('id_item_temario', '=', $this->item_id)
         ->get();
 
         $this->emit('mensajePositivo', ['mensaje' => 'Archivos PDF subidos correctamente.']);
+        $this->readonly = false;
     }
+
+
 
     public function render()
     {
@@ -136,6 +137,7 @@ class ItemsTemario extends Component
                 'id_tema' => session('id_temario'),
                 'comision_id' => $params["comision_id"],
                 'facultad_id' => $params["facultad_id"],
+                'numero' => $params["numero"],
                 'resolucion' => $params["resolucion"],
                 'resumen' => $params["resumen"],
                 'tipo' => $params["tipo"]
@@ -255,33 +257,27 @@ class ItemsTemario extends Component
 
 
     public function deleteAdj($id){
-        // $this->emit('mensajePositivo', ['mensaje' => $id]);
-        $f = ModelFileUpload::find($id);
+
+        $f = ModelAdjunto::find($id);
 
         Storage::delete($f->path);
         $f->delete();
 
-        $filesUpload = new ModelFileUpload();
+        $filesUpload = new ModelAdjunto();
         $this->archivos = $filesUpload->select('*')
-        ->where('id_temario', '=', $this->item_id)
+        ->where('id_item_temario', '=', $this->item_id)
         ->get();
-
-
-//        $this->emit('mensajePositivo', ['mensaje' => $f]);
-
 
     }
 
     public function openAttachModal($id){
         $this->item_id = $id;
 
-        $filesUpload = new ModelFileUpload();
+        $filesUpload = new ModelAdjunto();
 
         $this->archivos = $filesUpload->select('*')
-        ->where('id_temario', '=', $id)
+        ->where('id_item_temario', '=', $id)
         ->get();
-
-
 
         if(is_null($this->archivos)){
             $this->archivos = [];
@@ -321,7 +317,6 @@ class ItemsTemario extends Component
 
 
     public function volver(){
-
         return redirect()->route('temarios');
     }
 

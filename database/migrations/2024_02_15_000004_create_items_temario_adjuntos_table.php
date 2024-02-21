@@ -13,25 +13,20 @@ return new class extends Migration
     {
         Schema::create('items_temario_adjuntos', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('id_item_temario');
             $table->string('name');
             $table->string('type');
             $table->float('size');
             $table->string('path');
             $table->string('title');
-            $table->integer('id_temario');
             $table->timestamps();
+
+            $table->foreign('id_item_temario')->references('id')->on('items_temario')->cascadeOnDelete();
 
     //        $table->foreign('id_orden_dia')->references('id')->on('ordenes_dia')->cascadeOnDelete();
     //        $table->foreign('id_tema')->references('id')->on('temas')->restrictOnDelete();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-   // public function down(): void
-   // {
-   //     Schema::dropIfExists('temarios_ordenes_dia');
-   // }
 };
 

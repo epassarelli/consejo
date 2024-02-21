@@ -11,6 +11,7 @@ use App\http\Livewire\Admin\TemarioOrdenDia;
 use App\Http\Livewire\Admin\Temas;
 use App\http\Livewire\Admin\ItemsTemario;
 
+use App\Http\Controllers\Admin\DescargarPDFController;
 
 
 
@@ -34,3 +35,4 @@ Route::get('/temas', Temas::class)->name('temas');
 Route::get('/temarios', TemarioOrdenDia::class)->name('temarios');
 Route::get('/items', ItemsTemario::class)->name('items'); // /{id}/{tema}
 Route::get('/ordenes', OrdenesDelDia::class)->name('ordenes'); // /{id}
+Route::get('/descargar-pdf', [DescargarPDFController::class, 'descargarPDF']);

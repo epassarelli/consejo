@@ -53,7 +53,7 @@ class TemarioOrdenDia extends Component
                             ->leftjoin('items_temario', 'temarios_ordenes_dia.id', '=', 'items_temario.id_tema')
                             ->select('temarios_ordenes_dia.*', DB::raw('COALESCE(COUNT(items_temario.id), 0) AS items'), 'temas.titulo as tema') // ', 'temas.titulo'
                             ->where('temarios_ordenes_dia.id_orden_dia', DB::raw($this->id_sesion))
-                            ->groupBy('items_temario.id_tema')
+                            ->groupBy('temarios_ordenes_dia.id_tema')
                             ->get();
 
         $this->temas = modelTemas::all();
@@ -147,7 +147,7 @@ class TemarioOrdenDia extends Component
     public function delete($id)
     {
         try {
-            $temarioToDelete = modelTemarioOrdenDia::where('id_orden_dia','=', $id);
+            $temarioToDelete = modelTemarioOrdenDia::where('id','=', $id);
             $items = ModelItemsTemario::where('id_tema', $id)->count();
 
             // Verifica si el tema existe antes de intentar eliminarlo

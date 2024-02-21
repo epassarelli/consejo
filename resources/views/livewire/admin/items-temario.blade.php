@@ -189,7 +189,8 @@
                                         @foreach ($archivos as $arch)
                                             <tr>
                                                 <td>{{$arch->title }}</td>
-                                                <td>{{$arch->name }}</td>
+                                                <td>
+                                                    <a href="{{ 'descargar-pdf?path='.$arch->path }}" download>{{$arch->name }}</a></td>
                                                 <td class="text-center">
                                                     <button wire:click="deleteAdj({{ $arch->id }})" class="btn btn-sm btn-danger" title="Eliminar"><i class="fas fa-trash-alt" style="color: white "></i></button>
                                                 </td>
@@ -200,31 +201,28 @@
 
                             <p class="fs-6"><strong>total:</strong>{{ count($archivos) }} archivos adjuntos</p>
 
-
                             <div class="border p-2 rounded-2">
 
                                 <div class="row">
                                     <div class="input-group mb-2 mr-sm-2">
                                         <div class="col-12 input-group-prepend">
                                             <label class="input-group-text">Título</label>
-                                            <input type="text" class="form-control" name="titulo" id="titulo" wire:model="titulo" @if($readonly) disabled @endif>
+                                            <input type="text" class="form-control" wire:model="titulo" @if($readonly) disabled @endif>
                                         </div>
                                     </div>
                                 </div>
 
 
                                 <div class="row">
-                                    <div class="input-group mb-2 mr-sm-2">
+                                    <div class="input-group mb-2 mr-sm-2"  >
                                         <div class="col-12 input-group-prepend">
-                                            <input class="form-control" type="file" wire:model="archivo">
-                                            <button type="button" wire:click="guardarArchivos" class="btn btn-sm btn-primary"><i class="fas fa-upload"></i></button>
+                                            <input class="form-control" type="file" wire:model="archivo" accept="application/pdf">
+                                            <button type="button" wire:click="guardarArchivos" class="btn btn-sm btn-primary" accept="application/pdf" wire:loading.attr="disabled"><i class="fas fa-upload" ></i></button>
                                         </div>
                                             <div wire:loading wire:target="archivo">Subiendo...</div>
                                     </div>
                                 </div>
                             </div>
-
-
                         </div>
                     </div>
                 </div>

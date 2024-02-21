@@ -19,6 +19,9 @@ class ItemsTemario extends Model
                             'resolucion',
                             'resumen'];
 
-
+    public function adjunto()
+    {
+        return $this->hasMany(Adjunto::class, 'id_itemario');
+    }
 
 }
