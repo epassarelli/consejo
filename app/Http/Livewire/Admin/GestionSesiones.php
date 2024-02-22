@@ -25,7 +25,7 @@ class GestionSesiones extends Component
     public function render()
     {
         $esAdmin = Gate::allows("admin-sesion");
-        $this->sesiones = $esAdmin  ? Sesion::all() : Sesion::whereIn("estado", [2,3,4])->get() ;
+        $this->sesiones = $esAdmin  ? Sesion::all() : Sesion::whereIn("estado", [2, 3, 4])->get();
         return view('livewire.admin.gestion-sesiones', [
             'sesiones' => $this->sesiones,
             'esAdmin' => $esAdmin
@@ -133,7 +133,8 @@ class GestionSesiones extends Component
     public function openOrdenModal($id_sesion)
     {
         Session::put('id_sesion', $id_sesion);
-        return redirect()->route('temarios');
+        $sesion = Sesion::find($id_sesion);
+        return  redirect()->route($sesion->estado == 4 ? "asistentes" :  'temarios');
     }
 
     private function resetInputFields()
