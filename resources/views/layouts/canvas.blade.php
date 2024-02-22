@@ -13,6 +13,7 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=PT+Serif:ital@0;1&display=swap"
         rel="stylesheet">
 
+    <link rel="stylesheet" href="//cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
     <!-- Core Style -->
     <link rel="stylesheet" href="css/style.css">
 
@@ -49,6 +50,13 @@
     <!-- JavaScripts
  ============================================= -->
     <script src="js/functions.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="//cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+    
+
+    <script src="{{ asset('js/datatables/basictable.js') }}"></script>
 </body>
 
 </html>
