@@ -51,6 +51,6 @@ class PresentesSesion extends Component
         $asistente = $this->sesion->asistentes()->find($userId);
         $asistente->pivot->votante = !$asistente->pivot->votante;
         $asistente->pivot->save();
-    0}
+    }
 
 }
