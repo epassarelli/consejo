@@ -15,13 +15,13 @@
 
     <link rel="stylesheet" href="//cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
     <!-- Core Style -->
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 
     <!-- Font Icons -->
-    <link rel="stylesheet" href="css/font-icons.css">
+    <link rel="stylesheet" href="{{ asset('css/font-icons.css') }}">
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="css/custom.css">
+    <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 

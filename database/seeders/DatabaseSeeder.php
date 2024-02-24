@@ -8,7 +8,7 @@ use App\Models\EstadoOrdenDia;
 use Illuminate\Database\Seeder;
 use App\Models\Role;
 use App\Models\Positions;
-
+use App\Models\ItemsTemario;
 
 class DatabaseSeeder extends Seeder
 {
@@ -27,5 +27,7 @@ class DatabaseSeeder extends Seeder
             EstadosOrdenDiaTableSeeder::class,
             SesionesTableSeeder::class
         ]);
+        
+        ItemsTemario::factory(540)->create();
     }
 }

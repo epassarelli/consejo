@@ -26,3 +26,5 @@ Auth::routes();
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/composicion', [ComposicionController::class, 'index'])->name('composicion');
 Route::get('/orden-del-dia', [OrdendeldiaController::class, 'index'])->name('OrdendelDia');
+Route::get('/orden-del-dia/{fecha}',[OrdendeldiaController::class, 'Sesiones']);
+Route::get('/sesiones-anteriores/{fecha}',[OrdendeldiaController::class, 'SesionesAnteriores'])->name('SesionesAnteriores');
