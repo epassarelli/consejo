@@ -72,4 +72,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Sesion::class, "presentes_sesion", "id_usuario", "id_sesion", "id", "id")->withPivot("votante")->withTimestamps();
     }
+
+    public function votaciones(): BelongsToMany
+    {
+        return $this->belongsToMany(Votacion::class, "votos_usuarios",  "id_usuario", "id_votacion", "id", "id")->withPivot("voto")->withTimestamps();
+    }
 }
