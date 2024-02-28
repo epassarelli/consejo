@@ -32,9 +32,9 @@
                             @foreach ($items as $item)
 
                             <tr>
-                                <td>{{$item->tema}}</td>
-                                <td class="">{{$item->comision}}</td>
-                                <td class="">{{$item->facultad}}</td>
+                                <td>{{$item->tema->titulo}}</td>
+                                <td class="">{{$item->comision->name}}</td>
+                                <td class="">{{$item->facultad->name}}</td>
                                 <td class="text-center">{{$item->numero}}</td>
                                 <td class="text-center">{{$item->resolucion}}</td>
                                 <td></td>
@@ -86,7 +86,7 @@
                                             <select class="form-control" name="comision" id="comision" wire:model="comision_id" @if($readonly) disabled @endif>
                                                 <option value="">Seleccionar...</option>
                                                 @foreach ($comisiones as $comision)
-                                                <option value={{$comision->id}}>{{$comision->name}}</option>
+                                                <option value="{{$comision->id}}">{{$comision->name}}</option>
                                                 @endforeach
                                             </select>
                                             @error('comision_id')

@@ -46,7 +46,11 @@ class TemarioOrdenDia extends Component
     {
         $this->id_sesion = session('id_sesion');
 
-        $this->sesion = ModelSesion::with(["temariosOrdenDia" => ["tema" => ["items"]]])->find($this->id_sesion);
+        if (empty($this->id_sesion))
+            $this->redirect("/admin/sesiones");
+
+
+        $this->sesion = ModelSesion::with(["temariosOrdenDia" => ["items", "tema"], "ordenDia"])->find($this->id_sesion);
 
         return view('livewire.admin.temario-orden-dia', [
             'temas' => modelTemas::all(),
@@ -59,7 +63,7 @@ class TemarioOrdenDia extends Component
         $this->loading = true;
 
         try {
-            $params = $this->validate([
+            $this->validate([
                 'id_tema' => 'required',
                 'orden' => 'required'
             ]);
@@ -175,10 +179,9 @@ class TemarioOrdenDia extends Component
         $this->openModal();
     }
 
-    public function items($id, $tema)
+    public function items($id)
     {
-        Session::put('id_temario', $id); // en realidad es el id de la sesion
-        Session::put('tema', $tema);
+        Session::put('id_temario', $id);
         return redirect()->route('items');
     }
 

@@ -25,6 +25,9 @@ class PresentesSesion extends Component
 
         $this->sesion = Sesion::find($this->id_sesion);
 
+        if($this->sesion->ordenDia->id_estado == 6)
+            $this->redirect('/admin/temarios');
+
         $user = User::find(Auth::user()->id);
 
         if (!$this->sesion->asistentes()->wherePivot('id_usuario', Auth::user()->id)->exists()) {
@@ -45,7 +48,7 @@ class PresentesSesion extends Component
         return redirect()->route('sesiones');
     }
 
-    
+
     public function toggleVoteEnable($userId)
     {
         $asistente = $this->sesion->asistentes()->find($userId);
@@ -53,4 +56,14 @@ class PresentesSesion extends Component
         $asistente->pivot->save();
     }
 
+    public function openOrder($open)
+    {
+        $this->sesion = Sesion::with("ordenDia")->find(session('id_sesion'));
+        if ($open && Gate::allows("admin-sesion") && $this->sesion->ordenDia->id_estado == 4) {
+            $this->sesion->ordenDia->id_estado = 6;
+            $this->sesion->ordenDia->save();
+        }
+
+        return redirect()->route("temarios");
+    }
 }

@@ -6,6 +6,7 @@ use App\Models\ItemsTemario as ModelItemsTemario;
 use App\Models\Facultad as ModelsFacultad;
 use App\Models\Comision as ModelsComision;
 use App\Models\Sesion;
+use App\Models\TemarioOrdenDia;
 use Livewire\Component;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -18,7 +19,6 @@ class ItemsTemario extends Component
     public $tema; // id del tema que viene desde el temario
     protected $facultades;
     protected $comisiones;
-    protected $items;
     public $id_tema; // este en realidad es el id del temario al que esta relacionado
     public $item_id;
     public $facultad_id;
@@ -32,6 +32,7 @@ class ItemsTemario extends Component
     public $showActionModal = false;
     public $loading = false;
     public $readonly = false;
+    public $items;
 
     protected $listeners = ['delete', 'update'];
 
@@ -47,25 +48,22 @@ class ItemsTemario extends Component
     public function render()
     {
 
+        if (empty(session("id_sesion")))
+            $this->redirect("/admin/sesiones");
+
+        if (empty(session('id_temario')))
+            $this->redirect("/admin/temarios");
+
         $this->sesion = Sesion::find(session("id_sesion"));
-        $itemsController = new ModelItemsTemario();
-        $esAdmin = Gate::allows("admin-sesion");
+        $temario = $this->sesion->temariosOrdenDia()->find(session('id_temario'));
+        if (empty($temario))
+            $this->redirect("/admin/temarios");
 
-        $this->items = $itemsController->join('facultades', 'items_temario.facultad_id', '=', 'facultades.id')
-            ->join('comisiones', 'items_temario.comision_id', '=', 'comisiones.id')
-            ->leftjoin('temas', DB::raw(session('tema')), '=', 'temas.id')
-            ->select('items_temario.*', 'facultades.name as facultad', 'comisiones.name as comision', 'temas.titulo as tema') //
-            ->where('items_temario.id_tema', session('id_temario'))
-            ->get();
-
-        $this->facultades = ModelsFacultad::all();
-        $this->comisiones = ModelsComision::all();
-
+        $this->items = $temario->items()->with(["facultad", "comision", "tema"])->get();
         return view('livewire.admin.items-temario', [
-            'items' => $this->items,
-            'facultades' => $this->facultades,
-            'comisiones' => $this->comisiones,
-            'esAdmin' => $esAdmin
+            'facultades' => ModelsFacultad::all(),
+            'comisiones' => ModelsComision::all(),
+            'esAdmin' => Gate::allows("admin-sesion")
         ])->layout('layouts.adminlte');
     }
 
@@ -93,9 +91,10 @@ class ItemsTemario extends Component
                 ]
             );
 
-            ModelItemsTemario::create([
-                'id_tema' => session('id_temario'),
-                'numero' =>$this->numero,
+            $temario = TemarioOrdenDia::find(session('id_temario'));
+            $temario->items()->create([
+                'id_tema' => $temario->id_tema,
+                'numero' => $this->numero,
                 'comision_id' => $this->comision_id,
                 'facultad_id' => $this->facultad_id,
                 'resolucion' => $this->resolucion,

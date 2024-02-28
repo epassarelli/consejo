@@ -33,9 +33,9 @@
                                 <td class="text-center">{{$temario->tema->items->count()}}</td>
                                 <td class="text-center">{{$temario->web}}</td>
                                 <td class="p-1 text-center">
-                                    <button wire:click="items({{$temario->id}}, {{$temario->id_tema}})" class="btn btn-sm btn-info" title="items"><i class="fas fa-file-alt"></i></button>
+                                    <button wire:click="items({{$temario->id}})" class="btn btn-sm btn-info" title="items"><i class="fas fa-file-alt"></i></button>
                                     <button wire:click="openEditModal({{$temario->id}}, true)" class="btn btn-sm btn-secondary" title="Ver"><i class="fa fa-eye"></i></button>
-                                    @if($esAdmin && in_array($sesion->estado, [1,4]))
+                                    @if($esAdmin && in_array($sesion->estado, [1,4]) && !in_array($sesion->ordenDia->id_estado, [2,3,5]))
                                     <button wire:click="openEditModal({{$temario->id}}, false)" class="btn btn-sm btn-primary" title="Editar"><i class="fa fa-edit"></i></button>
                                     <button wire:click="$emit('alertDelete',{{ $temario->id_orden_dia }})" class="btn btn-sm btn-danger" title="Eliminar"><i class="fas fa-trash-alt" style="color: white "></i></button>
                                     @endif
