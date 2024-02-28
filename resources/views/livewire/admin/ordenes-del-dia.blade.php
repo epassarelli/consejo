@@ -46,7 +46,7 @@
                             <tr>
                                 <td class="text-center">{{ $temario->tema->titulo }}</td>
                                 <td class="text-center">{{ $temario->orden }}</td>
-                                <td class="text-center">0</td>
+                                <td class="text-center">{{ $temario->items->count() }}</td>
                                 <td class="text-center"><input type="checkbox" readonly checked="{{$temario->web == 1 ? 'true':'false' }}"/></td>
                                 <td class="p-1 text-center">
                                     <button  class="btn btn-sm btn-danger" title="Eliminar"><i class="fas fa-trash-alt" style="color: white "></i></button>

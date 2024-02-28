@@ -14,6 +14,11 @@ class TemarioOrdenDia extends Model
     protected $table = 'temarios_ordenes_dia';
     protected $fillable = ['id_orden_dia', 'id_tema', 'orden', 'web'];
 
+    public function tema(): HasOne
+    {
+        return $this->hasOne(Tema::class, 'id', 'id_tema');
+    }
+    
     public function items(): HasMany
     {
         return $this->hasMany(ItemsTemario::class, 'id_temario', 'id');

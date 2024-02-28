@@ -9,10 +9,127 @@
             <div class="col-md-4 text-right">
                 <button class="btn btn-secondary" wire:click="volver" data-target="#itemModal"><i class="fas fa-arrow-circle-left  mr-2" style="color: white;"></i>Volver</button>
                 @if($esAdmin && in_array($sesion->estado, [1,4]))
-                <button class="btn btn-success" wire:click="openModal" data-target="#itemModal"><i class="fas fa-plus-circle mr-2" style="color: white;"></i>Agregar</button>
+                <button class="btn btn-success" wire:click="openModal" data-target="#itemModal"><i class="fas fa-plus-circle mr-2" style="color: white;"></i>Agregar Item</button>
+                <button class="btn btn-warning" wire:click="createVotacion" data-target="#itemModalVotacion"><i class="fas fa-plus-circle mr-2" style="color: white;"></i>Agregar Votación</button>
                 @endif
             </div>
 
+        </div>
+        <div class="row">
+            @if(!empty($votacionId))
+
+            <div class="mt-3">
+                <div class="col-md-12 input-group">
+                    <div class="col-4 input-group-prepend">
+                        <label class="input-group-text">Votación</label>
+                        <input type="text" class="form-control" name="VotTitulo" wire:model="votacionTitulo" @if(!$esAdmin) disabled @endif>
+                    </div>
+                    <div class="col-3 input-group-prepend">
+                        <label class="input-group-text">Aprobación</label>
+                        <select class="form-control" name="comision" id="comision" wire:model="votacionAceptacion" @if(!$esAdmin) disabled @endif>
+                            <option value="">Seleccionar...</option>
+                            <option value="mayoria">Mayoria Simple > 50%</option>
+                            <option value="2/3">2/3 Sesionando</option>
+                            <option value="absoluta">Mayoria</option>
+                        </select>
+                    </div>
+                    @if(!$esAdmin)
+                    <div class="col-5 text-right">
+                        <button type="button" wire:click="removeVotacion({{$votacionId}})" class="btn btn-danger">Eliminar</button>&nbsp;
+                        <button wire:click="updateVotacion" class="btn btn-primary">Actualizar</button>&nbsp;
+
+                        @if(!empty($votacionActiva) && $votacionActiva->id = $votacionId)
+                        <button wire:click="enableVotacion({{$votacionId}},3)" class="btn btn-secondary">Cerrar Votación</button>&nbsp;
+                        <button wire:click="enableVotacion({{$votacionId}},1)" class="btn btn-warning">Pausar Votación</button>
+                        @elseif(empty($votacionActiva))
+                        <button wire:click="enableVotacion({{$votacionId}},2)" class="btn btn-warning">Habilitar Votación</button>
+                        @endif
+                    </div>
+                    @endif
+                </div>
+            </div>
+
+            @if(!empty($votacionActiva) && $votacionActiva->id == $votacionId)
+            <div class="row mt-3">
+                <div class="col-lg-2 col-4">
+                    <div class="small-box bg-success">
+                        <div class="inner">
+                            <h3>{{$votacionActiva->participantes()->where("voto",1)->count()}}</h3>
+                            <p>Afirmativos</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-thumbs-up"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-4">
+                    <div class="small-box bg-danger">
+                        <div class="inner">
+                            <h3>{{$votacionActiva->participantes()->where("voto",0)->count()}}</h3>
+                            <p>Negativos</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-thumbs-down"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-4">
+                    <div class="small-box bg-info">
+                        <div class="inner">
+                            <h3>{{$votacionActiva->participantes()->whereNull("voto")->count()}}</h3>
+                            <p>Abstienen</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-yin-yang"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-4">
+                    <div class="small-box bg-warning">
+                        <div class="inner">
+                            <h3>{{$votacionActiva->participantes()->count()}}</h3>
+                            <p>Votaron</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-stamp"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-6">
+                    <div class="small-box bg-secundary">
+                        <div class="inner">
+                            <h3>{{$sesion->votantes->count() - $votacionActiva->participantes->count()}}</h3>
+                            <p>Faltan</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-user-plus"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-6">
+                    <div class="small-box bg-secundary">
+                        <div class="inner">
+                            <p>Voto</p>
+                            @if(!$votacionActiva->participantes()->where("users.id", Auth::user()->id)->exists())
+                            <button wire:click="setVoto(true)" class="btn btn-success" title="Afirmativo"><i class="fa fa-thumbs-up"></i></button>&nbsp;
+                            <button wire:click="setVoto(false)" class="btn btn-danger" title="Negativo"><i class="fa fa-thumbs-down"></i></button>
+                            <button wire:click="setVoto(null)" class="btn btn-info" title="Absenerse"><i class="fa fa-yin-yang"></i></button>
+                            @else
+                            <button wire:click="removeVoto({{$votacionId}})" class="btn btn-warning">Borrar Voto</button>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endif
+            @endif
+            @if(in_array($sesion->estado, [1,4]))
+            <div class="mt-2 col-md-12 text-left btn-group btn-group-toggle">
+                @foreach ($votaciones as $votacion)
+                <label class="btn bg-warning {{$votacionId == $votacion->id ? 'active':''}}"><input type="radio" name="votacion" id="voto_{{$votacion->id}}" autocomplete="off" wire:click="activeVotacion({{$votacion->id}})"> {{$votacion->titulo}}</label>
+                @endforeach
+            </div>
+            @endif
             <div class="row w-100 mt-3">
                 <div class="col-12">
 
@@ -30,23 +147,29 @@
                         </thead>
                         <tbody>
                             @foreach ($items as $item)
-
                             <tr>
-                                <td>{{$item->tema}}</td>
-                                <td class="">{{$item->comision}}</td>
-                                <td class="">{{$item->facultad}}</td>
-                                <td class="text-center">{{$item->numero}}</td>
-                                <td class="text-center">{{$item->resolucion}}</td>
-                                <td></td>
-                                <td class="p-1 text-center">
+                                <td class="{{$item->id_votacion == $votacionId ? 'bg-warning' : ''}}">{{$item->tema->titulo}}</td>
+                                <td class="{{$item->id_votacion == $votacionId ? 'bg-warning' : ''}}">{{$item->comision->name}}</td>
+                                <td class="{{$item->id_votacion == $votacionId ? 'bg-warning' : ''}}">{{$item->facultad->name}}</td>
+                                <td class="{{$item->id_votacion == $votacionId ? 'bg-warning' : ''}} text-center">{{$item->numero}}</td>
+                                <td class="{{$item->id_votacion == $votacionId ? 'bg-warning' : ''}} text-center">{{$item->resolucion}}</td>
+                                <td class="{{$item->id_votacion == $votacionId ? 'bg-warning' : ''}}"></td>
+                                <td class="{{$item->id_votacion == $votacionId ? 'bg-warning' : ''}} p-1 text-center">
                                     <button wire:click="openEditModal({{ $item->id }}, true)" class="btn btn-sm btn-secondary" title="Ver"><i class="fa fa-eye"></i></button>
                                     @if($esAdmin && in_array($sesion->estado, [1,4]))
                                     <button wire:click="openEditModal({{ $item->id }}, false)" class="btn btn-sm btn-primary" title="Editar"><i class="fa fa-edit"></i></button>
                                     <button wire:click="$emit('alertDelete',{{ $item->id }})" class="btn btn-sm btn-danger" title="Eliminar"><i class="fas fa-trash-alt" style="color: white "></i></button>
                                     @endif
+                                    @if($esAdmin && in_array($sesion->estado, [1,4]) && !empty($votacionId))
+                                    @if(empty($item->id_votacion))
+                                    <button wire:click="addVotacion({{ $item->id }}, {{$votacionId}}, true)" class="btn btn-sm btn-warning" title="Agregar" @if($item->id_votacion) disabled @endif><i class="fa fa-plus"></i></button>
+                                    @elseif($item->id_votacion == $votacionId)
+                                    <button wire:click="addVotacion({{ $item->id }}, {{$votacionId}}, false)" class="btn btn-sm bg-white" title="Quitar"><i class="fa fa-minus"></i></button>
+                                    @endif
+
+                                    @endif
                                 </td>
                             </tr>
-
                             @endforeach
                         </tbody>
                     </table>
@@ -86,7 +209,7 @@
                                             <select class="form-control" name="comision" id="comision" wire:model="comision_id" @if($readonly) disabled @endif>
                                                 <option value="">Seleccionar...</option>
                                                 @foreach ($comisiones as $comision)
-                                                <option value={{$comision->id}}>{{$comision->name}}</option>
+                                                <option value="{{$comision->id}}">{{$comision->name}}</option>
                                                 @endforeach
                                             </select>
                                             @error('comision_id')
@@ -164,5 +287,6 @@
             </div>
         </div>
         @endif
+
     </div>
 </div>

@@ -26,9 +26,9 @@ class ItemsTemario extends Model
         'id_temario'
     ];
 
-    public function tema(): BelongsTo
+    public function tema(): HasOneThrough
     {
-        return $this->belongsTo(Tema::class, 'id_tema');
+        return $this->hasOneThrough(Tema::class, TemarioOrdenDia::class, 'id', 'id', 'id_temario', 'id_tema');
     }
 
     public function temario(): HasOne
