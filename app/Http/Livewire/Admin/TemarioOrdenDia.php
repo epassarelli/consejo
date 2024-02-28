@@ -5,21 +5,25 @@ namespace App\Http\Livewire\Admin;
 use App\Models\TemarioOrdenDia as modelTemarioOrdenDia;
 use App\Models\ItemsTemario as ModelItemsTemario;
 use App\Models\Tema as ModelTemas;
+use App\Models\Sesion as ModelSesion;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Session;
 
 class TemarioOrdenDia extends Component
 {
 
     public $temarios;
+    public $sesion;
     public $loading = false;
     public $showActionModal = false;
     public $readonly = false;
     public $id_temario = 0;
     public $id_tema;
     public $orden;
-    public $web;
-
+    public $web = 0;
+    private $id_sesion = 0;
     protected $listeners = ['delete', 'update'];
 
     public function openModal()
@@ -29,22 +33,29 @@ class TemarioOrdenDia extends Component
 
     public function closeModal()
     {
+        $this->id_tema = null;
+        $this->orden = '';
+        $this->web = false;
+        $this->id_temario = 0;
         $this->showActionModal = false;
+        $this->readonly = false;
         $this->loading = false;
     }
 
-
     public function render()
     {
-        $temariosController = new modelTemarioOrdenDia();
-        $this->temarios = $temariosController
-            ->leftJoin('temas', 'temarios_ordenes_dia.id_tema', '=', 'temas.id')
-            ->leftJoin('items_temario', 'temarios_ordenes_dia.id', '=', 'items_temario.id_tema')
-            ->select('temarios_ordenes_dia.*', DB::raw('COALESCE(COUNT(items_temario.id_tema), 0) AS items'), 'temas.titulo as tema')
-            ->groupBy('temarios_ordenes_dia.id', 'temarios_ordenes_dia.id_orden_dia','temarios_ordenes_dia.id_tema','temarios_ordenes_dia.orden','temarios_ordenes_dia.web','temarios_ordenes_dia.created_at','temarios_ordenes_dia.updated_at','temas.titulo') // Agregar 'id_orden_dia' a la cláusula GROUP BY
-            ->get();
-        $this->temas = modelTemas::all();
-        return view('livewire.admin.temario-orden-dia', ['temarios' => $this->temarios, 'temas' => $this->temas])->layout('layouts.adminlte');
+        $this->id_sesion = session('id_sesion');
+
+        if (empty($this->id_sesion))
+            $this->redirect("/admin/sesiones");
+
+
+        $this->sesion = ModelSesion::with(["temariosOrdenDia" => ["items", "tema"], "ordenDia"])->find($this->id_sesion);
+
+        return view('livewire.admin.temario-orden-dia', [
+            'temas' => modelTemas::all(),
+            "esAdmin" => Gate::allows("admin-sesion")
+        ])->layout('layouts.adminlte');
     }
 
     public function storeItemTemario()
@@ -52,23 +63,23 @@ class TemarioOrdenDia extends Component
         $this->loading = true;
 
         try {
+            $this->validate([
+                'id_tema' => 'required',
+                'orden' => 'required'
+            ]);
+            //                , [
+            //                    'id_tema.in' => 'El campo Tema es obligatorio.',
+            //                    'orden.required' => "el orden es obligatorio."
+            //                ]
 
-            $params = $this->validate(
-                [
-                    'id_tema' => 'required',
-                    'orden' => 'required'
-                ],
-                [
-                    'id_tema.required' => 'El campo Tema es obligatorio.',
-                    'orden.required' => "el orden es obligatorio"
-                ]
-            );
 
-            modelTemarioOrdenDia::create([
-                'id_orden_dia' => 5,
-                'orden' => $params["orden"],
+            $this->emit('mensajePositivo', ['mensaje' => $this->orden]);
+
+            $this->sesion->ordenDia->temariosOrdenDia()->firstOrcreate([
+                'id_tema' => $this->id_tema
+            ], [
+                'orden' => $this->orden,
                 'web' => $this->web,
-                'id_tema' => $params["id_tema"],
             ]);
 
             $this->reset(['id_tema']);
@@ -82,17 +93,12 @@ class TemarioOrdenDia extends Component
             //       $this->emit('mensajeNegativo', ['mensaje' => 'Error al agregar el item 2: ' . $errors]);
         } catch (\Exception $e) {
             // Manejar otros errores
-            $this->emit('mensajeNegativo', ['mensaje' => 'Error al agregar el item1: ' . $e->getMessage()]);
+            $this->emit('mensajeNegativo', ['mensaje' => 'Error al agregar el item: ' . $e->getMessage()]);
         } finally {
             // Independientemente de si hubo un error o no, cierra el modal y restablece el estado del loader
             $this->loading = false;
         }
-    }
 
-
-    public function items($id, $tema = 1)
-    {
-        return redirect()->route('items', ['id' => $id, 'tema' => $tema]);
     }
 
 
@@ -122,6 +128,7 @@ class TemarioOrdenDia extends Component
                 $temarioToUpdate->web = $this->web;
                 $temarioToUpdate->save();
             }
+
             $this->reset(['id_temario', 'orden', 'web']);
             $this->closeModal();
 
@@ -137,9 +144,8 @@ class TemarioOrdenDia extends Component
 
     public function delete($id)
     {
-
         try {
-            $temarioToDelete = modelTemarioOrdenDia::find($id);
+            $temarioToDelete = modelTemarioOrdenDia::where('id_orden_dia', '=', $id);
             $items = ModelItemsTemario::where('id_tema', $id)->count();
 
             // Verifica si el tema existe antes de intentar eliminarlo
@@ -157,12 +163,12 @@ class TemarioOrdenDia extends Component
 
     public function openEditModal($id, $readonly)
     {
+
+        $temarioToUpdate = modelTemarioOrdenDia::find($id);
         $this->readonly = $readonly;
         $this->id_temario = $id;
 
-        $temarioToUpdate = modelTemarioOrdenDia::find($id);
-
-        if ($id === 0) {
+        if ($id == 0) {
             $this->readonly = true;
         }
 
@@ -173,5 +179,16 @@ class TemarioOrdenDia extends Component
         }
 
         $this->openModal();
+    }
+
+    public function items($id)
+    {
+        Session::put('id_temario', $id);
+        return redirect()->route('items');
+    }
+
+    public function volver()
+    {
+        return redirect()->route('sesiones');
     }
 }

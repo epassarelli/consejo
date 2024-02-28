@@ -3,11 +3,14 @@
     <div class="container mt-4">
         <div class="row">
             <div class="col-md-8">
-                <h3>Orden del Día - Temario</h3>
+                <h3>Orden del Día - {{date("d/m/Y", strtotime($sesion->fecha))}}</h3>
             </div>
 
             <div class="col-md-4 text-right">
+                <button class="btn btn-secondary" wire:click="volver" data-target="#itemModal"><i class="fas fa-arrow-circle-left  mr-2" style="color: white;"></i>Volver</button>
+                @if($esAdmin && in_array($sesion->estado, [1,4]))
                 <button class="btn btn-success" wire:click="openModal"><i class="fas fa-plus-circle mr-2" style="color: white;"></i>Agregar</button>
+                @endif
             </div>
 
             <div class="row w-100 mt-3">
@@ -23,19 +26,21 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($temarios as $temario)
-                                <tr>
-                                    <td class="">{{$temario->tema}}</td>
-                                    <td class="text-center">{{$temario->orden}}</td>
-                                    <td class="text-center">{{$temario->items}}</td>
-                                    <td class="text-center">{{$temario->web}}</td>
-                                    <td class="p-1 text-center">
-                                        <button wire:click="items({{$temario->id}}, {{$temario->id_tema}})" class="btn btn-sm btn-info" title="items"><i class="fas fa-file-alt"></i></button>
-                                        <button wire:click="openEditModal({{ $temario->id }}, true)"  class="btn btn-sm btn-secondary" title="Editar"><i class="fa fa-eye"></i></button>
-                                        <button wire:click="openEditModal({{ $temario->id }}, false)"  class="btn btn-sm btn-primary" title="Editar"><i class="fa fa-edit"></i></button>
-                                        <button wire:click="$emit('alertDelete',{{ $temario->id }})" class="btn btn-sm btn-danger" title="Eliminar"><i class="fas fa-trash-alt" style="color: white "></i></button>
-                                    </td>
-                                </tr>
+                            @foreach ($sesion->temariosOrdenDia as $temario)
+                            <tr>
+                                <td class="">{{$temario->tema->titulo}}</td>
+                                <td class="text-center">{{$temario->orden}}</td>
+                                <td class="text-center">{{$temario->tema->items->count()}}</td>
+                                <td class="text-center">{{$temario->web}}</td>
+                                <td class="p-1 text-center">
+                                    <button wire:click="items({{$temario->id}})" class="btn btn-sm btn-info" title="items"><i class="fas fa-file-alt"></i></button>
+                                    <button wire:click="openEditModal({{$temario->id}}, true)" class="btn btn-sm btn-secondary" title="Ver"><i class="fa fa-eye"></i></button>
+                                    @if($esAdmin && in_array($sesion->estado, [1,4]) && !in_array($sesion->ordenDia->id_estado, [2,3,5]))
+                                    <button wire:click="openEditModal({{$temario->id}}, false)" class="btn btn-sm btn-primary" title="Editar"><i class="fa fa-edit"></i></button>
+                                    <button wire:click="$emit('alertDelete',{{ $temario->id_orden_dia }})" class="btn btn-sm btn-danger" title="Eliminar"><i class="fas fa-trash-alt" style="color: white "></i></button>
+                                    @endif
+                                </td>
+                            </tr>
                             @endforeach
                         </tbody>
                     </table>
@@ -65,24 +70,24 @@
                                     <div class="input-group mb-2 mr-sm-2">
                                         <div class="col-8 input-group-prepend">
                                             <label class="input-group-text">Tema</label>
-                                            <select class="form-control" name="tema" id="id_tema" wire:model="id_tema" @if($readonly) disabled @endif>
+                                            <select class="form-control" name="id_tema" id="id_tema" wire:model="id_tema" @if($readonly) disabled @endif>
                                                 <option value="">Seleccionar...</option>
                                                 @foreach ($temas as $tema)
-                                                    <option value={{$tema->id}}>{{$tema->titulo}}</option>
+                                                <option value={{$tema->id}}>{{$tema->titulo}}</option>
                                                 @endforeach
                                             </select>
-                                            @error('comision_id')
-                                                <span class="text-danger">{{ $message }}</span>
+                                            @error('id_tema')
+                                            <span class="text-danger">{{ $message }}</span>
                                             @enderror
                                         </div>
 
                                         <div class="col-4 input-group-prepend">
                                             <label class="input-group-text">Orden</label>
                                             <input type="text" class="form-control" name="orden" id="orden" wire:model="orden" @if($readonly) disabled @endif>
-                                            @error('name')
-                                                <span class="text-danger">{{ $message }}</span>
+                                            @error('orden')
+                                            <span class="text-danger">{{ $message }}</span>
                                             @enderror
-                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -98,22 +103,21 @@
                             </div>
 
                             <div class="modal-footer">
-                                <button type="button" wire:click="closeModal" class="btn btn-secondary"
-                                    data-dismiss="modal">Cerrar</button>
-                                    @if (!$readonly)
-                                        @if ($id_temario)
-                                            <button wire:click="updateTemario" class="btn btn-primary">Actualizar</button>
-                                        @else
-                                            <button wire:click="storeItemTemario" class="btn btn-primary">Guardar</button>
-                                        @endif
+                                <button type="button" wire:click="closeModal" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                @if (!$readonly)
+                                    @if ($id_temario)
+                                <button wire:click="updateTemario" class="btn btn-primary">Actualizar</button>
+                                    @else
+                                <button wire:click="storeItemTemario" class="btn btn-primary">Guardar</button>
                                     @endif
+                                @endif
                             </div>
                         </div>
-                        </div>
                     </div>
+                </div>
             </div>
             @endif
-            </div>
+        </div>
 
     </div>
 </div>

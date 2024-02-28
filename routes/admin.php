@@ -6,13 +6,11 @@ use App\Http\Livewire\Admin\Roles;
 use App\Http\Livewire\Admin\Users;
 use App\Http\Livewire\Admin\GestionComisiones;
 use App\Http\Livewire\Admin\GestionSesiones;
-use App\http\Livewire\Admin\OrdenesDelDia;
-use App\http\Livewire\Admin\TemarioOrdenDia;
+use App\Http\Livewire\Admin\OrdenesDelDia;
+use App\Http\Livewire\Admin\TemarioOrdenDia;
 use App\Http\Livewire\Admin\Temas;
-use App\http\Livewire\Admin\ItemsTemario;
-
-
-
+use App\Http\Livewire\Admin\ItemsTemario;
+use App\Http\Livewire\Admin\PresentesSesion;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,5 +30,6 @@ Route::get('/comisiones', GestionComisiones::class)->name('comisiones');
 Route::get('/sesiones', GestionSesiones::class)->name('sesiones');
 Route::get('/temas', Temas::class)->name('temas');
 Route::get('/temarios', TemarioOrdenDia::class)->name('temarios');
-Route::get('/items/{id}/{tema}', ItemsTemario::class)->name('items');
-Route::get('/ordenes', OrdenesDelDia::class)->name('ordenes');
+Route::get('/items', ItemsTemario::class)->name('items'); // /{id}/{tema}
+Route::get('/ordenes', OrdenesDelDia::class)->name('ordenes'); // /{id}
+Route::get('/presentes-sesion', PresentesSesion::class)->name('asistentes'); // /{id}

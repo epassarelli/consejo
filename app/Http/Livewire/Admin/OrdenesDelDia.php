@@ -31,16 +31,12 @@ class OrdenesDelDia extends Component
         $this->emit('openAddTemarioModal', $id_orden);
     }
 
-    /*
+/*
     public function openOrdenModal($id_sesion)
     {
         $this->id_sesion = $id_sesion;
         $this->showActionModal = true;
     }
 
-
-
-
-
-    */
+*/
 }
