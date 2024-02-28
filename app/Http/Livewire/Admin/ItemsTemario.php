@@ -6,16 +6,17 @@ use App\Models\ItemsTemario as ModelItemsTemario;
 use App\Models\Facultad as ModelsFacultad;
 use App\Models\Comision as ModelsComision;
 use App\Models\Sesion;
-use App\Models\TemarioOrdenDia;
+use App\Models\Adjunto as ModelAdjunto;
 use Livewire\Component;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
+use Livewire\WithFileUploads;
 
 class ItemsTemario extends Component
 {
-    public $id_temario;
+    public $id_item_temario;
     public $tema; // id del tema que viene desde el temario
     protected $facultades;
     protected $comisiones;
@@ -30,20 +31,62 @@ class ItemsTemario extends Component
     public $resumen;
     public $showModal = 'none';
     public $showActionModal = false;
+    public $showAttachModal = false;
     public $loading = false;
     public $readonly = false;
-    public $items;
-
     protected $listeners = ['delete', 'update'];
-
+    public $archivos = [];
+    public $archivo;
     public $errors = [];
 
-    public function mount($id, $tema = 0)
+    // para adjuntos
+    public $titulo = '';
+
+    use WithFileUploads;
+    public $file;
+
+    public function guardarArchivos()
     {
-        // Acceder al valor del parámetro "id" desde la URL
-        $this->id_temario = $id;
-        $this->tema = $tema;
+
+        $this->validate([
+            'archivo' => 'required|file|max:2048',// 1024 kilobytes = 1 MB
+            'titulo' => 'required'
+        ]);
+
+
+        if ($this->archivo && $this->archivo->getClientOriginalExtension() == 'pdf') {
+
+            $rutaArchivo = $this->archivo->store('archivos');
+            $newAdjunto = new ModelAdjunto();
+            $newAdjunto->id_item_temario = $this->item_id;
+            $newAdjunto->title = $this->titulo;
+            $newAdjunto->name =  $this->archivo->getClientOriginalName();
+            $newAdjunto->type = $this->archivo->getClientMimeType();
+            $newAdjunto->size = $this->archivo->getSize();
+            $newAdjunto->path = $rutaArchivo;
+
+            $newAdjunto->save();
+        }
+
+
+        $this->reset('file');
+        $this->titulo = '';
+        $this->archivo = null;
+
+        if(is_null($this->archivos)){
+            $this->archivos = [];
+        }
+
+        $filesUpload = new ModelAdjunto();
+        $this->archivos = $filesUpload->select('*')
+        ->where('id_item_temario', '=', $this->item_id)
+        ->get();
+
+        $this->emit('mensajePositivo', ['mensaje' => 'Archivos PDF subidos correctamente.']);
+        $this->readonly = false;
     }
+
+
 
     public function render()
     {
@@ -69,6 +112,7 @@ class ItemsTemario extends Component
 
     public function storeItem()
     {
+
         $this->loading = true;
         try {
 
@@ -91,10 +135,9 @@ class ItemsTemario extends Component
                 ]
             );
 
-            $temario = TemarioOrdenDia::find(session('id_temario'));
-            $temario->items()->create([
-                'id_tema' => $temario->id_tema,
-                'numero' => $this->numero,
+            ModelItemsTemario::create([
+                'id_tema' => session('id_temario'),
+                'numero' =>$this->numero,
                 'comision_id' => $this->comision_id,
                 'facultad_id' => $this->facultad_id,
                 'resolucion' => $this->resolucion,
@@ -123,7 +166,7 @@ class ItemsTemario extends Component
     {
         $this->loading = true;
 
-
+        Storage::disk('local')->put('archivo.txt', 'Contenido del archivo');
         try {
 
             $params = $this->validate([
@@ -211,6 +254,40 @@ class ItemsTemario extends Component
     }
 
 
+    public function deleteAdj($id){
+
+        $f = ModelAdjunto::find($id);
+
+        Storage::delete($f->path);
+        $f->delete();
+
+        $filesUpload = new ModelAdjunto();
+        $this->archivos = $filesUpload->select('*')
+        ->where('id_item_temario', '=', $this->item_id)
+        ->get();
+
+    }
+
+    public function openAttachModal($id){
+        $this->item_id = $id;
+
+        $filesUpload = new ModelAdjunto();
+
+        $this->archivos = $filesUpload->select('*')
+        ->where('id_item_temario', '=', $id)
+        ->get();
+
+        if(is_null($this->archivos)){
+            $this->archivos = [];
+        }
+
+        $this->showAttachModal = true;
+    }
+
+    public function closeAttachModal(){
+        $this->showAttachModal = false;
+    }
+
     public function openModal()
     {
         $this->showActionModal = true;
@@ -239,7 +316,6 @@ class ItemsTemario extends Component
 
     public function volver()
     {
-
         return redirect()->route('temarios');
     }
 }

@@ -26,9 +26,9 @@ class ItemsTemario extends Model
         'id_temario'
     ];
 
-    public function tema(): HasOneThrough
+    public function tema(): BelongsTo
     {
-        return $this->hasOneThrough(Tema::class, TemarioOrdenDia::class, 'id', 'id', 'id_temario', 'id_tema');
+        return $this->belongsTo(Tema::class, 'id_tema');
     }
 
     public function temario(): HasOne
@@ -47,4 +47,8 @@ class ItemsTemario extends Model
         return $this->belongsTo(Comision::class, 'comision_id');
     }
 
+    public function votacion(): BelongsTo
+    {
+        return $this->belongsTo(Votacion::class, 'id', 'votacion_id');
+    }
 }

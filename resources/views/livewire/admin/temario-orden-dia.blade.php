@@ -26,6 +26,7 @@
                             </tr>
                         </thead>
                         <tbody>
+
                             @foreach ($sesion->temariosOrdenDia as $temario)
                             <tr>
                                 <td class="">{{$temario->tema->titulo}}</td>
@@ -41,6 +42,7 @@
                                     @endif
                                 </td>
                             </tr>
+
                             @endforeach
                         </tbody>
                     </table>
