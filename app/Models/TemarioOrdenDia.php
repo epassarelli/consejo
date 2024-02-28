@@ -29,5 +29,10 @@ class TemarioOrdenDia extends Model
         return $this->hasOne(OrdenDia::class, 'id', 'id_orden_dia');
     }
 
+    public function votaciones(): HasMany
+    {
+        return $this->hasMany(Votacion::class, 'id_temario', 'id');
+    }
+
 
 }
