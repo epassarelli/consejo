@@ -21,7 +21,7 @@ class OrdenDia extends Model
         return $this->belongsTo(EstadoOrdenDia::class, 'id_estado');
     }
 
-    public function temarioOrdenDia()
+    public function temariosOrdenDia()
     {
         return $this->hasMany(TemarioOrdenDia::class, 'id_orden_dia');
     }

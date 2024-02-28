@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -65,5 +66,15 @@ class User extends Authenticatable
     public function cargo()
     {
         return $this->belongsTo(Cargo::class, 'cargo_id');
+    }
+
+    public function sesiones(): BelongsToMany
+    {
+        return $this->belongsToMany(Sesion::class, "presentes_sesion", "id_usuario", "id_sesion", "id", "id")->withPivot("votante")->withTimestamps();
+    }
+
+    public function votaciones(): BelongsToMany
+    {
+        return $this->belongsToMany(Votacion::class, "votos_usuarios",  "id_usuario", "id_votacion", "id", "id")->withPivot("voto")->withTimestamps();
     }
 }
