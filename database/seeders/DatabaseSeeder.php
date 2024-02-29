@@ -27,6 +27,6 @@ class DatabaseSeeder extends Seeder
             EstadosOrdenDiaTableSeeder::class
         ]);
         
-        ItemsTemario::factory(540)->create();
+        // ItemsTemario::factory(540)->create();
     }
 }
