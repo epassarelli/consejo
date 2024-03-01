@@ -17,13 +17,29 @@ class Votacion extends Model
         "id_temario",
         "titulo",
         "estado",
-        "aceptacion"
+        "aceptacion",
+        "resultado"
     ];
 
 
     public function participantes(): BelongsToMany
     {
         return $this->belongsToMany(User::class,  "votos_usuarios", "id_votacion", "id_usuario", "id", "id")->withPivot("voto")->withTimestamps();
+    }
+
+    public function votaronAfirmativo(): BelongsToMany
+    {
+        return $this->participantes()->wherePivot("voto", "=", 1);
+    }
+
+    public function votaronNegativo(): BelongsToMany
+    {
+        return $this->participantes()->wherePivot("voto", "=", 0);
+    }
+
+    public function votaronAbstenerse(): BelongsToMany
+    {
+        return $this->participantes()->wherePivotNull("voto");
     }
 
     public function items(): HasMany

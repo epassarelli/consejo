@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class Sesion extends Model
@@ -54,4 +55,5 @@ class Sesion extends Model
     {
         return $this->asistentes()->wherePivot("votante", "=", 0);
     }
+
 }

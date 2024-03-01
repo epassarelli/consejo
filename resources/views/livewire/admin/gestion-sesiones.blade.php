@@ -44,7 +44,7 @@
 
                                 <button wire:click="descargarPdf({{ $sesion->id }})" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#roleModal" title="Descargar pdf"><i class="far fa-file-pdf"></i></button>
 
-                                @if($sesion->estado != 4 && $esAdmin)
+                                @if($esAdmin && $sesion->estado == 1)
                                 <button wire:click="iniciarSesion({{ $sesion->id }})" class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#roleModal" title="Iniciar sesión"><i class="fas fa-users"></i></button>
                                 @endif
                             </td>

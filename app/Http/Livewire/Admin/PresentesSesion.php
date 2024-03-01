@@ -25,8 +25,8 @@ class PresentesSesion extends Component
 
         $this->sesion = Sesion::find($this->id_sesion);
 
-        if($this->sesion->ordenDia->id_estado == 6)
-            $this->redirect('/admin/temarios');
+        /*if($this->sesion->ordenDia->id_estado == 6)
+            $this->redirect('/admin/temarios');*/
 
         $user = User::find(Auth::user()->id);
 
