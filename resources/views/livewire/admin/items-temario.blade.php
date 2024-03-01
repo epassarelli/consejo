@@ -154,7 +154,6 @@
                                 <th class="text-center">FACULTAD</th>
                                 <th class="text-center">EXPEDIENTE</th>
                                 <th class="text-center">RESOLUCIÓN</th>
-                                <!-- <th class="text-center">ADJ</th> -->
                                 <th style="width: 15%" class="text-center">Acciones</th>
                             </tr>
                         </thead>
@@ -166,7 +165,6 @@
                                 <td class="{{$itemEnVotacionActiva ? 'bg-warning' : ''}}">{{$item->facultad->name}}</td>
                                 <td class="{{$itemEnVotacionActiva ? 'bg-warning' : ''}} text-center">{{$item->numero}}</td>
                                 <td class="{{$itemEnVotacionActiva ? 'bg-warning' : ''}} text-center">{{$item->resolucion}}</td>
-                                <td class="{{$itemEnVotacionActiva ? 'bg-warning' : ''}}"></td>
                                 <td class="{{$itemEnVotacionActiva ? 'bg-warning' : ''}} p-1 text-center">
                                     <button wire:click="openEditModal({{ $item->id }}, true)" class="btn btn-sm btn-secondary" title="Ver"><i class="fa fa-eye"></i></button>
                                     <button wire:click="openAttachModal({{ $item->id }})"  class="btn btn-sm btn-primary" title="atach"><i class="fa fa-file-pdf"></i></button>
