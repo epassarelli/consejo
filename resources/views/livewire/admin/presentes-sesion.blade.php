@@ -18,7 +18,7 @@
 
         <div class="row mt-3">
             <div class="col-12" wire:poll>
-                <table id="basic-table" class="table table-hover table-bordered mt-3">
+                <table class="table table-hover table-bordered mt-3">
                     <thead>
                         <tr>
                             <th class="text-center">Nombre</th>
@@ -31,7 +31,7 @@
                         <tr>
                             <td>{{ $asistente->name }}</td>
                             <td>{{ ($asistente->cargo) ? $asistente->cargo->nombre : "-"}}</td>
-                            <td><input type="checkbox" wire:click="toggleVoteEnable({{ $asistente->id }})" {{ $asistente->pivot->votante ? 'checked' : '' }} {{$esAdmin ? '' : 'disabled'}} /></td>
+                            <td><input type="checkbox" wire:click="toggleVoteEnable({{ $asistente->id }})" {{ $asistente->pivot->votante ? 'checked' : '' }} {{$esAdmin || in_array($sesion->ordenDia->id_estado, [2,3,5]) ? '' : 'disabled'}} /></td>
                             </td>
                         </tr>
                         @endforeach
