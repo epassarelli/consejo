@@ -33,6 +33,7 @@
                             </tr>
                         </thead>
                         <tbody>
+
                             @foreach ($sesion->temariosOrdenDia as $temario)
                             <tr>
                                 <td class="{{($itemEnVotacionActiva = !empty($temario->votacionesActivas->count())) ? 'bg-warning' : '' }}">{{$temario->tema->titulo}}</td>
@@ -48,6 +49,7 @@
                                     @endif
                                 </td>
                             </tr>
+
                             @endforeach
                         </tbody>
                     </table>

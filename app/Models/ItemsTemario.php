@@ -51,4 +51,5 @@ class ItemsTemario extends Model
     {
         return $this->belongsTo(Votacion::class, 'id', 'votacion_id');
     }
+
 }
