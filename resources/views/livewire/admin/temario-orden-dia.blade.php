@@ -2,20 +2,27 @@
 
     <div class="container mt-4">
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-6">
                 <h3>Orden del Día - {{date("d/m/Y", strtotime($sesion->fecha))}}</h3>
             </div>
 
-            <div class="col-md-4 text-right">
+            <div class="col-md-6 text-right">
                 <button class="btn btn-secondary" wire:click="volver" data-target="#itemModal"><i class="fas fa-arrow-circle-left  mr-2" style="color: white;"></i>Volver</button>
                 @if($esAdmin && in_array($sesion->estado, [1,4]))
                 <button class="btn btn-success" wire:click="openModal"><i class="fas fa-plus-circle mr-2" style="color: white;"></i>Agregar</button>
                 @endif
-            </div>
+                @if($esAdmin && $sesion->estado == 4 && in_array($sesion->ordenDia->id_estado, [4, 6]))
+                <button class="btn btn-warning" wire:click="openPresentes"><i class="fas fa-users mr-2"></i>Presentes Orden del Día</button>
+                @if($sesion->ordenDia->votaciones()->where("id_estado","!=",3))
+                <button class="btn btn-info" wire:click="closeOrdenDia"><i class="fas fa-gavel mr-2"></i>Cerrar Orden del Día</button>
+                @endif
+                @endif
 
+            </div>
+            @if($sesion->ordenDia->id_estado == 6)<div wire:poll></div>@endif
             <div class="row w-100 mt-3">
                 <div class="col-12">
-                    <table id="basic-table" class="table table-hover table-bordered mt-3">
+                    <table class="table table-hover table-bordered mt-3">
                         <thead>
                             <tr>
                                 <th class="text-center">TEMAS</th>
@@ -29,14 +36,14 @@
 
                             @foreach ($sesion->temariosOrdenDia as $temario)
                             <tr>
-                                <td class="">{{$temario->tema->titulo}}</td>
-                                <td class="text-center">{{$temario->orden}}</td>
-                                <td class="text-center">{{$temario->tema->items->count()}}</td>
-                                <td class="text-center">{{$temario->web}}</td>
-                                <td class="p-1 text-center">
-                                    <button wire:click="items({{$temario->id}}, {{$temario->id_tema}})" class="btn btn-sm btn-info" title="items"><i class="fas fa-file-alt"></i></button>
+                                <td class="{{($itemEnVotacionActiva = !empty($temario->votacionesActivas->count())) ? 'bg-warning' : '' }}">{{$temario->tema->titulo}}</td>
+                                <td class="{{$itemEnVotacionActiva ? 'bg-warning' : ''}} text-center">{{$temario->orden}}</td>
+                                <td class="{{$itemEnVotacionActiva ? 'bg-warning' : ''}} text-center">{{$temario->tema->items->count()}}</td>
+                                <td class="{{$itemEnVotacionActiva ? 'bg-warning' : ''}} text-center">{{$temario->web}}</td>
+                                <td class="{{$itemEnVotacionActiva ? 'bg-warning' : ''}} p-1 text-rigth">
+                                    <button wire:click="items({{$temario->id}})" class="btn btn-sm btn-info" title="items"><i class="fas fa-file-alt"></i></button>
                                     <button wire:click="openEditModal({{$temario->id}}, true)" class="btn btn-sm btn-secondary" title="Ver"><i class="fa fa-eye"></i></button>
-                                    @if($esAdmin && in_array($sesion->estado, [1,4]))
+                                    @if($esAdmin && in_array($sesion->estado, [1,4]) && !in_array($sesion->ordenDia->id_estado, [2,3,5]))
                                     <button wire:click="openEditModal({{$temario->id}}, false)" class="btn btn-sm btn-primary" title="Editar"><i class="fa fa-edit"></i></button>
                                     <button wire:click="$emit('alertDelete',{{ $temario->id_orden_dia }})" class="btn btn-sm btn-danger" title="Eliminar"><i class="fas fa-trash-alt" style="color: white "></i></button>
                                     @endif
@@ -107,11 +114,11 @@
                             <div class="modal-footer">
                                 <button type="button" wire:click="closeModal" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                                 @if (!$readonly)
-                                    @if ($id_temario)
+                                @if ($id_temario)
                                 <button wire:click="updateTemario" class="btn btn-primary">Actualizar</button>
-                                    @else
+                                @else
                                 <button wire:click="storeItemTemario" class="btn btn-primary">Guardar</button>
-                                    @endif
+                                @endif
                                 @endif
                             </div>
                         </div>

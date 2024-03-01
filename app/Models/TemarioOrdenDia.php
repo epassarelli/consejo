@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
 
 class TemarioOrdenDia extends Model
 {
@@ -14,6 +15,11 @@ class TemarioOrdenDia extends Model
     protected $table = 'temarios_ordenes_dia';
     protected $fillable = ['id_orden_dia', 'id_tema', 'orden', 'web'];
 
+    public function tema(): HasOne
+    {
+        return $this->hasOne(Tema::class, 'id', 'id_tema');
+    }
+    
     public function items(): HasMany
     {
         return $this->hasMany(ItemsTemario::class, 'id_temario', 'id');
@@ -29,4 +35,8 @@ class TemarioOrdenDia extends Model
         return $this->hasMany(Votacion::class, 'id_temario', 'id');
     }
 
+    public function votacionesActivas(): HasMany
+    {
+        return $this->votaciones()->where("estado", 2);
+    }
 }

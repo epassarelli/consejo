@@ -18,6 +18,7 @@ class TemarioOrdenDia extends Component
     public $sesion;
     public $loading = false;
     public $showActionModal = false;
+    public $showActionModalVotacion = false;
     public $readonly = false;
     public $id_temario = 0;
     public $id_tema;
@@ -46,7 +47,11 @@ class TemarioOrdenDia extends Component
     {
         $this->id_sesion = session('id_sesion');
 
-        $this->sesion = ModelSesion::with(["temariosOrdenDia" => ["tema" => ["items"]]])->find($this->id_sesion);
+        if (empty($this->id_sesion))
+            $this->redirect("/admin/sesiones");
+
+
+        $this->sesion = ModelSesion::with(["temariosOrdenDia" => ["items", "tema", "votacionesActivas"], "ordenDia"])->find($this->id_sesion);
 
         return view('livewire.admin.temario-orden-dia', [
             'temas' => modelTemas::all(),
@@ -59,14 +64,10 @@ class TemarioOrdenDia extends Component
         $this->loading = true;
 
         try {
-            $params = $this->validate([
+            $this->validate([
                 'id_tema' => 'required',
                 'orden' => 'required'
             ]);
-            //                , [
-            //                    'id_tema.in' => 'El campo Tema es obligatorio.',
-            //                    'orden.required' => "el orden es obligatorio."
-            //                ]
 
 
             $this->emit('mensajePositivo', ['mensaje' => $this->orden]);
@@ -94,7 +95,9 @@ class TemarioOrdenDia extends Component
             // Independientemente de si hubo un error o no, cierra el modal y restablece el estado del loader
             $this->loading = false;
         }
+
     }
+
 
     public function updateTemario()
     {
@@ -175,15 +178,27 @@ class TemarioOrdenDia extends Component
         $this->openModal();
     }
 
-    public function items($id, $tema)
+
+    public function closeOrdenDia() {
+        $this->sesion->ordenDia->id_estado=5;
+        $this->sesion->ordenDia->save();
+        $this->sesion->estado = 3;
+        $this->sesion->save();
+    }
+
+    public function items($id)
     {
-        Session::put('id_temario', $id); // en realidad es el id de la sesion
-        Session::put('tema', $tema);
+        Session::put('id_temario', $id);
         return redirect()->route('items');
     }
 
     public function volver()
     {
         return redirect()->route('sesiones');
+    }
+
+    public function openPresentes(){
+        return redirect()->route('asistentes');
+
     }
 }

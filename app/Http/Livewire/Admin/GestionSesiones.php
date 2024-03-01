@@ -113,7 +113,9 @@ class GestionSesiones extends Component
     {
         $sesion->estado = 4;
         $sesion->save();
-
+        $sesion->ordenDia->id_estado = 4;
+        $sesion->ordenDia->save();
+        
         $this->emit('mensajePositivo', ['mensaje' => "La sesion cambio a estado '{$this->estados[$sesion->estado - 1]}'"]);
     }
 

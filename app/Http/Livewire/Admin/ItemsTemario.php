@@ -7,6 +7,9 @@ use App\Models\Facultad as ModelsFacultad;
 use App\Models\Comision as ModelsComision;
 use App\Models\Sesion;
 use App\Models\Adjunto as ModelAdjunto;
+use App\Models\TemarioOrdenDia;
+use App\Models\Votacion;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
@@ -20,7 +23,6 @@ class ItemsTemario extends Component
     public $tema; // id del tema que viene desde el temario
     protected $facultades;
     protected $comisiones;
-    protected $items;
     public $id_tema; // este en realidad es el id del temario al que esta relacionado
     public $item_id;
     public $facultad_id;
@@ -35,6 +37,16 @@ class ItemsTemario extends Component
     public $showAttachModal = false;
     public $loading = false;
     public $readonly = false;
+    public $votaciones = null;
+    public $items;
+    /**** Propiedades Votacion Activa para edicion / asignacion Items   */
+    public $votacionId = 0;
+    public $votacionTitulo = "";
+    public $votacionAceptacion;
+    public $votacionEstado;
+    /********************************************************************/
+    public $votacionActiva;
+
     protected $listeners = ['delete', 'update'];
     public $archivos = [];
     public $archivo;
@@ -91,25 +103,34 @@ class ItemsTemario extends Component
 
     public function render()
     {
+        if (empty(session("id_sesion")))
+            $this->redirect("/admin/sesiones");
 
-        $this->sesion = Sesion::find(session("id_sesion"));
-        $itemsController = new ModelItemsTemario();
-        $esAdmin = Gate::allows("admin-sesion");
+        if (empty(session('id_temario')))
+            $this->redirect("/admin/temarios");
+        
+            $esAdmin = Gate::allows("admin-sesion");
 
-        $this->items = $itemsController->join('facultades', 'items_temario.facultad_id', '=', 'facultades.id')
-            ->join('comisiones', 'items_temario.comision_id', '=', 'comisiones.id')
-            ->leftjoin('temas', DB::raw(session('tema')), '=', 'temas.id')
-            ->select('items_temario.*', 'facultades.name as facultad', 'comisiones.name as comision', 'temas.titulo as tema') //
-            ->where('items_temario.id_tema', session('id_temario'))
-            ->get();
+        
+        $this->sesion = Sesion::with(["ordenDia", "temariosOrdenDia" => ["votacionesActivas"]])->withCount("asistentes")->find(session("id_sesion"));
+        $temario = $this->sesion->temariosOrdenDia()->find(session('id_temario'));
+        if (empty($temario))
+            $this->redirect("/admin/temarios");
 
-        $this->facultades = ModelsFacultad::all();
-        $this->comisiones = ModelsComision::all();
+        $this->votaciones = $temario->votaciones()->withCount(["participantes", "votaronAfirmativo", "votaronNegativo", "votaronAbstenerse"])->get();
+        if (!$esAdmin || empty($this->votacionActiva))
+            $this->votacionActiva = $this->votaciones->where("estado", 2)->first();
+        else $this->votacionActiva = $this->votaciones->where("id", $this->votacionActiva->id)->first();
+        if (!$esAdmin) {
 
+            $this->votacionId = !empty($this->votacionActiva) ? $this->votacionActiva->id : null;
+            $this->votacionTitulo = !empty($this->votacionActiva) ? $this->votacionActiva->titulo : null;
+            $this->votacionAceptacion = !empty($this->votacionActiva) ? $this->votacionActiva->aceptacion : null;
+        }
+        $this->items = $temario->items()->with(["facultad", "comision", "tema"])->get();
         return view('livewire.admin.items-temario', [
-            'items' => $this->items,
-            'facultades' => $this->facultades,
-            'comisiones' => $this->comisiones,
+            'facultades' => ModelsFacultad::all(),
+            'comisiones' => ModelsComision::all(),
             'esAdmin' => $esAdmin
         ])->layout('layouts.adminlte');
     }
@@ -139,9 +160,10 @@ class ItemsTemario extends Component
                 ]
             );
 
-            ModelItemsTemario::create([
-                'id_tema' => session('id_temario'),
-                'numero' =>$this->numero,
+            $temario = TemarioOrdenDia::find(session('id_temario'));
+            $temario->items()->create([
+                'id_tema' => $temario->id_tema,
+                'numero' => $this->numero,
                 'comision_id' => $this->comision_id,
                 'facultad_id' => $this->facultad_id,
                 'resolucion' => $this->resolucion,
@@ -305,6 +327,18 @@ class ItemsTemario extends Component
         $this->loading = false;
     }
 
+    public function createVotacion()
+    {
+        $temario = $this->sesion->temariosOrdenDia()->with("tema")->find(session('id_temario'));
+        $this->votacionTitulo = $temario->tema->titulo . "-{$this->sesion->ordenDia->id}-" . ($temario->votaciones()->count() + 1);
+        $newVotacion = $temario->votaciones()->create(["titulo" => $this->votacionTitulo, "estado" => 1, "aceptacion" => "mayoria"]);
+        $this->votaciones = $temario->refresh();
+        $this->votacionId = $newVotacion->id;
+        $this->votacionAceptacion = $newVotacion->aceptacion;
+        $this->votacionEstado = $newVotacion->estado;
+
+        $this->emit(['mensajePositivo', ['mensaje' => "Se agrego la votacion {$this->votacionTitulo} correctamente"]]);
+    }
 
     private function resetInputFields()
     {
@@ -321,5 +355,103 @@ class ItemsTemario extends Component
     public function volver()
     {
         return redirect()->route('temarios');
+    }
+
+
+    public function activeVotacion($id)
+    {
+        if (Gate::allows("admin-sesion")) {
+            $this->votacionId = $id;
+            $votacion = $this->votaciones->where("id", $id)->first();
+            $votacion->refresh();
+            $this->votacionTitulo = $votacion->titulo;
+            $this->votacionAceptacion = $votacion->aceptacion;
+            $this->votacionEstado = $votacion->estado;
+            if (in_array($votacion->estado, [2, 3]))
+                $this->votacionActiva = $votacion;
+            else $this->votacionActiva = null;
+        }
+    }
+
+    public function removeVotacion($id)
+    {
+        $this->votacionId = $id;
+        $votacion = $this->votaciones->where("id", $id)->first();
+        $votacion->participantes()->detach();
+        $votacion->items()->update(["id_votacion" => null]);
+        $votacion->delete();
+        $this->votacionId = null;
+        $this->votacionTitulo = "";
+        $this->votacionAceptacion = "";
+    }
+
+    public function updateVotacion()
+    {
+        Votacion::where("id", $this->votacionId)->update([
+            "titulo" => $this->votacionTitulo,
+            "aceptacion" => $this->votacionAceptacion
+        ]);
+        $this->emit(['mensajePositivo', ['mensaje' => "Se actualizó correctamnente la Votación"]]);
+    }
+
+    public function addVotacion($itemId, $votacionId, $add)
+    {
+        $item = $this->items->where("id", $itemId)->first();
+        if ($add) $item->id_votacion = $votacionId;
+        elseif ($item->id_votacion == $votacionId) $item->id_votacion = null;
+        $item->save();
+        $this->emit(['mensajePositivo', ['mensaje' => "Se " . ($add ? "agrego" : "quito") . " el item de la votacion."]]);
+    }
+
+    public function enableVotacion($id, $estado)
+    {
+        $this->votacionId = $id;
+        $votacion = $this->votaciones->where("id", $id)->first();
+        $votacion = Votacion::withCount(["participantes", "votaronAfirmativo", "votaronNegativo", "votaronAbstenerse"])->find($votacion->id);
+        if ($votacion->estado == 1) {
+            $votacion->titulo = $this->votacionTitulo;
+            $votacion->aceptacion = $this->votacionAceptacion;
+        }
+        $votacion->estado = $estado;
+        if ($estado == 3) {
+            $sesionParticipantes = $this->sesion->votantes()->count();
+            $votacionParticipantes = $votacion->participantes()->count();
+            $votacionAfirmativos = $votacion->votaronAfirmativo()->where("voto", 1)->count();
+
+            if ($votacionParticipantes == $sesionParticipantes) {
+                if ($votacion->aceptacion == "mayoria") $votacion->resultado = ($sesionParticipantes / 2) < $votacionAfirmativos;
+                elseif ($votacion->aceptacion == "absoluto") $votacion->resultado = $sesionParticipantes == $votacionAfirmativos;
+                elseif ($votacion->aceptacion == "mayoria2/3") $votacion->resultado = ($sesionParticipantes * 2 / 3) <= $votacionAfirmativos;
+                else $votacion->resultado = null;
+            } else $votacion->resultado = null;
+        } else {
+            $votacion->resultado = null;
+        }
+
+        $votacion->save();
+        $this->votacionActiva = in_array($estado, [2, 3]) ? $votacion : null;
+        $this->votacionEstado = $estado;
+        $this->emit(['mensajePositivo', ['mensaje' => "Se habilito la votacion {$votacion->titulo} el item de la votacion."]]);
+    }
+
+
+    public function setVoto($voto = null)
+    {
+        #if (Gate::allows("votante")) {
+            if (!$this->votacionActiva->participantes()->where("users.id", Auth::user()->id)->exists()) {
+                $this->votacionActiva->participantes()->attach(Auth::user()->id, ['voto' => $voto]);
+            } else {
+                $this->votacionActiva->participantes()->updateExistingPivot(Auth::user()->id, ['voto' => $voto]);
+            }
+            $this->emit(['mensajePositivo', ['mensaje' => "Se registro con exito su voto."]]);
+        /*} else {
+            $this->emit(['mensajNegativo', ['mensaje' => "No tiene permiso para votar."]]);
+        }*/
+    }
+
+    public function removeVoto()
+    {
+        $this->votacionActiva->participantes()->detach(Auth::user()->id);
+        $this->emit(['mensajePositivo', ['mensaje' => "Se elimino con exito su voto."]]);
     }
 }

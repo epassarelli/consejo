@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('id_votacion');
             $table->unsignedBigInteger('id_usuario');
-            $table->binary('voto')->nullable();
+            $table->boolean('voto')->nullable();
             $table->timestamps();
 
             $table->foreign('id_votacion')->references('id')->on('votaciones')->cascadeOnDelete();
