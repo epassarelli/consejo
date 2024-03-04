@@ -108,10 +108,10 @@ class ItemsTemario extends Component
 
         if (empty(session('id_temario')))
             $this->redirect("/admin/temarios");
-        
+
             $esAdmin = Gate::allows("admin-sesion");
 
-        
+
         $this->sesion = Sesion::with(["ordenDia", "temariosOrdenDia" => ["votacionesActivas"]])->withCount("asistentes")->find(session("id_sesion"));
         $temario = $this->sesion->temariosOrdenDia()->find(session('id_temario'));
         if (empty($temario))
@@ -146,7 +146,7 @@ class ItemsTemario extends Component
                     'numero' => 'required|string',
                     'resolucion' => 'required',
                     'resumen' => 'required',
-                    'comision_id' => 'required',
+                    'comision_id' => 'nullable',
                     'facultad_id' => 'required',
                     'tipo' => 'required',
                 ],
@@ -199,7 +199,7 @@ class ItemsTemario extends Component
                 'numero' => 'required|string',
                 'resolucion' => 'required',
                 'resumen' => 'required',
-                'comision_id' => 'required',
+                'comision_id' => 'nullable',
                 'facultad_id' => 'required',
                 'tipo' => 'required',
             ], [
@@ -228,7 +228,7 @@ class ItemsTemario extends Component
             $this->emit('mensajePositivo', ['mensaje' => 'El item se modificó correctamente']);
         } catch (\Illuminate\Validation\ValidationException $e) {
             //  $errors = $e->validator->getMessageBag();
-            $this->emit('errores', ['errores' => $errors]);
+            $this->emit('errores', ['errores' => $e->getMessage()]);
         } catch (\Exception $e) {
             // Manejar otros errores
             $this->emit('mensajeNegativo', ['mensaje' => 'Error al agregar el item2: ' . $e->getMessage()]);

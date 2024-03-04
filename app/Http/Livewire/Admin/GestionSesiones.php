@@ -105,9 +105,9 @@ class GestionSesiones extends Component
     {
         echo 'A la espera de sprint';
     }
-    public function descargarPdf()
+    public function descargarPdf($id)
     {
-        echo 'A la espera de sprint';
+        return redirect('admin/generate-pdf/'.$id);
     }
     public function iniciarSesion(Sesion $sesion)
     {
@@ -115,7 +115,7 @@ class GestionSesiones extends Component
         $sesion->save();
         $sesion->ordenDia->id_estado = 4;
         $sesion->ordenDia->save();
-        
+
         $this->emit('mensajePositivo', ['mensaje' => "La sesion cambio a estado '{$this->estados[$sesion->estado - 1]}'"]);
     }
 
