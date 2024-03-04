@@ -47,9 +47,13 @@ class TemarioOrdenDia extends Component
     {
         $this->id_sesion = session('id_sesion');
 
-        if (empty($this->id_sesion))
+        if (empty($this->id_sesion)){
             $this->redirect("/admin/sesiones");
-
+            return view('livewire.admin.temario-orden-dia', [
+                'temas' => null,
+                "esAdmin" => false
+            ])->layout('layouts.adminlte');
+        }
 
         $this->sesion = ModelSesion::with(["temariosOrdenDia" => ["items", "tema", "votacionesActivas"], "ordenDia"])->find($this->id_sesion);
 

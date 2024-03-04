@@ -20,16 +20,19 @@ class PresentesSesion extends Component
 
         $this->id_sesion = session('id_sesion');
 
-        if (empty($this->id_sesion))
-            return redirect()->route('sesiones');
-
+        if (empty($this->id_sesion)) {
+            $this->redirect('sesiones');
+            return view(
+                'livewire.admin.presentes-sesion',
+                [
+                    'asistentes' => null,
+                    "esAdmin" => false
+                ]
+            )->layout('layouts.adminlte');
+        }
         $this->sesion = Sesion::find($this->id_sesion);
 
-        /*if($this->sesion->ordenDia->id_estado == 6)
-            $this->redirect('/admin/temarios');*/
-
         $user = User::find(Auth::user()->id);
-
         if (!$this->sesion->asistentes()->wherePivot('id_usuario', Auth::user()->id)->exists()) {
             $this->sesion->asistentes()->attach($user->id);
             $this->sesion->refresh();

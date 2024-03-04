@@ -13,7 +13,7 @@
                 @endif
                 @if($esAdmin && $sesion->estado == 4 && in_array($sesion->ordenDia->id_estado, [4, 6]))
                 <button class="btn btn-warning" wire:click="openPresentes"><i class="fas fa-users mr-2"></i>Presentes Orden del Día</button>
-                @if($sesion->ordenDia->votaciones()->where("id_estado","!=",3))
+                @if($sesion->ordenDia->votaciones()->where("estado","!=",3)->count() == 0)
                 <button class="btn btn-info" wire:click="closeOrdenDia"><i class="fas fa-gavel mr-2"></i>Cerrar Orden del Día</button>
                 @endif
                 @endif

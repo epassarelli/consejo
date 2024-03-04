@@ -31,7 +31,12 @@
                         <tr>
                             <td>{{ $asistente->name }}</td>
                             <td>{{ ($asistente->cargo) ? $asistente->cargo->nombre : "-"}}</td>
-                            <td><input type="checkbox" wire:click="toggleVoteEnable({{ $asistente->id }})" {{ $asistente->pivot->votante ? 'checked' : '' }} {{$esAdmin || in_array($sesion->ordenDia->id_estado, [2,3,5]) ? '' : 'disabled'}} /></td>
+                            <td><input type="checkbox" 
+                                wire:click="toggleVoteEnable({{ $asistente->id }})" 
+                                {{ $asistente->pivot->votante ? 'checked' : '' }} 
+                                {{($esAdmin || in_array($sesion->ordenDia->id_estado, [2,3,5])) && Gate::forUser($asistente)->allows("votante") ? 
+                                    '' : 'disabled'
+                                }} /></td>
                             </td>
                         </tr>
                         @endforeach
