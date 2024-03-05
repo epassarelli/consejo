@@ -1,13 +1,14 @@
 <?php
 
+
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ComposicionController;
-use App\Http\Controllers\NosotrosController;
-use App\Http\Controllers\RegistrateController;
-use App\Http\Controllers\EllosTambienController;
-use App\Http\Controllers\HacesFaltaController;
+use App\Http\Controllers\ActasController;
+use App\Http\Controllers\ReglamentosController;
+use App\Http\Controllers\BuscadorController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -24,3 +25,6 @@ Auth::routes();
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/composicion', [ComposicionController::class, 'index'])->name('composicion');
+Route::get('/actas', [ActasController::class, 'index'])->name('actas');
+Route::get('/reglamentos', [ReglamentosController::class, 'index'])->name('reglamentos');
+Route::get('/buscador', [BuscadorController::class, 'index'])->name('buscador');
