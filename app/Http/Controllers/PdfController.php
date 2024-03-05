@@ -11,28 +11,35 @@ class PdfController extends Controller
 {
     public function generatePdf($id)
     {
-       // \DB::enableQueryLog();
 
-        $sesion = Sesion::with(['ordenesDelDia.temarioOrdenDia.tema',
-                                'ordenesDelDia.temarioOrdenDia.items' => function ($query) {
+       //  \DB::enableQueryLog();
+
+        $sesion = Sesion::with(['ordenDia.temariosOrdenDia.tema',
+                                'ordenDia.temariosOrdenDia.items' => function ($query) {
                                     $query->orderBy('items_temario.comision_id');
                                 },
-                                'ordenesDelDia.temarioOrdenDia.items.facultad',
-                                'ordenesDelDia.temarioOrdenDia.items.comision',
-                                'ordenesDelDia.temarioOrdenDia' => function ($query) {
+                                'ordenDia.temariosOrdenDia.items.comision',
+                                'ordenDia.temariosOrdenDia' => function ($query) {
                                     $query->orderBy('temarios_ordenes_dia.orden');
-                                }]
-                            )->findOrFail($id);
+                                }     ,
+                                'ordenDia.temariosOrdenDia.items.facultad' => function($query) {
+                                    $query->orderBy('name');
+                                },
+        ])->findOrFail($id);
 
-        // $sql = \DB::getQueryLog();
+
+
+      //  $sql = \DB::getQueryLog();
+
+      //  dd($sql);
 
         $data = [
             'id' => $id,
             'fecha' => $sesion->fecha,
-            'orden_del_dia' => $sesion->ordenesDelDia
+            'orden_del_dia' => $sesion->ordenDia
         ];
 
-        $html = View::make('pdf.pdf_content')->with($data)->render();
+        $html = View::make('pdf.ordenDelDiaPdf')->with($data)->render();
 
         $options = new Options();
         $options->set('isHtml5ParserEnabled', true);
@@ -44,6 +51,6 @@ class PdfController extends Controller
         $dompdf->setPaper('A4', 'portrait');
         $dompdf->render();
 
-        return $dompdf->stream('ordendeldia.pdf');
+        return $dompdf->stream('Orden del dia '.$sesion->fecha.'.pdf');
     }
 }

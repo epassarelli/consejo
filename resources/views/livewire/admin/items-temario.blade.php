@@ -62,7 +62,7 @@
                 </div>
                 @if(!empty($votacionActiva) && $votacionActiva->id == $votacionId && in_array($votacionActiva->estado, [2,3]))
                 <div class="row mt-3">
-                    <div class="col-lg-2 col-4">    
+                    <div class="col-lg-2 col-4">
                         <div class="small-box bg-success">
                             <div class="inner">
                                 <h3>{{$votacionActiva->votaron_afirmativo_count}}</h3>
@@ -139,7 +139,7 @@
             @endif
             <div class="mt-2 col-md-12 text-left btn-group btn-group-toggle" style="overflow-x: auto">
                 @foreach ($votaciones as $votacion)
-                <label 
+                <label
                 class="btn {{($votacion->estado == 2 ? 'bg-info' : ($votacion->estado == 3 ? (!empty($votacion->resultado) ? 'bg-success' : ($votacion->resultado === null ? 'bg-secondary' : 'bg-danger')) : 'bg-warning'))}} {{ $esAdmin ? ($votacionId == $votacion->id ? 'active':'') : ($votacion->estado == 2 ? 'active' : '')}}"
                 style="text-decoration: {{$votacion->estado == 3 && $votacion->resultado == null && $sesion->votantes()->where('users.id', Auth::user()->id)->exists() && !$votacion->participantes()->where('users.id', Auth::user()->id)->exists() ? 'line-through' : 'none'}}"
                 ><input type="radio" name="votacion" id="voto_{{$votacion->id}}" autocomplete="off" wire:click="activeVotacion({{$votacion->id}})" @if(!$esAdmin && !in_array($sesion->ordenDia->id_estado, [2,3,5])) disabled @endif  /> {{$votacion->titulo}}</label>
@@ -161,8 +161,13 @@
                         <tbody>
                             @foreach ($items as $item)
                             <tr>
+
                                 <td class="{{($itemEnVotacionActiva = (!empty($votacionId) && $item->id_votacion == $votacionId)) ? 'bg-warning' : ''}}">{{$item->tema->titulo}}</td>
-                                <td class="{{$itemEnVotacionActiva ? 'bg-warning' : ''}}">{{$item->comision->name}}</td>
+                                @if ($item->comision)
+                                    <td class="{{$itemEnVotacionActiva ? 'bg-warning' : ''}}">{{ $item->comision->name }}</td>
+                                @else
+                                    <td class="{{$itemEnVotacionActiva ? 'bg-warning' : ''}}"></td>
+                                @endif
                                 <td class="{{$itemEnVotacionActiva ? 'bg-warning' : ''}}">{{$item->facultad->name}}</td>
                                 <td class="{{$itemEnVotacionActiva ? 'bg-warning' : ''}} text-center">{{$item->numero}}</td>
                                 <td class="{{$itemEnVotacionActiva ? 'bg-warning' : ''}} text-center">{{$item->resolucion}}</td>

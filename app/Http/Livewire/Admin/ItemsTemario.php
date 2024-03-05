@@ -114,24 +114,22 @@ class ItemsTemario extends Component
             $this->redirect("/admin/temarios");
             $emptySesion = true;
         }
-
         $esAdmin = Gate::allows("admin-sesion");
-        if (!$emptySesion) {
-            $this->sesion = Sesion::with(["ordenDia", "temariosOrdenDia" => ["votacionesActivas"]])->withCount("asistentes")->find(session("id_sesion"));
-            $temario = $this->sesion->temariosOrdenDia()->find(session('id_temario'));
-            if (empty($temario)) {
-                $this->redirect("/admin/temarios");
-
-                $emptySesion = true;
-            }
-        }
 
         if ($emptySesion)
-            return view('livewire.admin.items-temario', [
-                'facultades' => null,
-                'comisiones' => null,
-                'esAdmin' => false
-            ])->layout('layouts.adminlte');
+        return view('livewire.admin.items-temario', [
+            'facultades' => null,
+            'comisiones' => null,
+            'esAdmin' => false
+        ])->layout('layouts.adminlte');
+
+        $this->sesion = Sesion::with(["ordenDia", "temariosOrdenDia" => ["votacionesActivas"]])->withCount("asistentes")->find(session("id_sesion"));
+        $temario = $this->sesion->temariosOrdenDia()->find(session('id_temario'));
+        if (empty($temario))
+            $this->redirect("/admin/temarios");
+        }
+
+       
 
         $this->votaciones = $temario->votaciones()->withCount(["participantes", "votaronAfirmativo", "votaronNegativo", "votaronAbstenerse"])->get();
         if ((!$esAdmin && !in_array($this->sesion->ordenDia->id_estado, [2,3,5])) || empty($this->votacionActiva) )
@@ -162,7 +160,7 @@ class ItemsTemario extends Component
                     'numero' => 'required|string',
                     'resolucion' => 'required',
                     'resumen' => 'required',
-                    'comision_id' => 'required',
+                    'comision_id' => 'nullable',
                     'facultad_id' => 'required',
                     'tipo' => 'required',
                 ],
@@ -215,7 +213,7 @@ class ItemsTemario extends Component
                 'numero' => 'required|string',
                 'resolucion' => 'required',
                 'resumen' => 'required',
-                'comision_id' => 'required',
+                'comision_id' => 'nullable',
                 'facultad_id' => 'required',
                 'tipo' => 'required',
             ], [
@@ -244,7 +242,7 @@ class ItemsTemario extends Component
             $this->emit('mensajePositivo', ['mensaje' => 'El item se modificó correctamente']);
         } catch (\Illuminate\Validation\ValidationException $e) {
             //  $errors = $e->validator->getMessageBag();
-            $this->emit('errores', ['errores' => $errors]);
+            $this->emit('errores', ['errores' => $e->getMessage()]);
         } catch (\Exception $e) {
             // Manejar otros errores
             $this->emit('mensajeNegativo', ['mensaje' => 'Error al agregar el item2: ' . $e->getMessage()]);

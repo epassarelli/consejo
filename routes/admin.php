@@ -12,7 +12,7 @@ use App\Http\Livewire\Admin\Temas;
 use App\Http\Livewire\Admin\ItemsTemario;
 use App\Http\Livewire\Admin\PresentesSesion;
 
-use App\Http\Controllers\Admin\DescargarPDFController;
+use App\Http\Controllers\PdfController;
 
 
 
@@ -37,4 +37,4 @@ Route::get('/temarios', TemarioOrdenDia::class)->name('temarios');
 Route::get('/items', ItemsTemario::class)->name('items'); // /{id}/{tema}
 Route::get('/ordenes', OrdenesDelDia::class)->name('ordenes'); // /{id}
 Route::get('/presentes-sesion', PresentesSesion::class)->name('asistentes'); // /{id}
-Route::get('/descargar-pdf', [DescargarPDFController::class, 'descargarPDF']);
+Route::get('/generate-pdf/{id}', [PdfController::class, 'generatePdf']);
