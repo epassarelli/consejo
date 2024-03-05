@@ -2,18 +2,18 @@
       ============================================= -->
 <nav class="primary-menu">
 
-    <ul class="menu-container">
-        <li class="menu-item">
-            <a class="menu-link" href="{{ route('home') }}">
-                <div>Inicio</div>
-            </a>
-        </li>
+  <ul class="menu-container">
+    <li class="menu-item">
+      <a class="menu-link" href="{{ route('home') }}">
+        <div>Inicio</div>
+      </a>
+    </li>
 
-        <li class="menu-item">
-            <a class="menu-link" href="{{ route('composicion') }}">
-                <div>Composición</div>
-            </a>
-        </li>
+    <li class="menu-item">
+      <a class="menu-link" href="{{ route('composicion') }}">
+        <div>Composición</div>
+      </a>
+    </li>
 
         <li class="menu-item">
             <a class="menu-link" href="{{ route('OrdendelDia') }}">
@@ -21,30 +21,30 @@
             </a>
         </li>
 
-        <li class="menu-item">
-            <a class="menu-link" href="#">
-                <div>Reglamentos</div>
-            </a>
-        </li>
+    <li class="menu-item">
+      <a class="menu-link" href="{{ route('reglamentos') }}">
+        <div>Reglamentos</div>
+      </a>
+    </li>
 
-        <li class="menu-item">
-            <a class="menu-link" href="#">
-                <div>Resoluciones</div>
-            </a>
-        </li>
+    <li class="menu-item">
+      <a class="menu-link" href="#">
+        <div>Resoluciones</div>
+      </a>
+    </li>
 
-        <li class="menu-item">
-            <a class="menu-link" href="#">
-                <div>Actas</div>
-            </a>
-        </li>
+    <li class="menu-item">
+      <a class="menu-link" href="{{ route('actas') }}">
+        <div>Actas</div>
+      </a>
+    </li>
 
-        <li class="menu-item">
-            <a class="menu-link" href="#">
-                <div>Buscador</div>
-            </a>
-        </li>
+    <li class="menu-item">
+      <a class="menu-link" href="{{ route('buscador') }}">
+        <div>Buscador</div>
+      </a>
+    </li>
 
-    </ul>
+  </ul>
 
 </nav><!-- #primary-menu end -->
