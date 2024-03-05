@@ -12,22 +12,26 @@ class PdfController extends Controller
     public function generatePdf($id)
     {
 
-        // \DB::enableQueryLog();
+       //  \DB::enableQueryLog();
 
         $sesion = Sesion::with(['ordenDia.temariosOrdenDia.tema',
                                 'ordenDia.temariosOrdenDia.items' => function ($query) {
                                     $query->orderBy('items_temario.comision_id');
                                 },
-                                'ordenDia.temariosOrdenDia.items.facultad',
                                 'ordenDia.temariosOrdenDia.items.comision',
                                 'ordenDia.temariosOrdenDia' => function ($query) {
                                     $query->orderBy('temarios_ordenes_dia.orden');
-                                }
+                                }     ,
+                                'ordenDia.temariosOrdenDia.items.facultad' => function($query) {
+                                    $query->orderBy('name');
+                                },
         ])->findOrFail($id);
 
 
 
-//        $sql = \DB::getQueryLog();
+      //  $sql = \DB::getQueryLog();
+
+      //  dd($sql);
 
         $data = [
             'id' => $id,
