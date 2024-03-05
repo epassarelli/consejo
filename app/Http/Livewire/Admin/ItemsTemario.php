@@ -116,20 +116,20 @@ class ItemsTemario extends Component
         }
         $esAdmin = Gate::allows("admin-sesion");
 
-        if ($emptySesion)
-        return view('livewire.admin.items-temario', [
-            'facultades' => null,
-            'comisiones' => null,
-            'esAdmin' => false
-        ])->layout('layouts.adminlte');
-
+        if ($emptySesion){
+            return view('livewire.admin.items-temario', [
+                'facultades' => null,
+                'comisiones' => null,
+                'esAdmin' => false
+            ])->layout('layouts.adminlte');
+        }
+        
         $this->sesion = Sesion::with(["ordenDia", "temariosOrdenDia" => ["votacionesActivas"]])->withCount("asistentes")->find(session("id_sesion"));
         $temario = $this->sesion->temariosOrdenDia()->find(session('id_temario'));
-        if (empty($temario))
+
+        if (empty($temario)){
             $this->redirect("/admin/temarios");
         }
-
-       
 
         $this->votaciones = $temario->votaciones()->withCount(["participantes", "votaronAfirmativo", "votaronNegativo", "votaronAbstenerse"])->get();
         if ((!$esAdmin && !in_array($this->sesion->ordenDia->id_estado, [2,3,5])) || empty($this->votacionActiva) )
