@@ -6,13 +6,14 @@ use Illuminate\Support\Facades\View;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use App\Models\Sesion;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use App\Models\Adjunto as modelAdjunto;
 
 class PdfController extends Controller
 {
     public function generatePdf($id)
     {
-
-       //  \DB::enableQueryLog();
 
         $sesion = Sesion::with(['ordenDia.temariosOrdenDia.tema',
                                 'ordenDia.temariosOrdenDia.items' => function ($query) {
@@ -28,10 +29,6 @@ class PdfController extends Controller
         ])->findOrFail($id);
 
 
-
-      //  $sql = \DB::getQueryLog();
-
-      //  dd($sql);
 
         $data = [
             'id' => $id,
@@ -53,4 +50,27 @@ class PdfController extends Controller
 
         return $dompdf->stream('Orden del dia '.$sesion->fecha.'.pdf');
     }
+
+
+
+
+     public function descargarPDF(Request $request)
+     {
+
+        $path = $request->input('path');
+
+        $apppath = storage_path('app/'. $request->input('path'));
+
+          $file = modelAdjunto::where('path', '=', $path)->first();
+
+        if (!Storage::exists($path)) {
+
+            abort(404, 'El archivo no existe.');
+        }
+
+        return response()->download($apppath, $file->name);
+
+
+    }
+
 }

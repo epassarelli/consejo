@@ -38,3 +38,4 @@ Route::get('/items', ItemsTemario::class)->name('items'); // /{id}/{tema}
 Route::get('/ordenes', OrdenesDelDia::class)->name('ordenes'); // /{id}
 Route::get('/presentes-sesion', PresentesSesion::class)->name('asistentes'); // /{id}
 Route::get('/generate-pdf/{id}', [PdfController::class, 'generatePdf']);
+Route::get('/descargar-pdf',[PdfController::class, 'descargarPDF']);
