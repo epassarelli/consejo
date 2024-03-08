@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('items_temario', function (Blueprint $table) {
-            $tiposPermitidos = ['EXPEDIENTE', 'NOTA'];
-            $table->enum('tipo', $tiposPermitidos)->nullable()->change();
-        });
+        // Schema::table('items_temario', function (Blueprint $table) {
+        //     $tiposPermitidos = ['EXPEDIENTE', 'NOTA'];
+        //     $table->enum('tipo', $tiposPermitidos)->nullable()->change();
+        // });
     }
 
     /**

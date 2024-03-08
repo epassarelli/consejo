@@ -49,7 +49,10 @@
                             @if(!empty($votacionActiva) && $votacionActiva->id == $votacionId && $votacionEstado == 2)
                             <button wire:click="enableVotacion({{$votacionId}},3)" class="btn btn-secondary">Cerrar Votación</button>&nbsp;
                             <button wire:click="enableVotacion({{$votacionId}},1)" class="btn btn-warning">Pausar Votación</button>
-                            @elseif((empty($votacionActiva) || $votacionActiva->estado != 2) && $sesion->ordenDia->votacionesActivas()->count() == 0)
+                            @elseif($sesion->ordenDia->id_estado == 6 && 
+                                (empty($votacionActiva) || $votacionActiva->estado != 2) && 
+                                $sesion->ordenDia->votacionesActivas()->count() == 0
+                            )
                             <button wire:click="enableVotacion({{$votacionId}},2)" class="btn btn-warning">Habilitar Votación</button>
                             @endif
                         </div>
@@ -129,21 +132,19 @@
                             </div>
                         </div>
                     </div>
-                    @endif
                 </div>
+                @endif
             </div>
             @endif
             @endif
-            @if(in_array($sesion->estado, [1,4]))
             <div class="mt-2 col-md-12 text-left btn-group btn-group-toggle" style="overflow-x: auto">
                 @foreach ($votaciones as $votacion)
                 <label
                 class="btn {{($votacion->estado == 2 ? 'bg-info' : ($votacion->estado == 3 ? (!empty($votacion->resultado) ? 'bg-success' : ($votacion->resultado === null ? 'bg-secondary' : 'bg-danger')) : 'bg-warning'))}} {{ $esAdmin ? ($votacionId == $votacion->id ? 'active':'') : ($votacion->estado == 2 ? 'active' : '')}}"
-                style="text-decoration: {{$votacion->estado == 3 && $votacion->resultado == null && !$votacion->participantes()->where('users.id', Auth::user()->id)->exists() ? 'line-through' : 'none'}}"
-                ><input type="radio" name="votacion" id="voto_{{$votacion->id}}" autocomplete="off" wire:click="activeVotacion({{$votacion->id}})" @if(!$esAdmin) disabled @endif  /> {{$votacion->titulo}}</label>
+                style="text-decoration: {{$votacion->estado == 3 && $votacion->resultado == null && $sesion->votantes()->where('users.id', Auth::user()->id)->exists() && !$votacion->participantes()->where('users.id', Auth::user()->id)->exists() ? 'line-through' : 'none'}}"
+                ><input type="radio" name="votacion" id="voto_{{$votacion->id}}" autocomplete="off" wire:click="activeVotacion({{$votacion->id}})" @if(!$esAdmin && !in_array($sesion->ordenDia->id_estado, [2,3,5])) disabled @endif  /> {{$votacion->titulo}}</label>
                 @endforeach
             </div>
-            @endif
             <div class="row w-100 mt-3">
                 <div class="col-12">
                     <table  class="table table-hover table-bordered mt-3">
@@ -188,7 +189,6 @@
                                     @elseif($item->id_votacion == $votacionId)
                                     <button wire:click="addVotacion({{ $item->id }}, {{$votacionId}}, false)" class="btn btn-sm bg-white" title="Quitar"><i class="fa fa-minus"></i></button>
                                     @endif
-
                                     @endif
                                 </td>
                             </tr>
