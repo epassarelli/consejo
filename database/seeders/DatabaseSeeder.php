@@ -24,9 +24,11 @@ class DatabaseSeeder extends Seeder
             UsuariosTableSeeder::class,
             ComisionesTableSeeder::class,
             TemasTableSeeder::class,
-            EstadosOrdenDiaTableSeeder::class
+            EstadosOrdenDiaTableSeeder::class,
+            SesionesTableSeeder::class,
+            VotacionTableSeeder::class
         ]);
         
-        // ItemsTemario::factory(540)->create();
+         ItemsTemario::factory(1080)->create();
     }
 }

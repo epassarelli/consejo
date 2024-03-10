@@ -45,7 +45,7 @@
                         <div class="entry">
                             
                             @foreach ($comisiones as $item)
-                                <a href="#">
+                                <a href="{{ "/orden-del-dia/" . $sesion->fecha ."/" . $item->comision_id }}">
                                     <div>{{$item->nombre_comision}}</div>
                                 </a>
                             @endforeach
