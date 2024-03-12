@@ -49,8 +49,8 @@
                             @if(!empty($votacionActiva) && $votacionActiva->id == $votacionId && $votacionEstado == 2)
                             <button wire:click="enableVotacion({{$votacionId}},3)" class="btn btn-secondary">Cerrar Votación</button>&nbsp;
                             <button wire:click="enableVotacion({{$votacionId}},1)" class="btn btn-warning">Pausar Votación</button>
-                            @elseif($sesion->ordenDia->id_estado == 6 && 
-                                (empty($votacionActiva) || $votacionActiva->estado != 2) && 
+                            @elseif($sesion->ordenDia->id_estado == 6 &&
+                                (empty($votacionActiva) || $votacionActiva->estado != 2) &&
                                 $sesion->ordenDia->votacionesActivas()->count() == 0
                             )
                             <button wire:click="enableVotacion({{$votacionId}},2)" class="btn btn-warning">Habilitar Votación</button>
@@ -168,7 +168,13 @@
                                 @else
                                     <td class="{{$itemEnVotacionActiva ? 'bg-warning' : ''}}"></td>
                                 @endif
-                                <td class="{{$itemEnVotacionActiva ? 'bg-warning' : ''}}">{{$item->facultad->name}}</td>
+
+                                @if ($item->facultad)
+                                    <td class="{{$itemEnVotacionActiva ? 'bg-warning' : ''}}">{{$item->facultad->name}}</td>
+                                @else
+                                    <td class="{{$itemEnVotacionActiva ? 'bg-warning' : ''}}"></td>
+                                @endif
+
                                 <td class="{{$itemEnVotacionActiva ? 'bg-warning' : ''}} text-center">{{$item->numero}}</td>
                                 <td class="{{$itemEnVotacionActiva ? 'bg-warning' : ''}} text-center">{{$item->resolucion}}</td>
                                 <td class="{{$itemEnVotacionActiva ? 'bg-warning' : ''}} p-1 text-center">

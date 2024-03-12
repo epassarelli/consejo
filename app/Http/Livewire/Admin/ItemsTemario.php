@@ -123,7 +123,7 @@ class ItemsTemario extends Component
                 'esAdmin' => false
             ])->layout('layouts.adminlte');
         }
-        
+
         $this->sesion = Sesion::with(["ordenDia", "temariosOrdenDia" => ["votacionesActivas"]])->withCount("asistentes")->find(session("id_sesion"));
         $temario = $this->sesion->temariosOrdenDia()->find(session('id_temario'));
 
@@ -157,19 +157,11 @@ class ItemsTemario extends Component
 
             $params = $this->validate(
                 [
-                    'numero' => 'required|string',
-                    'resolucion' => 'required',
                     'resumen' => 'required',
-                    'comision_id' => 'nullable',
-                    'facultad_id' => 'required',
                     'tipo' => 'required',
                 ],
                 [
-                    'numero.required' => 'El campo Número es obligatorio.',
-                    'resolucion.required' => 'El campo resolución es obligatorio.',
                     'resumen.required' => 'El campo resumen es obligatorio.',
-                    'comision_id.required' => 'El campo comisión es obligatorio.',
-                    'facultad_id.required' => 'El campo facultad es obligatorio.',
                     'tipo.required' => 'El campo tipo es obligatorio.',
                 ]
             );
@@ -181,8 +173,8 @@ class ItemsTemario extends Component
                 'comision_id' => $this->comision_id,
                 'facultad_id' => $this->facultad_id,
                 'resolucion' => $this->resolucion,
-                'resumen' => $this->resumen,
-                'tipo' => $this->tipo
+                'resumen' => $params["resumen"],
+                'tipo' => $params["tipo"]
             ]);
 
             $this->reset(['numero']);
@@ -210,28 +202,20 @@ class ItemsTemario extends Component
         try {
 
             $params = $this->validate([
-                'numero' => 'required|string',
-                'resolucion' => 'required',
                 'resumen' => 'required',
-                'comision_id' => 'nullable',
-                'facultad_id' => 'required',
                 'tipo' => 'required',
             ], [
-                'numero.required' => 'El campo Número es obligatorio.',
-                'resolucion.required' => 'El campo resolución es obligatorio.',
                 'resumen.required' => 'El campo resumen es obligatorio.',
-                'comision_id.required' => 'El campo comisión es obligatorio.',
-                'facultad_id.required' => 'El campo facultad es obligatorio.',
                 'tipo.required' => 'El campo tipo es obligatorio.',
             ]);
 
             $ItemToUpdate = ModelItemsTemario::find($this->item_id);
 
             if (!empty($ItemToUpdate)) {
-                $ItemToUpdate->numero = $params["numero"];
-                $ItemToUpdate->comision_id = $params["comision_id"];
-                $ItemToUpdate->facultad_id = $params["facultad_id"];
-                $ItemToUpdate->resolucion = $params["resolucion"];
+                $ItemToUpdate->numero = $this->numero; // $params["numero"];
+                $ItemToUpdate->comision_id = $this->comision_id; // $params["comision_id"];
+                $ItemToUpdate->facultad_id = $this->facultad_id; // $params["facultad_id"];
+                $ItemToUpdate->resolucion = $this->resolucion; // $params["resolucion"];
                 $ItemToUpdate->resumen = $params["resumen"];
                 $ItemToUpdate->tipo = $params["tipo"];
                 $ItemToUpdate->save();
@@ -376,7 +360,7 @@ class ItemsTemario extends Component
 
     public function activeVotacion($id)
     {
-        if (Gate::allows("admin-sesion") || in_array($this->sesion->ordenDia->id_estado, [2, 3, 5])) { # Publicada | Cerrada | Finalizada 
+        if (Gate::allows("admin-sesion") || in_array($this->sesion->ordenDia->id_estado, [2, 3, 5])) { # Publicada | Cerrada | Finalizada
             $this->votacionId = $id;
             $votacion = $this->votaciones->where("id", $id)->first();
             $votacion->refresh();
