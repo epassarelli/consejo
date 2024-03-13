@@ -40,7 +40,7 @@
         </li>
 
         <li class="menu-item">
-            <a class="menu-link" href="#">
+            <a class="menu-link" href="{{ route('busqueda') }}">
                 <div>Buscador</div>
             </a>
         </li>

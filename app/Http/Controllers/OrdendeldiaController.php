@@ -90,7 +90,7 @@ class OrdendeldiaController extends Controller
         $name_comision = DB::table('comisiones')
                             ->where('id','=',$comision)->first()->name;
 
-        $itmes_comision = DB::table('sesiones')
+        $items_comision = DB::table('sesiones')
                     ->join('ordenes_dia','sesiones.id','=','ordenes_dia.id_sesion')
                     ->join('temarios_ordenes_dia','ordenes_dia.id','=','temarios_ordenes_dia.id_orden_dia')
                     ->join('items_temario', 'temarios_ordenes_dia.id', '=', 'items_temario.id_temario')
