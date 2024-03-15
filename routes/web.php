@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BusquedaController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\HomeController;
@@ -29,3 +30,4 @@ Route::get('/orden-del-dia', [OrdendeldiaController::class, 'index'])->name('Ord
 Route::get('/orden-del-dia/{fecha}/{comision_id}',[OrdendeldiaController::class, 'comision']);
 Route::get('/orden-del-dia/{fecha}',[OrdendeldiaController::class, 'Sesiones']);
 Route::get('/sesiones-anteriores/{fecha}',[OrdendeldiaController::class, 'SesionesAnteriores'])->name('SesionesAnteriores');
+Route::get('/buscador',BusquedaController::class)->name('busqueda');
