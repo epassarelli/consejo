@@ -26,7 +26,7 @@
                                    ============================================= -->
 
                         <div class="entry-title">
-                            <h1>Items para la comisión {{ $name_comision }}</h1>
+                            <h2>Items para la comisión {{ $name_comision }}</h2>
                         </div><!-- .entry-title end -->
 
 

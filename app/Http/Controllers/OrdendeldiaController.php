@@ -40,7 +40,7 @@ class OrdendeldiaController extends Controller
 
     public function SesionesAnteriores($fecha)
     {
-        $title = 'Sesiones anteriores al ' . $fecha;
+        $title = 'Sesiones anteriores al ' . date('d/m/Y',strtotime($fecha));
 
         $parameter = [2, 5];
 
