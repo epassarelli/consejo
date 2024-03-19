@@ -2,6 +2,8 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
+    <base href="{{ url('/') }}/">
+    
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <meta http-equiv="x-ua-compatible" content="IE=edge">
     <title>@yield('title', 'UBA | Consejo Superior')</title>
@@ -24,6 +26,8 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
 </head>
 
 <body class="stretched">
