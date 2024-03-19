@@ -4,8 +4,9 @@
 <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <meta http-equiv="x-ua-compatible" content="IE=edge">
-    <title>@yield('title', 'Título por defecto')</title>
+    <title>@yield('title', 'UBA | Consejo Superior')</title>
 
+    <link rel="shortcut icon" href="{{ asset('favicons/favicon.ico') }}"/>
     <!-- Font Imports -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

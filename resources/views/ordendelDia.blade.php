@@ -1,52 +1,52 @@
 @extends('layouts.canvas')
 
 @section('content')
-    <!-- Content
-                              ============================================= -->
+    <section class="page-title dark" data-bs-theme="dark">
+        <div class="container">
+            <div class="page-title-row">
+                <div class="page-title-content">
+                    <h1>{{ $title }}</h1>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Content ============================================= -->
     <section id="content">
         <div class="content-wrap">
             <div class="container">
 
                 <div class="single-post mb-0">
 
-                    <!-- Single Post
-                                  ============================================= -->
+                    <!-- Single Post ============================================= -->
                     <div class="entry">
 
-                        <!-- Entry Title
-                                   ============================================= -->
                         <div class="entry-title">
-                            <h2>ORDEN DEL DÍA</h2>
-                        </div><!-- .entry-title end -->
-
-                        <hr>
-
-                        <div class="entry-title">
-                            <h2>SESION DE CONSEJO SUPERIOR {{ $sesion->fecha }}</h2>
+                            <h2>Sesión de Consejo Superior {{ \Carbon\Carbon::parse($sesion->fecha)->format('d/m/Y') }}</h2>
                         </div><!-- .entry-title end -->
                         
                         <br>
 
                         <div class="entry">
-                            <a href="{{ __DIR__ . "/../sessions/" . $sesion->pdf }}">
-                                <div>Indice del orden del día</div>
+                            <a class="text-decoration-underline" href="{{ __DIR__ . "/../sessions/" . $sesion->pdf }}">
+                                Indice del orden del día
                             </a>
-                            <a href="{{ __DIR__ . "/../sessions/" . $sesion->pdf }}">
-                                <div>Temario del orden del día</div>
+                            <br>
+                            <a class="text-decoration-underline" href="{{ __DIR__ . "/../sessions/" . $sesion->pdf }}">
+                                Temario del orden del día
                             </a>
                         </div>
                         
 
                         <div class="entry-title">
-                            <h2>COMISIONES</h2>
+                            <h2>Comisiones</h2>
                         </div><!-- .entry-title end -->
 
 
                         <div class="entry">
                             
                             @foreach ($comisiones as $item)
-                                <a href="{{ "/orden-del-dia/" . $sesion->fecha ."/" . $item->comision_id }}">
-                                    <div>{{$item->nombre_comision}}</div>
+                                <a class="text-decoration-underline"  href="{{ "/orden-del-dia/" . $sesion->fecha ."/" . $item->comision_id }}">
+                                    {{$item->nombre_comision}}<br>
                                 </a>
                             @endforeach
                             
@@ -71,7 +71,7 @@
                         </div>
 
                         <div class="entry-title">
-                            <h1>Items por comisiones</h1>
+                            <h2>Items por comisiones</h2>
                         </div><!-- .entry-title end -->
 
 
@@ -79,7 +79,7 @@
                             
                             @foreach ($itemsTemario as $item)
                                 <div class="entry">
-                                    <b>CUDAP. EXP-UBA</b> {{$item->numero}} <b>CUDAP. EXP-UBA</b> {{$item->resumen}} <a href="#">ver despacho</a>
+                                    <b>CUDAP. EXP-UBA</b> {{$item->numero}} <b>CUDAP. EXP-UBA</b> {{$item->resumen}} <a class="text-decoration-underline" href="#">ver despacho</a>
                                 </div>
                                 
                             @endforeach
@@ -92,7 +92,7 @@
                         <div class="entry-title">
                             <h2>Sesiones anteriores</h2>
                             <div>
-                                <p>Para ver sesiones anteriores a esta orden siga el siguiente enlace <a href="{{ "/sesiones-anteriores/" . $sesion->fecha }}">ver Sesiones anteriores</a></p>
+                                <p>Para ver sesiones anteriores a esta orden siga el siguiente enlace <a class="text-decoration-underline" href="{{ "/sesiones-anteriores/" . $sesion->fecha }}">ver sesiones anteriores</a></p>
                             </div>
                         </div><!-- .entry-title end -->
                     </div><!-- .entry end -->
