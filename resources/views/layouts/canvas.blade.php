@@ -50,14 +50,16 @@
 
     <!-- JavaScripts
  ============================================= -->
-    <script src="js/functions.js"></script>
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-    <script src="//cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
-    
-
-    <script src="{{ asset('js/datatables/basictable.js') }}"></script>
+ 
+ <script src="{{ asset('js/functions.js') }}"></script>
+ 
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+ <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+ <script src="//cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+ 
+ 
+ <script src="{{ asset('js/datatables/basictable.js') }}"></script>
+ 
 </body>
 
 </html>

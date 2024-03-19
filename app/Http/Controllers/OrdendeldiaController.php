@@ -78,7 +78,7 @@ class OrdendeldiaController extends Controller
         return view('ordendelDia', compact('title', 'sesion', 'comisiones', 'itemsTemario','sesiones'));
     }
 
-    public function comision($fecha, $comision)
+    public function Comision($fecha, $comision)
     {
         $parameter = [2, 5];
 
@@ -102,6 +102,6 @@ class OrdendeldiaController extends Controller
 
 
         //$sesiones = Sesion::where('fecha', '<', $sesion->fecha)->orderBy('fecha','desc')->get();
-        return view('ItemsXcomision_OD', compact('title', 'name_comision', 'items_comision','fecha'));
+        return view('ItemsXcomisionOD', compact('title', 'name_comision', 'items_comision','fecha'));
     }
 }

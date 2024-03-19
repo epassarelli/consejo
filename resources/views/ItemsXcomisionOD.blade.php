@@ -1,8 +1,17 @@
 @extends('layouts.canvas')
 
 @section('content')
-    <!-- Content
-                              ============================================= -->
+
+    <section class="page-title dark" data-bs-theme="dark">
+        <div class="container">
+            <div class="page-title-row">
+                <div class="page-title-content">
+                    <h1>{{ $title }}</h1>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Content ============================================= -->
     <section id="content">
         <div class="content-wrap">
             <div class="container">
