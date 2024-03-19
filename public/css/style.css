@@ -16551,7 +16551,7 @@ body:not(.is-expanded-menu) .mobile-menu-floating .menu-container {
 .is-expanded-menu .full-header .primary-menu .menu-container {
   padding-right: 0.5rem;
   margin-right: 0.5rem;
-  border-right: 1px solid var(--cnvs-header-border-color);
+  /* border-right: 1px solid var(--cnvs-header-border-color); */
 }
 .is-expanded-menu .transparent-header.full-header .primary-menu .menu-container {
   border-right-color: var(--cnvs-header-transparent-border-color);
