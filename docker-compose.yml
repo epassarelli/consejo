@@ -9,8 +9,8 @@ services:
       - 5173:5173
     working_dir: /
     image: consejo_app
-    volumes:
-      - ./:/var/www/html
+    # volumes:
+      # - ./:/var/www/html
     #      - ./docker-files/backend/php.ini:/usr/local/etc/php/conf.d/local.ini
     depends_on:
       - db
@@ -26,9 +26,9 @@ services:
       MYSQL_ROOT_PASSWORD: consejo
       MYSQL_PASSWORD: consejo
       MYSQL_USER: consejo
-    volumes:
+    # volumes:
       # - ./backend/docker-files/db/my.cnf:/etc/mysql/my.cnf
-      - ./database_local:/var/lib/mysql
+      # - ./database_local:/var/lib/mysql
     networks:
       - app-network
 
