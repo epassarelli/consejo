@@ -151,11 +151,90 @@
                         <thead>
                             <tr>
                                 <th class="text-center">TEMA</th>
-                                <th class="text-center">COMISIÓN</th>
-                                <th class="text-center">FACULTAD</th>
-                                <th class="text-center">EXPEDIENTE</th>
-                                <th class="text-center">RESOLUCIÓN</th>
+                                <th wire:click="sortBy('comisiones.name')" class="text-center">COMISIÓN
+                                    @if($sortColumn == 'comisiones.name')
+                                        @if($sortDirection == 'asc')
+                                            <i class="fas fa-sort-up"></i>
+                                        
+                                        @else
+                                            <i class="fas fa-sort-down"></i>
+                                        @endif
+                                    @else
+                                        <i class="fas fa-sort"></i>
+                                    @endif
+                                </th>
+                                <th wire:click="sortBy('facultades.name')" class="text-center">FACULTAD
+                                    @if($sortColumn == 'facultades.name')
+                                        @if($sortDirection == 'asc')
+                                            <i class="fas fa-sort-up"></i>
+                                        
+                                        @else
+                                            <i class="fas fa-sort-down"></i>
+                                        @endif
+                                    @else
+                                        <i class="fas fa-sort"></i>
+                                    @endif
+                                </th>
+                                <th wire:click="sortBy('items_temario.numero')" class="text-center">EXPEDIENTE/NOTAS
+                                    @if($sortColumn == 'items_temario.numero')
+                                        @if($sortDirection == 'asc')
+                                            <i class="fas fa-sort-up"></i>
+                                        
+                                        @else
+                                            <i class="fas fa-sort-down"></i>
+                                        @endif
+                                    @else
+                                        <i class="fas fa-sort"></i>
+                                    @endif
+                                </th>
+                                <th wire:click="sortBy('items_temario.resolucion')" class="text-center">RESOLUCIÓN
+                                    @if($sortColumn == 'items_temario.resolucion')
+                                        @if($sortDirection == 'asc')
+                                            <i class="fas fa-sort-up"></i>
+                                        
+                                        @else
+                                            <i class="fas fa-sort-down"></i>
+                                        @endif
+                                    @else
+                                        <i class="fas fa-sort"></i>
+                                    @endif
+                                </th>
                                 <th style="width: 15%" class="text-center">Acciones</th>
+                            </tr>
+                            <tr>
+                                
+                                <th class="text-center"></th>
+                                <th class="text-center">
+                                    <div class="row">
+                                    <div class="col-sm-12">
+                                        <input wire:model="searchByComision" type="search" placeholder="Buscar por comisión" class="form-control form-control-sm"></th>
+                                    </div>
+                                </div>
+                                </th>
+                                <th class="text-center">
+                                    <div class="row">
+                                    <div class="col-sm-12">
+                                        <input wire:model="searchByFaculty" type="search" placeholder="Buscar por facultad" class="form-control form-control-sm"></th>
+                                    </div>
+                                </div>
+                                </th>
+                                <th class="text-center">
+                                    <div class="row">
+                                    <div class="col-sm-12">
+                                        <input wire:model="searchByExp" type="search" placeholder="Buscar por expediente" class="form-control form-control-sm"></th>
+                                    </div>
+                                </div>
+                                </th>
+                                <th class="text-center">
+                                    <div class="row">
+                                    <div class="col-sm-12">
+                                        <input wire:model="searchByResolution" type="search" placeholder="Buscar por resolucion" class="form-control form-control-sm"></th>
+                                    </div>
+                                </div>
+                                </th>
+                                <th class="text-center  align-middle">
+                                    <button wire:click="resetSearchFields" class="btn btn-sm btn-secondary">Limpiar Búsqueda</button>
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -175,7 +254,7 @@
                                     <td class="{{$itemEnVotacionActiva ? 'bg-warning' : ''}}"></td>
                                 @endif
 
-                                <td class="{{$itemEnVotacionActiva ? 'bg-warning' : ''}} text-center">{{$item->numero}}</td>
+                                <td class="{{$itemEnVotacionActiva ? 'bg-warning' : ''}} text-center">{{$item->tipo}} Nro {{$item->numero}}</td>
                                 <td class="{{$itemEnVotacionActiva ? 'bg-warning' : ''}} text-center">{{$item->resolucion}}</td>
                                 <td class="{{$itemEnVotacionActiva ? 'bg-warning' : ''}} p-1 text-center">
                                     <button wire:click="openEditModal({{ $item->id }}, true)" class="btn btn-sm btn-secondary" title="Ver"><i class="fa fa-eye"></i></button>

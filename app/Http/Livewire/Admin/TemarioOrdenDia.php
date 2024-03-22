@@ -6,17 +6,15 @@ use App\Models\TemarioOrdenDia as modelTemarioOrdenDia;
 use App\Models\ItemsTemario as ModelItemsTemario;
 use App\Models\Tema as ModelTemas;
 use App\Models\Sesion as ModelSesion;
+use Illuminate\Database\Eloquent\Model;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Session;
-use Livewire\WithPagination;
 
 class TemarioOrdenDia extends Component
 {
 
-    use WithPagination;
-    
     public $temarios;
     public $sesion;
     public $loading = false;
@@ -29,12 +27,6 @@ class TemarioOrdenDia extends Component
     public $web = 0;
     private $id_sesion = 0;
     protected $listeners = ['delete', 'update'];
-    public $search = '';
- 
-    public function updatingSearch()
-    {
-        $this->resetPage();
-    }
 
     public function openModal()
     {
@@ -55,7 +47,7 @@ class TemarioOrdenDia extends Component
     public function render()
     {
         $this->id_sesion = session('id_sesion');
-        if (empty($this->id_sesion)){
+        if (empty($this->id_sesion)) {
             $this->redirect("/admin/sesiones");
             return view('livewire.admin.temario-orden-dia', [
                 'temas' => null,
@@ -67,10 +59,7 @@ class TemarioOrdenDia extends Component
             ->find($this->id_sesion);
 
         $temariosOrdenDia = $this->sesion->temariosOrdenDia()
-            ->whereHas('tema', function($query) {
-                $query->where('titulo', 'like', '%' . $this->search . '%');
-            })
-            ->with(['items', 'votacionesActivas'])
+            ->with(['items', 'tema', 'votacionesActivas'])
             ->paginate(10);
         // $this->sesion = ModelSesion::with(["temariosOrdenDia" => ["items", "tema", "votacionesActivas"], "ordenDia"])->find($this->id_sesion);
 
@@ -81,6 +70,20 @@ class TemarioOrdenDia extends Component
             "esAdmin" => Gate::allows("admin-sesion")
         ])->layout('layouts.adminlte');
     }
+
+    
+    public function toggleEstado($id)
+    {
+        $temarioOrdenDia = modelTemarioOrdenDia::find($id);
+        if ($temarioOrdenDia) {
+            $temarioOrdenDia->web = !$temarioOrdenDia->web;
+            $temarioOrdenDia->save();
+
+            // Opcional: Emitir un evento para notificar sobre el cambio de estado
+            $this->emit('estadoCambiado');
+        }
+    }
+
 
     public function storeItemTemario()
     {
@@ -118,7 +121,6 @@ class TemarioOrdenDia extends Component
             // Independientemente de si hubo un error o no, cierra el modal y restablece el estado del loader
             $this->loading = false;
         }
-
     }
 
 
@@ -202,8 +204,9 @@ class TemarioOrdenDia extends Component
     }
 
 
-    public function closeOrdenDia() {
-        $this->sesion->ordenDia->id_estado=5;
+    public function closeOrdenDia()
+    {
+        $this->sesion->ordenDia->id_estado = 5;
         $this->sesion->ordenDia->save();
         $this->sesion->estado = 3;
         $this->sesion->save();
@@ -220,8 +223,8 @@ class TemarioOrdenDia extends Component
         return redirect()->route('sesiones');
     }
 
-    public function openPresentes(){
+    public function openPresentes()
+    {
         return redirect()->route('asistentes');
-
     }
 }

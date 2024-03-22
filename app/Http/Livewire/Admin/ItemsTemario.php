@@ -16,9 +16,13 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Livewire\WithFileUploads;
+use Livewire\WithPagination;
+
 
 class ItemsTemario extends Component
 {
+    use WithPagination;
+
     public $id_item_temario;
     public $tema; // id del tema que viene desde el temario
     protected $facultades;
@@ -57,6 +61,27 @@ class ItemsTemario extends Component
 
     use WithFileUploads;
     public $file;
+
+
+    //campos de busqueda
+
+    public $searchByComision = '';
+    public $searchByFaculty = '';
+    public $searchByExp = '';
+    public $searchByResolution = '';
+
+    //Campos de ordenamiento
+
+    public $sortColumn = 'comisiones.name';
+    public $sortDirection = 'desc';
+
+
+    protected $queryString = [
+        'searchByComision',
+        'searchByFaculty',
+        'searchByExp',
+        'searchByResolution',
+    ];
 
     public function guardarArchivos()
     {
@@ -116,7 +141,7 @@ class ItemsTemario extends Component
         }
         $esAdmin = Gate::allows("admin-sesion");
 
-        if ($emptySesion){
+        if ($emptySesion) {
             return view('livewire.admin.items-temario', [
                 'facultades' => null,
                 'comisiones' => null,
@@ -127,12 +152,17 @@ class ItemsTemario extends Component
         $this->sesion = Sesion::with(["ordenDia", "temariosOrdenDia" => ["votacionesActivas"]])->withCount("asistentes")->find(session("id_sesion"));
         $temario = $this->sesion->temariosOrdenDia()->find(session('id_temario'));
 
-        if (empty($temario)){
+        if (empty($temario)) {
+            $this->redirect("/admin/temarios");
+        }
+
+
+        if (empty($temario)) {
             $this->redirect("/admin/temarios");
         }
 
         $this->votaciones = $temario->votaciones()->withCount(["participantes", "votaronAfirmativo", "votaronNegativo", "votaronAbstenerse"])->get();
-        if ((!$esAdmin && !in_array($this->sesion->ordenDia->id_estado, [2,3,5])) || empty($this->votacionActiva) )
+        if ((!$esAdmin && !in_array($this->sesion->ordenDia->id_estado, [2, 3, 5])) || empty($this->votacionActiva))
             $this->votacionActiva = $this->votaciones->where("estado", 2)->first();
         else $this->votacionActiva = $this->votaciones->where("id", $this->votacionActiva->id)->first();
         if (!$esAdmin) {
@@ -141,12 +171,49 @@ class ItemsTemario extends Component
             $this->votacionTitulo = !empty($this->votacionActiva) ? $this->votacionActiva->titulo : null;
             $this->votacionAceptacion = !empty($this->votacionActiva) ? $this->votacionActiva->aceptacion : null;
         }
-        $this->items = $temario->items()->with(["facultad", "comision", "tema"])->get();
+        $this->items = $temario->items()
+            ->join('temas', 'items_temario.id_tema', '=', 'temas.id')
+            ->join('comisiones','items_temario.comision_id','=','comisiones.id')
+            ->join('facultades','items_temario.facultad_id','=','facultades.id')
+            ->with(['facultad', 'comision', 'tema'])
+            ->where('comisiones.name','like','%'.$this->searchByComision.'%')
+            ->where('facultades.name','like','%'.$this->searchByFaculty.'%')
+            ->where('items_temario.numero','like','%'.$this->searchByExp.'%')
+            ->where('items_temario.resolucion','like','%'.$this->searchByResolution.'%')
+            ->orderBy($this->sortColumn, $this->sortDirection)
+            ->select('*')
+            ->get();
         return view('livewire.admin.items-temario', [
             'facultades' => ModelsFacultad::all(),
             'comisiones' => ModelsComision::all(),
             'esAdmin' => $esAdmin
         ])->layout('layouts.adminlte');
+    }
+
+
+    public function updating($propertyName)
+    {
+        $this->resetPage();
+    }
+
+
+    public function resetSearchFields()
+    {
+        $this->searchByTopic = '';
+        $this->searchByComision = '';
+        $this->searchByFaculty = '';
+        $this->searchByExp = '';
+        $this->searchByResolution = '';
+    }
+
+    public function sortBy($column)
+    {
+        if ($this->sortColumn === $column) {
+            $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
+        } else {
+            $this->sortColumn = $column;
+            $this->sortDirection = 'asc';
+        }
     }
 
     public function storeItem()
