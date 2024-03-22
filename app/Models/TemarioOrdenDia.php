@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
 
@@ -23,6 +24,11 @@ class TemarioOrdenDia extends Model
     public function items(): HasMany
     {
         return $this->hasMany(ItemsTemario::class, 'id_temario', 'id');
+    }
+
+    public function itemsTemarios(): HasManyThrough
+    {
+        return $this->hasManyThrough(ItemsTemario::class, TemarioOrdenDia::class, "id", "id_temario", "id", "id");
     }
 
     public function ordenDia(): HasOne

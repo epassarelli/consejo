@@ -32,18 +32,18 @@ services:
     networks:
       - app-network
 
-  phpmyadmin:
-    image: phpmyadmin:5.1.1
-    environment:
-      PMA_HOST: db
-      PMA_USER: consejo
-      PMA_PASSWORD: consejo
-    ports:
-      - 8080:80
-    networks:
-      - app-network
-    links:
-      - db:db
+  # phpmyadmin:
+  #   image: phpmyadmin:5.1.1
+  #   environment:
+  #     PMA_HOST: db
+  #     PMA_USER: consejo
+  #     PMA_PASSWORD: consejo
+  #   ports:
+  #     - 8080:80
+  #   networks:
+  #     - app-network
+  #   links:
+  #     - db:db
 
 networks:
   app-network:

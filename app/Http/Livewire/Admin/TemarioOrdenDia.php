@@ -10,10 +10,13 @@ use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Session;
+use Livewire\WithPagination;
 
 class TemarioOrdenDia extends Component
 {
 
+    use WithPagination;
+    
     public $temarios;
     public $sesion;
     public $loading = false;
@@ -26,6 +29,12 @@ class TemarioOrdenDia extends Component
     public $web = 0;
     private $id_sesion = 0;
     protected $listeners = ['delete', 'update'];
+    public $search = '';
+ 
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
 
     public function openModal()
     {
@@ -46,7 +55,6 @@ class TemarioOrdenDia extends Component
     public function render()
     {
         $this->id_sesion = session('id_sesion');
-
         if (empty($this->id_sesion)){
             $this->redirect("/admin/sesiones");
             return view('livewire.admin.temario-orden-dia', [
@@ -55,9 +63,20 @@ class TemarioOrdenDia extends Component
             ])->layout('layouts.adminlte');
         }
 
-        $this->sesion = ModelSesion::with(["temariosOrdenDia" => ["items", "tema", "votacionesActivas"], "ordenDia"])->find($this->id_sesion);
+        $this->sesion = ModelSesion::with(['ordenDia'])
+            ->find($this->id_sesion);
+
+        $temariosOrdenDia = $this->sesion->temariosOrdenDia()
+            ->whereHas('tema', function($query) {
+                $query->where('titulo', 'like', '%' . $this->search . '%');
+            })
+            ->with(['items', 'votacionesActivas'])
+            ->paginate(10);
+        // $this->sesion = ModelSesion::with(["temariosOrdenDia" => ["items", "tema", "votacionesActivas"], "ordenDia"])->find($this->id_sesion);
 
         return view('livewire.admin.temario-orden-dia', [
+            // 'sesion' => $this->sesion,
+            'temariosOrdenDia' => $temariosOrdenDia,
             'temas' => modelTemas::all(),
             "esAdmin" => Gate::allows("admin-sesion")
         ])->layout('layouts.adminlte');

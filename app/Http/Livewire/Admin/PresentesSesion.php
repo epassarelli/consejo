@@ -17,7 +17,7 @@ class PresentesSesion extends Component
 
     public function render()
     {
-
+var_dump('aca');
         $this->id_sesion = session('id_sesion');
 
         if (empty($this->id_sesion)) {

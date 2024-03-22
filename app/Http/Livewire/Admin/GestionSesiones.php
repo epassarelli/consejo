@@ -10,26 +10,141 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Session;
+use Livewire\WithPagination;
+
 
 class GestionSesiones extends Component
 {
+
+    use WithPagination;
     public $sesion_id;
     public $fecha;
     public $urlYoutube;
     public $muestraModal = 'none';
-    public $estados = ['En revisión', 'Publicada', 'Cerrada', 'En sesión'];
+    public $estados = ['En revisión', 'Publicada', 'Cerrada', 'En sesión', 'Finalizada'];
 
     protected $sesiones;
     protected $listeners = ['delete'];
 
+    // Campos de busqueda
+    public $searchByState = '';
+    public $searchByDateStart = '';
+    public $searchByDateEnd = '';
+    public $searchByDateComStart = '';
+    public $searchByDateComEnd = '';
+    public $searchByDateFinishStart = '';
+    public $searchByDateFinishEnd = '';
+
+    //Campos de ordenamiento
+
+    public $sortColumn = 'fecha';
+    public $sortDirection = 'desc';
+
+    protected $queryString = [
+        'searchByState',
+        'searchByDateStart',
+        'searchByDateEnd',
+        'searchByDateComStart',
+        'searchByDateComEnd',
+        'searchByDateFinishStart',
+        'searchByDateFinishEnd'
+    ];
+
+
+
+
     public function render()
     {
+
+
+        // Iniciar la consulta base para sesiones.
+        $query = Sesion::query();
+
+        $busquedaNormalizada = $this->eliminarAcentos(strtolower($this->searchByState));
+        $resultados = array_filter($this->estados, function ($estado) use ($busquedaNormalizada) {
+            $estadoSinAcentos = $this->eliminarAcentos(strtolower($estado));
+            return strpos($estadoSinAcentos, $busquedaNormalizada) !== false;
+        });
+        $indices = array_keys($resultados);
+        $indicesAjustados = array_map(function ($indice) {
+            return $indice + 1;
+        }, $indices);
+
+        if (!empty($indicesAjustados)) {
+            $query->whereIn('estado', $indicesAjustados);
+        }
+
+        // Ejemplo de cómo aplicar el filtro para cada pareja de fechas.
+        // Filtro para 'searchByDateStart' y 'searchByDateEnd'.
+        $this->applyDateFilter($query, 'fecha', $this->searchByDateStart, $this->searchByDateEnd);
+
+        // Filtro para 'searchByDateComStart' y 'searchByDateComEnd'.
+        $this->applyDateFilter($query, 'fcomunicacion', $this->searchByDateComStart, $this->searchByDateComEnd);
+
+        // Filtro para 'searchByDateFinishStart' y 'searchByDateFinishEnd'.
+        $this->applyDateFilter($query, 'ffinalizada', $this->searchByDateFinishStart, $this->searchByDateFinishEnd);
+
+        // Aquí puedes incluir otros filtros, como el filtro por estado que ya tenías.
+
+        // Aplicar filtros adicionales como el del estado y la lógica de paginación.
         $esAdmin = Gate::allows("admin-sesion");
-        $this->sesiones = $esAdmin  ? Sesion::all() : Sesion::whereIn("estado", [2, 3, 4])->get();
+        $this->sesiones = $esAdmin ? $query->orderBy($this->sortColumn,$this->sortDirection)->paginate(10) : $query->whereIn("estado", [2, 3, 4])->paginate(10);
+
+
+        $esAdmin = Gate::allows("admin-sesion");
+        // $this->sesiones = $esAdmin  ? Sesion::whereIn("estado", $indicesAjustados ?: [])->paginate(10) : Sesion::whereIn("estado", [2, 3, 4])->get()->paginate(10);
         return view('livewire.admin.gestion-sesiones', [
             'sesiones' => $this->sesiones,
             'esAdmin' => $esAdmin
         ])->layout('layouts.adminlte');
+    }
+
+
+    public function updating($propertyName)
+    {
+        $this->resetPage();
+    }
+
+
+    public function resetSearchFields()
+    {
+        $this->searchByState = '';
+        $this->searchByDateStart = '';
+        $this->searchByDateEnd = '';
+        $this->searchByDateComStart = '';
+        $this->searchByDateComEnd = '';
+        $this->searchByDateFinishStart = '';
+        $this->searchByDateFinishEnd = '';
+    }
+
+    public function sortBy($column)
+    {
+        if ($this->sortColumn === $column) {
+            $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
+        } else {
+            $this->sortColumn = $column;
+            $this->sortDirection = 'asc';
+        }
+    }
+
+    protected function applyDateFilter(&$query, $column, $startDate, $endDate)
+    {
+        if (!empty($startDate) && !empty($endDate)) {
+            $query->whereBetween($column, [$startDate, $endDate]);
+        } elseif (!empty($startDate)) {
+            $query->where($column, '>=', $startDate);
+        } elseif (!empty($endDate)) {
+            $query->where($column, '<=', $endDate);
+        }
+    }
+
+    protected function eliminarAcentos($cadena)
+    {
+        $originales = 'ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿŔŕ';
+        $modificadas = 'AAAAAAACEEEEIIIIDNOOOOOOUUUUYBsaaaaaaaceeeeiiiidnoooooouuuuybyRr';
+        $cadena = utf8_decode($cadena);
+        $cadena = strtr($cadena, utf8_decode($originales), $modificadas);
+        return utf8_encode($cadena);
     }
 
     protected function messages()
@@ -107,7 +222,7 @@ class GestionSesiones extends Component
     }
     public function descargarPdf($id)
     {
-        return redirect('admin/generate-pdf/'.$id);
+        return redirect('admin/generate-pdf/' . $id);
     }
     public function iniciarSesion(Sesion $sesion)
     {
