@@ -11,9 +11,13 @@ use App\Models\User_rol;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
+use Livewire\WithPagination;
+
 
 class Users extends Component
 {
+    use WithPagination;
+
     public $user;
     public $facultades;
     public $cargos;
@@ -35,12 +39,27 @@ class Users extends Component
     public $muestraModalRole = 'none';
     public $togleWeb = false;
 
+    // Campos de busqueda
+    public $searchByName = '';
+    public $searchByLastname = '';
+    public $searchByEmail = '';
+    //Campos de ordenamiento
+
+    public $sortColumn = 'id';
+    public $sortDirection = 'asc';
+
+    protected $queryString = [
+        'searchByName',
+        'searchByLastname',
+        'searchByEmail',
+    ];
+
     protected $users, $roles, $users_roles;
     protected $listeners = ['delete'];
 
     public function render()
     {
-        $this->users = User::where('estado', true)->get();
+        $this->users = User::where('estado', true)->where('email','like','%'.$this->searchByEmail.'%')->where('lastname','like','%'.$this->searchByLastname.'%')->where('name','like','%'.$this->searchByName.'%')->orderBy($this->sortColumn, $this->sortDirection)->paginate(10);
         $this->roles = Role::all();
         $this->facultades = Facultad::all();
         $this->cargos = Cargo::all();
@@ -61,6 +80,24 @@ class Users extends Component
             'cargos' => $this->cargos,
             'users_roles' => $this->users_roles,
         ])->layout('layouts.adminlte');
+    }
+
+
+    public function resetSearchFields()
+    {
+        $this->searchByName = '';
+        $this->searchByLastname = '';
+        $this->searchByEmail = '';
+    }
+
+    public function sortBy($column)
+    {
+        if ($this->sortColumn === $column) {
+            $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
+        } else {
+            $this->sortColumn = $column;
+            $this->sortDirection = 'asc';
+        }
     }
 
     protected function rules()

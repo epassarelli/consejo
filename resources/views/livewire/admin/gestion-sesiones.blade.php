@@ -70,7 +70,61 @@
                                     <i class="fas fa-sort"></i>
                                 @endif
                             </th>
-                            <th style="width: 15%" class="text-center">Acciones</th>
+                            <th style="width: 25%" class="text-center">Acciones</th>
+                        </tr>
+                        <tr>
+                            <th>
+                                <div class="row">
+                                    <label for="searchByDateStart" class="col-sm-2 col-form-label col-sm-4">Desde: </label>
+                                    <div class="col-sm-8">
+                                      <input wire:model="searchByDateStart" id="searchByDateStart" type="date" placeholder="Buscar por fecha desde" class="form-control form-control-sm">
+                                    </div>
+                                </div>
+                                <div class="mt-2 row">
+                                    <label for="searchByDateEnd" class="col-sm-2 col-form-label col-sm-4">Hasta: </label>
+                                    <div class="col-sm-8">
+                                        <input wire:model="searchByDateEnd" id="searchByDateEnd" type="date" placeholder="Buscar por fecha hasta" class="form-control form-control-sm">
+                                    </div>
+                                </div>
+                            </th>
+                            <th class="align-middle">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <input wire:model="searchByState" type="search" placeholder="Buscar por estado" class="form-control form-control-sm"></th>
+                                    </div>
+                                </div>
+
+                            <th>
+                                <div class="row">
+                                    <label for="searchByDateComStart" class="col-sm-2 col-form-label col-sm-4">Desde: </label>
+                                    <div class="col-sm-8">
+                                        <input wire:model="searchByDateComStart" id="searchByDateComStart" type="date" placeholder="Buscar por fecha desde" class="form-control form-control-sm">
+                                    </div>
+                                </div>
+                                <div class="mt-2 row">
+                                    <label for="searchByDateComEnd" class="col-sm-2 col-form-label col-sm-4">Hasta: </label>
+                                    <div class="col-sm-8">
+                                        <input wire:model="searchByDateComEnd" id="searchByDateComEnd" type="date" placeholder="Buscar por fecha hasta" class="form-control form-control-sm">
+                                    </div>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="row">
+                                    <label for="searchByDateFinishStart" class="col-sm-2 col-form-label col-sm-4">Desde: </label>
+                                    <div class="col-sm-8">
+                                      <input wire:model="searchByDateFinishStart" id="searchByDateFinishStart" type="date" placeholder="Buscar por fecha desde" class="form-control form-control-sm">
+                                    </div>
+                                </div>
+                                <div class="mt-2 row">
+                                    <label for="searchByDateFinishEnd" class="col-sm-2 col-form-label col-sm-4">Hasta: </label>
+                                    <div class="col-sm-8">
+                                        <input wire:model="searchByDateFinishEnd" id="searchByDateFinishEnd" type="date" placeholder="Buscar por fecha hasta" class="form-control form-control-sm">
+                                    </div>
+                                </div>
+                            </th>
+                            <th class="text-center align-middle">
+                                <button wire:click="resetSearchFields" class="btn btn-sm btn-secondary">Limpiar Búsqueda</button>
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -98,62 +152,6 @@
                         </tr>
                         @endforeach
                     </tbody>
-                    <tfoot>
-                        <tr>
-                            <th>
-                                <div class="row">
-                                    <label for="searchByDateStart" class="col-sm-2 col-form-label">Desde: </label>
-                                    <div class="col-sm-10">
-                                      <input wire:model="searchByDateStart" id="searchByDateStart" type="date" placeholder="Buscar por fecha desde" class="form-control form-control-sm">
-                                    </div>
-                                </div>
-                                <div class="mt-2 row">
-                                    <label for="searchByDateEnd" class="col-sm-2 col-form-label">Hasta: </label>
-                                    <div class="col-sm-10">
-                                        <input wire:model="searchByDateEnd" id="searchByDateEnd" type="date" placeholder="Buscar por fecha hasta" class="form-control form-control-sm">
-                                    </div>
-                                </div>
-                            </th>
-                            <th>
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        <input wire:model="searchByState" type="search" placeholder="Buscar por estado" class="form-control form-control-sm"></th>
-                                    </div>
-                                </div>
-
-                            <th>
-                                <div class="row">
-                                    <label for="searchByDateComStart" class="col-sm-2 col-form-label">Desde: </label>
-                                    <div class="col-sm-10">
-                                        <input wire:model="searchByDateComStart" id="searchByDateComStart" type="date" placeholder="Buscar por fecha desde" class="form-control form-control-sm">
-                                    </div>
-                                </div>
-                                <div class="mt-2 row">
-                                    <label for="searchByDateComEnd" class="col-sm-2 col-form-label">Hasta: </label>
-                                    <div class="col-sm-10">
-                                        <input wire:model="searchByDateComEnd" id="searchByDateComEnd" type="date" placeholder="Buscar por fecha hasta" class="form-control form-control-sm">
-                                    </div>
-                                </div>
-                            </th>
-                            <th>
-                                <div class="row">
-                                    <label for="searchByDateFinishStart" class="col-sm-2 col-form-label">Desde: </label>
-                                    <div class="col-sm-10">
-                                      <input wire:model="searchByDateFinishStart" id="searchByDateFinishStart" type="date" placeholder="Buscar por fecha desde" class="form-control form-control-sm">
-                                    </div>
-                                </div>
-                                <div class="mt-2 row">
-                                    <label for="searchByDateFinishEnd" class="col-sm-2 col-form-label">Hasta: </label>
-                                    <div class="col-sm-10">
-                                        <input wire:model="searchByDateFinishEnd" id="searchByDateFinishEnd" type="date" placeholder="Buscar por fecha hasta" class="form-control form-control-sm">
-                                    </div>
-                                </div>
-                            </th>
-                            <th class="text-center align-middle">
-                                <button wire:click="resetSearchFields" class="btn btn-sm btn-secondary">Limpiar Búsqueda</button>
-                            </th>
-                        </tr>
-                    </tfoot>
                 </table>
                 {{ $sesiones->links('layouts.paginator') }}
             </div>

@@ -21,7 +21,7 @@ class GestionSesiones extends Component
     public $fecha;
     public $urlYoutube;
     public $muestraModal = 'none';
-    public $estados = ['En revisión', 'Publicada', 'Cerrada', 'En sesión', 'Finalizada'];
+    public $estados = ['En revisión', 'Publicada', 'Cerrada', 'En sesión', 'Finalizada','En sesión'];
 
     protected $sesiones;
     protected $listeners = ['delete'];

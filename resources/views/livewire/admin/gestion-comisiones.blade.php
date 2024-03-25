@@ -13,13 +13,60 @@
 
         <div class="row mt-3">
             <div class="col-12">
-                <table id="basic-table" class="table table-hover table-bordered mt-3">
+                <table class="table table-hover table-bordered mt-3">
                     <thead>
                         <tr>
-                            <th class="text-center">Id</th>
-                            <th class="text-center">Nombre</th>
-                            <th class="text-center">Orden</th>
+                            <th wire:click="sortBy('id')" class="text-center" style="width: 5%">Id
+                                @if($sortColumn == 'id')
+                                    @if($sortDirection == 'asc')
+                                        <i class="fas fa-sort-up"></i>
+                                    
+                                    @else
+                                        <i class="fas fa-sort-down"></i>
+                                    @endif
+                                @else
+                                    <i class="fas fa-sort"></i>
+                                @endif
+                            </th>
+                            <th wire:click="sortBy('name')" class="text-center">Nombre
+                                @if($sortColumn == 'name')
+                                    @if($sortDirection == 'asc')
+                                        <i class="fas fa-sort-up"></i>
+                                    
+                                    @else
+                                        <i class="fas fa-sort-down"></i>
+                                    @endif
+                                @else
+                                    <i class="fas fa-sort"></i>
+                                @endif
+                            </th>
+                            <th wire:click="sortBy('orden')" class="text-center">Orden
+                                @if($sortColumn == 'orden')
+                                    @if($sortDirection == 'asc')
+                                        <i class="fas fa-sort-up"></i>
+                                    
+                                    @else
+                                        <i class="fas fa-sort-down"></i>
+                                    @endif
+                                @else
+                                    <i class="fas fa-sort"></i>
+                                @endif
+                            </th>
                             <th style="width: 15%" class="text-center">Acciones</th>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <th class="align-middle">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <input wire:model="searchByName" type="search" placeholder="Buscar por nombre" class="form-control form-control-sm"></th>
+                                    </div>
+                                </div>
+                            </th>
+                            <th></th>
+                            <th class="text-center align-middle">
+                                <button wire:click="resetSearchFields" class="btn btn-sm btn-secondary">Limpiar Búsqueda</button>
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -40,6 +87,7 @@
                         @endforeach
                     </tbody>
                 </table>
+                {{ $comisiones->links('layouts.paginator') }}
             </div>
         </div>
 

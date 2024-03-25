@@ -4,10 +4,14 @@ namespace App\Http\Livewire\Admin;
 
 use App\Models\Tema as ModelTemas;
 use Livewire\Component;
+use Livewire\WithPagination;
+
 
 class Temas extends Component
 {
-    public $temas;
+    use WithPagination;
+
+    protected $temas;
     public $id_tema;
     public $loading = false;
     public $showActionModal = false;
@@ -15,6 +19,31 @@ class Temas extends Component
     protected $listeners = ['errorTitulo' => 'handleErrorTitulo', 'delete'];
     public $errorTitulo = [];
 
+    // Campos de busqueda
+    public $searchByTitle = '';
+    //Campos de ordenamiento
+
+    public $sortColumn = 'id';
+    public $sortDirection = 'asc';
+
+    protected $queryString = [
+        'searchByTitle',
+    ];
+
+    public function resetSearchFields()
+    {
+        $this->searchByTitle = '';
+    }
+
+    public function sortBy($column)
+    {
+        if ($this->sortColumn === $column) {
+            $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
+        } else {
+            $this->sortColumn = $column;
+            $this->sortDirection = 'asc';
+        }
+    }
 
     public function openModal()
     {
@@ -135,9 +164,10 @@ class Temas extends Component
 
     public function render()
     {
-        $this->temas = ModelTemas::all();
-    
-        return view('livewire.admin.temas', ['temas' => $this->temas])
+        $temas = ModelTemas::where('titulo', 'like', '%'.$this->searchByTitle.'%')
+        ->orderBy($this->sortColumn, $this->sortDirection)
+        ->paginate(10);
+        return view('livewire.admin.temas', ['temas' => $temas])
             ->layout('layouts.adminlte');
     }
     

@@ -13,20 +13,91 @@
 
         <div class="row mt-3">
             <div class="col-12">
-                <table id="basic-table" class="table table-hover table-bordered mt-3">
+                <table class="table table-hover table-bordered mt-3">
                     <thead>
                         <tr>
-                            <th class="text-center">Id</th>
-                            <th class="text-center">Nombre</th>
-                            <th class="text-center">Apellido</th>
-                            <th class="text-center">E-mail</th>
+                            <th wire:click="sortBy('id')" class="text-center" style="width: 5%">Id
+                                @if($sortColumn == 'id')
+                                    @if($sortDirection == 'asc')
+                                        <i class="fas fa-sort-up"></i>
+                                    
+                                    @else
+                                        <i class="fas fa-sort-down"></i>
+                                    @endif
+                                @else
+                                    <i class="fas fa-sort"></i>
+                                @endif
+                            </th>
+                            <th wire:click="sortBy('name')" class="text-center">Nombre
+                                @if($sortColumn == 'name')
+                                    @if($sortDirection == 'asc')
+                                        <i class="fas fa-sort-up"></i>
+                                    
+                                    @else
+                                        <i class="fas fa-sort-down"></i>
+                                    @endif
+                                @else
+                                    <i class="fas fa-sort"></i>
+                                @endif
+                            </th>
+                            <th wire:click="sortBy('lastname')" class="text-center">Apellido
+                                @if($sortColumn == 'lastname')
+                                    @if($sortDirection == 'asc')
+                                        <i class="fas fa-sort-up"></i>
+                                    
+                                    @else
+                                        <i class="fas fa-sort-down"></i>
+                                    @endif
+                                @else
+                                    <i class="fas fa-sort"></i>
+                                @endif
+                            </th>
+                            <th wire:click="sortBy('email')" class="text-center">E-mail
+                                @if($sortColumn == 'email')
+                                    @if($sortDirection == 'asc')
+                                        <i class="fas fa-sort-up"></i>
+                                    
+                                    @else
+                                        <i class="fas fa-sort-down"></i>
+                                    @endif
+                                @else
+                                    <i class="fas fa-sort"></i>
+                                @endif
+                            </th>
                             <th style="width: 15%" class="text-center">Acciones</th>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <th class="align-middle">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <input wire:model="searchByName" type="search" placeholder="Buscar por nombre" class="form-control form-control-sm"></th>
+                                    </div>
+                                </div>
+                            </th>
+                            <th class="align-middle">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <input wire:model="searchByLastname" type="search" placeholder="Buscar por apellido" class="form-control form-control-sm"></th>
+                                    </div>
+                                </div>
+                            </th>
+                            <th class="align-middle">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <input wire:model="searchByEmail" type="search" placeholder="Buscar por e-mail" class="form-control form-control-sm"></th>
+                                    </div>
+                                </div>
+                            </th>
+                            <th class="text-center align-middle">
+                                <button wire:click="resetSearchFields" class="btn btn-sm btn-secondary">Limpiar Búsqueda</button>
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($users as $user)
                             <tr>
-                                <td>{{ $user->id }}</td>
+                                <td class="text-center">{{ $user->id }}</td>
                                 <td>{{ $user->name }}</td>
                                 <td>{{ $user->lastname }}</td>
                                 <td>{{ $user->email }}</td>
@@ -48,6 +119,7 @@
                         @endforeach
                     </tbody>
                 </table>
+                {{ $users->links('layouts.paginator') }}
             </div>
         </div>
 
