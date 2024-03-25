@@ -21,7 +21,7 @@ class GestionSesiones extends Component
     public $fecha;
     public $urlYoutube;
     public $muestraModal = 'none';
-    public $estados = ['En revisión', 'Publicada', 'Cerrada', 'En sesión', 'Finalizada','En sesión'];
+    public $estados = ['En revisión', 'Publicada', 'Cerrada', 'En sesión', 'Finalizada','Sesionando'];
 
     protected $sesiones;
     protected $listeners = ['delete'];
@@ -88,8 +88,7 @@ class GestionSesiones extends Component
 
         // Aplicar filtros adicionales como el del estado y la lógica de paginación.
         $esAdmin = Gate::allows("admin-sesion");
-        $this->sesiones = $esAdmin ? $query->orderBy($this->sortColumn,$this->sortDirection)->paginate(10) : $query->whereIn("estado", [2, 3, 4])->paginate(10);
-
+        $this->sesiones = $esAdmin ? $query->orderBy($this->sortColumn,$this->sortDirection)->paginate(10) : $query->whereIn("estado", [2, 3, 4])->orderBy($this->sortColumn,$this->sortDirection)->paginate(10);
 
         $esAdmin = Gate::allows("admin-sesion");
         // $this->sesiones = $esAdmin  ? Sesion::whereIn("estado", $indicesAjustados ?: [])->paginate(10) : Sesion::whereIn("estado", [2, 3, 4])->get()->paginate(10);

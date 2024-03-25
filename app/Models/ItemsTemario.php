@@ -47,4 +47,9 @@ class ItemsTemario extends Model
         return $this->belongsTo(Comision::class, 'comision_id');
     }
 
+    public function votacion(): BelongsTo
+    {
+        return $this->belongsTo(votacion::class, 'votacion_id');
+    }
+
 }

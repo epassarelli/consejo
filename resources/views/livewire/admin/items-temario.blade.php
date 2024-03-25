@@ -36,7 +36,7 @@
                             <label class="input-group-text">Aprobación</label>
                             <select class="form-control" name="comision" id="comision" wire:model="votacionAceptacion" @if(!$esAdmin || $votacionEstado!=1) disabled @endif>
                                 <option value="mayoria">Mayoria Simple > 50%</option>
-                                <option value="mayoria2/3">2/3 Sesionando</option>
+                                <option value="mayoria 2/3">2/3 Sesionando</option>
                                 <option value="absoluto">Mayoria</option>
                             </select>
                         </div>
@@ -151,8 +151,8 @@
                         <thead>
                             <tr>
                                 <th class="text-center">TEMA</th>
-                                <th wire:click="sortBy('comisiones.name')" class="text-center">COMISIÓN
-                                    @if($sortColumn == 'comisiones.name')
+                                <th wire:click="sortBy('comision')" class="text-center">COMISIÓN
+                                    @if($sortColumn == 'comision')
                                         @if($sortDirection == 'asc')
                                             <i class="fas fa-sort-up"></i>
                                         
@@ -163,8 +163,8 @@
                                         <i class="fas fa-sort"></i>
                                     @endif
                                 </th>
-                                <th wire:click="sortBy('facultades.name')" class="text-center">FACULTAD
-                                    @if($sortColumn == 'facultades.name')
+                                <th wire:click="sortBy('faculty')" class="text-center">FACULTAD
+                                    @if($sortColumn == 'faculty')
                                         @if($sortDirection == 'asc')
                                             <i class="fas fa-sort-up"></i>
                                         
@@ -242,13 +242,13 @@
                             <tr>
 
                                 <td class="{{($itemEnVotacionActiva = (!empty($votacionId) && $item->id_votacion == $votacionId)) ? 'bg-warning' : ''}}">{{$item->tema->titulo}}</td>
-                                @if ($item->comision)
+                                @if ($item->comision->name)
                                     <td class="{{$itemEnVotacionActiva ? 'bg-warning' : ''}}">{{ $item->comision->name }}</td>
                                 @else
                                     <td class="{{$itemEnVotacionActiva ? 'bg-warning' : ''}}"></td>
                                 @endif
 
-                                @if ($item->facultad)
+                                @if ($item->facultad->name)
                                     <td class="{{$itemEnVotacionActiva ? 'bg-warning' : ''}}">{{$item->facultad->name}}</td>
                                 @else
                                     <td class="{{$itemEnVotacionActiva ? 'bg-warning' : ''}}"></td>
@@ -280,6 +280,7 @@
                             @endforeach
                         </tbody>
                     </table>
+                    {{ $items->links('layouts.paginator') }}
                 </div>
             </div>
         </div>
