@@ -7,6 +7,8 @@ RUN apt-get update && apt-get install -y \
   libzip-dev \
   zip \
   unzip \
+  nodejs \
+  npm \
   && docker-php-ext-configure zip \
   && docker-php-ext-install zip pdo_mysql
 
@@ -43,10 +45,7 @@ RUN chown -R www-data:www-data \
   /var/www/html/storage \
   /var/www/html/bootstrap/cache
 
-RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - \
-  && apt-get install -y nodejs\
-  npm
-
+RUN composer install
 # Puerto expuesto
 EXPOSE 80 443 5173
 
