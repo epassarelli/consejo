@@ -3,7 +3,7 @@ FROM php:8.2-apache
 
 # Instalar dependencias
 RUN apt-get update && apt-get install -y \
-  curl\
+  curl \
   libzip-dev \
   zip \
   unzip \
@@ -31,7 +31,7 @@ WORKDIR /var/www/html
 COPY . /var/www/html
 
 # Instalar dependencias de Composer
-RUN cd /var/www/html && composer install --ignore-platform-reqs --optimize-autoloader --no-dev
+RUN composer install --ignore-platform-reqs --optimize-autoloader --no-dev
 
 # Generar key de Laravel
 RUN php artisan key:generate
@@ -45,7 +45,6 @@ RUN chown -R www-data:www-data \
   /var/www/html/storage \
   /var/www/html/bootstrap/cache
 
-RUN composer install
 # Puerto expuesto
 EXPOSE 80 443 5173
 
