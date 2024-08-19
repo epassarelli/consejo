@@ -37,7 +37,7 @@
                                 @endforeach
                             </select><br><br>
                             
-                            <label for="facultad_id">Facultad:</label>
+                            <label for="facultad_id">Unidad académica:</label>
                             <select class="form-select" name="parameter[facultad_id]">
                                 <option selected value="">(Sin selección)</option>
                                 @foreach ($facultades as $item)

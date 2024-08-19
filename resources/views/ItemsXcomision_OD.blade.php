@@ -23,9 +23,9 @@
 
                         <div class="entry">
                             
-                            @foreach ($itmes_comision as $item)
+                            @foreach ($items_comision as $item)
                                 <div class="entry">
-                                    <b>CUDAP. EXP-UBA</b> {{$item->numero}} <b>CUDAP. EXP-UBA</b> {{$item->resumen}} <a href="#">ver despacho</a>
+                                    <b>EXP-UBA</b> {{$item->numero}} <b>EXP-UBA</b> {{$item->resumen}} <a href="#">ver despacho</a>
                                 </div>
                                 
                             @endforeach

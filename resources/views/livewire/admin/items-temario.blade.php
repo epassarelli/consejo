@@ -152,7 +152,7 @@
                             <tr>
                                 <th class="text-center">TEMA</th>
                                 <th class="text-center">COMISIÓN</th>
-                                <th class="text-center">FACULTAD</th>
+                                <th class="text-center">UNIDAD ACADÉMICA</th>
                                 <th class="text-center">EXPEDIENTE</th>
                                 <th class="text-center">RESOLUCIÓN</th>
                                 <th style="width: 15%" class="text-center">Acciones</th>
@@ -245,7 +245,7 @@
                                             @enderror
                                         </div>
                                         <div class="col-6 input-group-prepend">
-                                            <label class="input-group-text">Facultad</label>
+                                            <label class="input-group-text">Unidad académica</label>
                                             <select class="form-control" name="facultad" id="facultad" wire:model="facultad_id" @if($readonly) disabled @endif>
                                                 <option value="">Seleccionar...</option>
                                                 @foreach ($facultades as $facultad)

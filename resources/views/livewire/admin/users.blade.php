@@ -69,7 +69,7 @@
                                 Crear usuario
                             @endif
                         </h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button type="button" wire:click="closeModal" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
@@ -168,16 +168,16 @@
 
 
                                 <div class="col-6 mb-2">
-                                    <label class="sr-only" for="facultad_id">Facultad</label>
+                                    <label class="sr-only" for="facultad_id">Unidad académica</label>
                                     <div class="input-group mb-2 mr-sm-2">
                                         <div class="input-group-prepend">
-                                            <div class="input-group-text">Facultad</span>
+                                            <div class="input-group-text">Unidad académica</span>
                                             </div>
                                         </div>
                                         <select class="form-control" id="facultad_id"
                                             aria-label="Default select example" name="facultad_id"
                                             wire:model="facultad_id">
-                                            <option selected>Seleccione un facultad</option>
+                                            <option selected>Seleccione una unidad académica</option>
                                             @foreach ($facultades as $facultad)
                                                 <option value="{{ $facultad->id }}">{{ $facultad->name }}</option>
                                             @endforeach
