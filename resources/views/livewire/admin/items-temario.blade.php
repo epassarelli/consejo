@@ -163,7 +163,7 @@
                                         <i class="fas fa-sort"></i>
                                     @endif
                                 </th>
-                                <th wire:click="sortBy('faculty')" class="text-center">FACULTAD
+                                <th wire:click="sortBy('faculty')" class="text-center">UNIDAD ACADÉMICA
                                     @if($sortColumn == 'faculty')
                                         @if($sortDirection == 'asc')
                                             <i class="fas fa-sort-up"></i>
@@ -325,7 +325,7 @@
                                             @enderror
                                         </div>
                                         <div class="col-6 input-group-prepend">
-                                            <label class="input-group-text">Facultad</label>
+                                            <label class="input-group-text">Unidad académica</label>
                                             <select class="form-control" name="facultad" id="facultad" wire:model="facultad_id" @if($readonly) disabled @endif>
                                                 <option value="">Seleccionar...</option>
                                                 @foreach ($facultades as $facultad)

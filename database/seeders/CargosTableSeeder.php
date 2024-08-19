@@ -16,34 +16,34 @@ class CargosTableSeeder extends Seeder
 
         Cargo::create([
             'id' => '1',
-            'name' => 'Decano',
+            'name' => 'Decano/a',
             'status' => true
         ]);
 
         Cargo::create([
             'id' => '2',
-            'name' => 'Vicedecano',
+            'name' => 'Vicedecano/a',
             'status' => true
         ]);
         Cargo::create([
             'id' => '3',
-            'name' => 'Profesores titulares',
+            'name' => 'Profesores/as titulares',
             'status' => true
         ]);
         Cargo::create([
             'id' => '4',
-            'name' => 'Profesores suplentes',
+            'name' => 'Profesores/as suplentes',
             'status' => true
         ]);
         Cargo::create([
             'id' => '5',
-            'name' => 'Graduados titulares',
+            'name' => 'Graduados/as titulares',
             'status' => true
         ]);
 
         Cargo::create([
             'id' => '6',
-            'name' => 'Graduados suplentes',
+            'name' => 'Graduados/as suplentes',
             'status' => true
         ]);
 
@@ -55,6 +55,30 @@ class CargosTableSeeder extends Seeder
         Cargo::create([
             'id' => '8',
             'name' => 'Estudiantes suplentes',
+            'status' => true
+        ]);
+        
+        Cargo::create([
+            'id' => '9',
+            'name' => 'Director/a CBC',
+            'status' => true
+        ]);
+        
+        Cargo::create([
+            'id' => '10',
+            'name' => 'Representante no docente',
+            'status' => true
+        ]);
+        
+        Cargo::create([
+            'id' => '11',
+            'name' => 'Rector',
+            'status' => true
+        ]);
+        
+        Cargo::create([
+            'id' => '12',
+            'name' => 'Vicerrector',
             'status' => true
         ]);
     }

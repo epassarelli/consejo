@@ -140,5 +140,45 @@ class FacultadesTableSeeder extends Seeder
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+
+        Facultad::create([
+            'id' => 17,
+            'name' => 'Rectorado UBA',
+            'status' => 1,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        Facultad::create([
+            'id' => 18,
+            'name' => 'Colegio Ramon Cereijo',
+            'status' => 1,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        Facultad::create([
+            'id' => 19,
+            'name' => 'Escuela de Educación Técnica',
+            'status' => 1,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        Facultad::create([
+            'id' => 20,
+            'name' => 'Escuela en Producción Agropecuaria y Agroalimentaria',
+            'status' => 1,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        Facultad::create([
+            'id' => 21,
+            'name' => 'Instituto Libre de Segunda Enseñanza',
+            'status' => 1,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
     }
 }
