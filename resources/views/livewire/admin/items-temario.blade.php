@@ -36,7 +36,7 @@
                             <label class="input-group-text">Aprobación</label>
                             <select class="form-control" name="comision" id="comision" wire:model="votacionAceptacion" @if(!$esAdmin || $votacionEstado!=1) disabled @endif>
                                 <option value="mayoria">Mayoria Simple > 50%</option>
-                                <option value="mayoria2/3">2/3 Sesionando</option>
+                                <option value="mayoria 2/3">2/3 Sesionando</option>
                                 <option value="absoluto">Mayoria</option>
                             </select>
                         </div>
@@ -151,11 +151,90 @@
                         <thead>
                             <tr>
                                 <th class="text-center">TEMA</th>
-                                <th class="text-center">COMISIÓN</th>
-                                <th class="text-center">FACULTAD</th>
-                                <th class="text-center">EXPEDIENTE</th>
-                                <th class="text-center">RESOLUCIÓN</th>
+                                <th wire:click="sortBy('comision')" class="text-center">COMISIÓN
+                                    @if($sortColumn == 'comision')
+                                        @if($sortDirection == 'asc')
+                                            <i class="fas fa-sort-up"></i>
+                                        
+                                        @else
+                                            <i class="fas fa-sort-down"></i>
+                                        @endif
+                                    @else
+                                        <i class="fas fa-sort"></i>
+                                    @endif
+                                </th>
+                                <th wire:click="sortBy('faculty')" class="text-center">UNIDAD ACADÉMICA
+                                    @if($sortColumn == 'faculty')
+                                        @if($sortDirection == 'asc')
+                                            <i class="fas fa-sort-up"></i>
+                                        
+                                        @else
+                                            <i class="fas fa-sort-down"></i>
+                                        @endif
+                                    @else
+                                        <i class="fas fa-sort"></i>
+                                    @endif
+                                </th>
+                                <th wire:click="sortBy('items_temario.numero')" class="text-center">EXPEDIENTE/NOTAS
+                                    @if($sortColumn == 'items_temario.numero')
+                                        @if($sortDirection == 'asc')
+                                            <i class="fas fa-sort-up"></i>
+                                        
+                                        @else
+                                            <i class="fas fa-sort-down"></i>
+                                        @endif
+                                    @else
+                                        <i class="fas fa-sort"></i>
+                                    @endif
+                                </th>
+                                <th wire:click="sortBy('items_temario.resolucion')" class="text-center">RESOLUCIÓN
+                                    @if($sortColumn == 'items_temario.resolucion')
+                                        @if($sortDirection == 'asc')
+                                            <i class="fas fa-sort-up"></i>
+                                        
+                                        @else
+                                            <i class="fas fa-sort-down"></i>
+                                        @endif
+                                    @else
+                                        <i class="fas fa-sort"></i>
+                                    @endif
+                                </th>
                                 <th style="width: 15%" class="text-center">Acciones</th>
+                            </tr>
+                            <tr>
+                                
+                                <th class="text-center"></th>
+                                <th class="text-center">
+                                    <div class="row">
+                                    <div class="col-sm-12">
+                                        <input wire:model="searchByComision" type="search" placeholder="Buscar por comisión" class="form-control form-control-sm"></th>
+                                    </div>
+                                </div>
+                                </th>
+                                <th class="text-center">
+                                    <div class="row">
+                                    <div class="col-sm-12">
+                                        <input wire:model="searchByFaculty" type="search" placeholder="Buscar por facultad" class="form-control form-control-sm"></th>
+                                    </div>
+                                </div>
+                                </th>
+                                <th class="text-center">
+                                    <div class="row">
+                                    <div class="col-sm-12">
+                                        <input wire:model="searchByExp" type="search" placeholder="Buscar por expediente" class="form-control form-control-sm"></th>
+                                    </div>
+                                </div>
+                                </th>
+                                <th class="text-center">
+                                    <div class="row">
+                                    <div class="col-sm-12">
+                                        <input wire:model="searchByResolution" type="search" placeholder="Buscar por resolucion" class="form-control form-control-sm"></th>
+                                    </div>
+                                </div>
+                                </th>
+                                <th class="text-center  align-middle">
+                                    <button wire:click="resetSearchFields" class="btn btn-sm btn-secondary">Limpiar Búsqueda</button>
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -163,19 +242,19 @@
                             <tr>
 
                                 <td class="{{($itemEnVotacionActiva = (!empty($votacionId) && $item->id_votacion == $votacionId)) ? 'bg-warning' : ''}}">{{$item->tema->titulo}}</td>
-                                @if ($item->comision)
+                                @if ($item->comision->name)
                                     <td class="{{$itemEnVotacionActiva ? 'bg-warning' : ''}}">{{ $item->comision->name }}</td>
                                 @else
                                     <td class="{{$itemEnVotacionActiva ? 'bg-warning' : ''}}"></td>
                                 @endif
 
-                                @if ($item->facultad)
+                                @if ($item->facultad->name)
                                     <td class="{{$itemEnVotacionActiva ? 'bg-warning' : ''}}">{{$item->facultad->name}}</td>
                                 @else
                                     <td class="{{$itemEnVotacionActiva ? 'bg-warning' : ''}}"></td>
                                 @endif
 
-                                <td class="{{$itemEnVotacionActiva ? 'bg-warning' : ''}} text-center">{{$item->numero}}</td>
+                                <td class="{{$itemEnVotacionActiva ? 'bg-warning' : ''}} text-center">{{$item->tipo}} Nro {{$item->numero}}</td>
                                 <td class="{{$itemEnVotacionActiva ? 'bg-warning' : ''}} text-center">{{$item->resolucion}}</td>
                                 <td class="{{$itemEnVotacionActiva ? 'bg-warning' : ''}} p-1 text-center">
                                     <button wire:click="openEditModal({{ $item->id }}, true)" class="btn btn-sm btn-secondary" title="Ver"><i class="fa fa-eye"></i></button>
@@ -201,6 +280,7 @@
                             @endforeach
                         </tbody>
                     </table>
+                    {{ $items->links('layouts.paginator') }}
                 </div>
             </div>
         </div>
@@ -245,7 +325,7 @@
                                             @enderror
                                         </div>
                                         <div class="col-6 input-group-prepend">
-                                            <label class="input-group-text">Facultad</label>
+                                            <label class="input-group-text">Unidad académica</label>
                                             <select class="form-control" name="facultad" id="facultad" wire:model="facultad_id" @if($readonly) disabled @endif>
                                                 <option value="">Seleccionar...</option>
                                                 @foreach ($facultades as $facultad)

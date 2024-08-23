@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('id_temario');
             $table->string('titulo')->unique();
             $table->tinyInteger('estado')->default(1); # 1 edicion | 2 activo | 3 cerrada
-            $table->enum('aceptacion', ["mayoria","2/3","absoluto"])->default("mayoria");
+            $table->enum('aceptacion', ["mayoria","mayoria 2/3","absoluto"])->default("mayoria");
             $table->timestamps();
 
             $table->foreign('id_temario')->references('id')->on('temarios_ordenes_dia')->cascadeOnDelete();

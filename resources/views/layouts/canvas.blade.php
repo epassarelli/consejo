@@ -2,10 +2,13 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
+    <base href="{{ url('/') }}/">
+    
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <meta http-equiv="x-ua-compatible" content="IE=edge">
-    <title>@yield('title', 'Título por defecto')</title>
+    <title>@yield('title', 'UBA | Consejo Superior')</title>
 
+    <link rel="shortcut icon" href="{{ asset('favicons/favicon.ico') }}"/>
     <!-- Font Imports -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,6 +26,8 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
 </head>
 
 <body class="stretched">
@@ -49,14 +54,16 @@
 
     <!-- JavaScripts
  ============================================= -->
-    <script src="js/functions.js"></script>
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-    <script src="//cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
-    
-
-    <script src="{{ asset('js/datatables/basictable.js') }}"></script>
+ 
+ <script src="{{ asset('js/functions.js') }}"></script>
+ 
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+ <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+ <script src="//cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+ 
+ 
+ <script src="{{ asset('js/datatables/basictable.js') }}"></script>
+ 
 </body>
 
 </html>

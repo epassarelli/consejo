@@ -30,7 +30,7 @@ return [
     |
     */
 
-    'use_ico_only' => false,
+    'use_ico_only' => true,
     'use_full_favicon' => false,
 
     /*
@@ -63,11 +63,11 @@ return [
     |
     */
 
-    'logo' => '<b>Consejo</b> Superior',
-    'logo_img' => 'img/uba.png',
-    'logo_img_class' => 'brand-image img-circle elevation-3',
-    'logo_img_xl' => null,
-    'logo_img_xl_class' => 'brand-image-xs',
+    'logo' => '<br><div class="text-center"><b>Consejo</b> Superior</div>',
+    'logo_img' => 'img/logo_uba_circular.svg',
+    'logo_img_class' => 'brand-image',
+    'logo_img_xl' => 'img/logo_uba.svg',
+    'logo_img_xl_class' => 'brand-image',
     'logo_img_alt' => 'Admin Logo',
 
     /*
@@ -84,13 +84,13 @@ return [
     */
 
     'auth_logo' => [
-        'enabled' => false,
+        'enabled' => true,
         'img' => [
-            'path' => 'img/uba.png',
-            'alt' => 'Auth Logo',
-            'class' => '',
-            'width' => 50,
-            'height' => 50,
+            'path' => 'img/logo_uba.svg',
+            'alt' => 'Logo UBA',
+            'class' => 'text-center',
+            'width' => 200,
+            'height' => 200,
         ],
     ],
 
@@ -109,11 +109,11 @@ return [
     'preloader' => [
         'enabled' => true,
         'img' => [
-            'path' => 'img/uba.png',
+            'path' => 'img/logo_uba_circular.svg',
             'alt' => 'UBA - Consejo Superior',
             'effect' => 'animation__shake',
-            'width' => 60,
-            'height' => 60,
+            'width' => 200,
+            'height' => 200,
         ],
     ],
 
@@ -187,7 +187,7 @@ return [
     */
 
     'classes_body' => '',
-    'classes_brand' => '',
+    'classes_brand' => 'bg-white',
     'classes_brand_text' => '',
     'classes_content_wrapper' => '',
     'classes_content_header' => '',
@@ -253,10 +253,10 @@ return [
     */
 
     'use_route_url' => false,
-    'dashboard_url' => 'home',
+    'dashboard_url' => 'admin',
     'logout_url' => 'logout',
     'login_url' => 'login',
-    'register_url' => 'register',
+    'register_url' => false,
     'password_reset_url' => 'password/reset',
     'password_email_url' => 'password/email',
     'profile_url' => false,
@@ -291,12 +291,12 @@ return [
 
     'menu' => [
         // Navbar items:
-        [
-            'type'         => 'navbar-search',
-            'text'         => 'search',
-            'topnav_right' => true,
-            'can' => ['admin-usuario']
-        ],
+        // [
+        //     'type'         => 'navbar-search',
+        //     'text'         => 'search',
+        //     'topnav_right' => true,
+        //     'can' => ['admin-usuario']
+        // ],
         [
             'type'         => 'fullscreen-widget',
             'topnav_right' => true,
@@ -305,7 +305,8 @@ return [
         // Sidebar items:
         [
             'type' => 'sidebar-menu-search',
-            'text' => 'search',
+            'text' => 'Buscar',
+            'classes'=> 'text-white'
         ],
         // [
         //     'text' => 'blog',

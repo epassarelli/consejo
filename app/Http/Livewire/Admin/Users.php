@@ -11,9 +11,13 @@ use App\Models\User_rol;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
+use Livewire\WithPagination;
+
 
 class Users extends Component
 {
+    use WithPagination;
+
     public $user;
     public $facultades;
     public $cargos;
@@ -29,18 +33,54 @@ class Users extends Component
     public $cargo_id;
     public $web;
     public $rol_id;
+    public $estado;
     public $muestraModal     = 'none';
     public $muestraModalPass = 'none';
     public $muestraModalRoles = 'none';
     public $muestraModalRole = 'none';
     public $togleWeb = false;
 
+    // Campos de busqueda
+    public $searchByName = '';
+    public $searchByLastname = '';
+    public $searchByEmail = '';
+    public $searchByRoles = '';
+    //Campos de ordenamiento
+
+    public $sortColumn = 'id';
+    public $sortDirection = 'asc';
+
+    protected $queryString = [
+        'searchByName',
+        'searchByLastname',
+        'searchByEmail',
+        'searchByRoles'
+    ];
+
     protected $users, $roles, $users_roles;
     protected $listeners = ['delete'];
 
     public function render()
     {
-        $this->users = User::where('estado', true)->get();
+        $query = User::query();
+
+        // Aplicar filtros de búsqueda
+        $query->where('estado', true)
+            ->where('email', 'like', '%' . $this->searchByEmail . '%')
+            ->where('lastname', 'like', '%' . $this->searchByLastname . '%')
+            ->where('name', 'like', '%' . $this->searchByName . '%');
+
+        if (!empty($this->searchByRoles)) {
+            $query->whereHas('roles', function ($query) {
+                $query->where('name', 'like', '%' . $this->searchByRoles . '%');
+            });
+        }
+
+        // Ordenar y paginar
+        $this->users = $query->orderBy($this->sortColumn, $this->sortDirection)
+            ->paginate(10);
+
+        // Cargar roles para el filtro
         $this->roles = Role::all();
         $this->facultades = Facultad::all();
         $this->cargos = Cargo::all();
@@ -61,6 +101,24 @@ class Users extends Component
             'cargos' => $this->cargos,
             'users_roles' => $this->users_roles,
         ])->layout('layouts.adminlte');
+    }
+
+
+    public function resetSearchFields()
+    {
+        $this->searchByName = '';
+        $this->searchByLastname = '';
+        $this->searchByEmail = '';
+    }
+
+    public function sortBy($column)
+    {
+        if ($this->sortColumn === $column) {
+            $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
+        } else {
+            $this->sortColumn = $column;
+            $this->sortDirection = 'asc';
+        }
     }
 
     protected function rules()
@@ -138,7 +196,7 @@ class Users extends Component
             'rol_id' => 'required|integer',
             'facultad_id' => 'integer|nullable',
             'web' => 'string|in:V,F',
-            'orden' => 'integer|nullable',
+            'orden' => 'integer|min:1|nullable',
             'password' => 'required|string|same:repassword',
             'repassword' => 'required|string'
         ]);
@@ -153,7 +211,8 @@ class Users extends Component
             'facultad_id' => $validatedData['facultad_id'] ?: null,
             'web' => $validatedData['web'],
             'orden' => $validatedData['orden'] ?: null,
-            'password' => bcrypt($validatedData['password'])
+            'password' => bcrypt($validatedData['password']),
+            'estado' => true
         ]);
         $user = User::where('email', $validatedData['email'])->first();
         $user->roles()->attach($validatedData['rol_id']);
@@ -243,6 +302,7 @@ class Users extends Component
         $this->web = 'F';
         $this->password = '';
         $this->repassword = '';
+        $this->estado = true;
     }
 
     public function closeModalPass()

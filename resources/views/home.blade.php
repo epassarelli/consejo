@@ -4,20 +4,9 @@
     <section class="page-title dark" data-bs-theme="dark">
         <div class="container">
             <div class="page-title-row">
-
                 <div class="page-title-content">
-                    <h1>Inicio</h1>
-                    <span>Consejo Superior</span>
+                    <h1>{{ $title }}</h1>
                 </div>
-
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                        {{-- <li class="breadcrumb-item"><a href="#">Inicio</a></li>
-                        <li class="breadcrumb-item"><a href="#">Templates</a></li> --}}
-                        <li class="breadcrumb-item active" aria-current="page">Inicio</li>
-                    </ol>
-                </nav>
-
             </div>
         </div>
     </section>

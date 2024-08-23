@@ -1,8 +1,17 @@
 @extends('layouts.canvas')
 
 @section('content')
-    <!-- Content
-                              ============================================= -->
+
+    <section class="page-title dark" data-bs-theme="dark">
+        <div class="container">
+            <div class="page-title-row">
+                <div class="page-title-content">
+                    <h1>{{ $title }}</h1>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Content ============================================= -->
     <section id="content">
         <div class="content-wrap">
             <div class="container">
@@ -17,15 +26,15 @@
                                    ============================================= -->
 
                         <div class="entry-title">
-                            <h1>Items para la comisión {{ $name_comision }}</h1>
+                            <h2>Items para la comisión {{ $name_comision }}</h2>
                         </div><!-- .entry-title end -->
 
 
                         <div class="entry">
                             
-                            @foreach ($itmes_comision as $item)
+                            @foreach ($items_comision as $item)
                                 <div class="entry">
-                                    <b>CUDAP. EXP-UBA</b> {{$item->numero}} <b>CUDAP. EXP-UBA</b> {{$item->resumen}} <a href="#">ver despacho</a>
+                                    <b>EXP-UBA</b> {{$item->numero}} <b>EXP-UBA</b> {{$item->resumen}} <a href="#">ver despacho</a>
                                 </div>
                                 
                             @endforeach

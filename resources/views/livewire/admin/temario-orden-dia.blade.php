@@ -34,13 +34,21 @@
                         </thead>
                         <tbody>
 
-                            @foreach ($sesion->temariosOrdenDia as $temario)
+                            @foreach ($temariosOrdenDia as $temario)
                             <tr>
-                                <td class="{{($itemEnVotacionActiva = !empty($temario->votacionesActivas->count())) ? 'bg-warning' : '' }}">{{$temario->tema->titulo}}</td>
-                                <td class="{{$itemEnVotacionActiva ? 'bg-warning' : ''}} text-center">{{$temario->orden}}</td>
-                                <td class="{{$itemEnVotacionActiva ? 'bg-warning' : ''}} text-center">{{$temario->tema->items->count()}}</td>
-                                <td class="{{$itemEnVotacionActiva ? 'bg-warning' : ''}} text-center">{{$temario->web}}</td>
-                                <td class="{{$itemEnVotacionActiva ? 'bg-warning' : ''}} p-1 text-rigth">
+                                <td style="width: 70%" class="{{($itemEnVotacionActiva = !empty($temario->votacionesActivas->count())) ? 'bg-warning' : '' }}">{{$temario->tema->titulo}}</td>
+                                <td style="width: 5%" class="{{$itemEnVotacionActiva ? 'bg-warning' : ''}} text-center">{{$temario->orden}}</td>
+                                <td style="width: 5%"class="{{$itemEnVotacionActiva ? 'bg-warning' : ''}} text-center">{{$temario->itemsTemarios->count()}}</td>
+                                <td style="width: 5%"class="{{$itemEnVotacionActiva ? 'bg-warning' : ''}} text-center">
+                                    <i style="cursor: pointer;" wire:click="toggleEstado({{ $temario->id }})" class="{{ $temario->web ? 'fas fa-toggle-on text-success' : 'fas fa-toggle-off text-secundary' }}" title="{{ $temario->web ? 'Despublicar' : 'Publicar' }}"></i>
+                                    {{-- @if ($temario->web == 1)
+                                    Si
+                                @else
+                                    No
+                                @endif --}}
+                                
+                                </td>
+                                <td style="width: 15%"class="{{$itemEnVotacionActiva ? 'bg-warning' : ''}} p-1 text-center">
                                     <button wire:click="items({{$temario->id}})" class="btn btn-sm btn-info" title="items"><i class="fas fa-file-alt"></i></button>
                                     <button wire:click="openEditModal({{$temario->id}}, true)" class="btn btn-sm btn-secondary" title="Ver"><i class="fa fa-eye"></i></button>
                                     @if($esAdmin && in_array($sesion->estado, [1,4]) && !in_array($sesion->ordenDia->id_estado, [2,3,5]))

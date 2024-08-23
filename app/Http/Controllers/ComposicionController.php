@@ -87,6 +87,7 @@ class ComposicionController extends Controller
             ->get();
         $facultades = Facultad::all();
         return view('composicion', [
+            'title' => 'COMPOSICIÓN',
             'profesoresT' => $profesoresT,
             'graduadosT' => $graduadosT,
             'estudiantesT' => $estudiantesT,

@@ -5,9 +5,14 @@ namespace App\Http\Livewire\Admin;
 use App\Models\Comision;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Livewire\WithPagination;
+
 
 class GestionComisiones extends Component
 {
+    use WithPagination;
+
     public $comision_id;
     public $name;
     public $status;
@@ -17,12 +22,42 @@ class GestionComisiones extends Component
     protected $comisiones;
     protected $listeners = ['delete'];
 
+    // Campos de busqueda
+    public $searchByName = '';
+    //Campos de ordenamiento
+
+    public $sortColumn = 'id';
+    public $sortDirection = 'asc';
+
+    protected $queryString = [
+        'searchByName',
+    ];
+
+    public function resetSearchFields()
+    {
+        $this->searchByName = '';
+    }
+
+    public function sortBy($column)
+    {
+        if ($this->sortColumn === $column) {
+            $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
+        } else {
+            $this->sortColumn = $column;
+            $this->sortDirection = 'asc';
+        }
+    }
+
     public function render()
     {
-        $this->comisiones = Comision::where('status', true)->get();
+        $comisiones = Comision::where('name', 'like', '%'.$this->searchByName.'%')
+        ->where('status', true)
+
+        ->orderBy($this->sortColumn, $this->sortDirection)
+        ->paginate(10);;
 
         return view('livewire.admin.gestion-comisiones', [
-            'comisiones' => $this->comisiones,
+            'comisiones' => $comisiones,
         ])->layout('layouts.adminlte');
     }
 
@@ -56,7 +91,19 @@ class GestionComisiones extends Component
 
         $validatedData = $this->validate([
             'name' => 'required|string',
-            'orden' => 'required|integer|unique:comisiones,orden',
+            'orden' => [
+                'required',
+                'integer',
+                function ($attribute, $value, $fail) {
+                    $exists = DB::table('comisiones')
+                        ->where('orden', $value)
+                        ->where('status', true) // Verifica que el estado sea 'true'
+                        ->exists();
+                    if ($exists) {
+                        $fail('El valor de ' . $attribute . ' ya está en uso.');
+                    }
+                },
+            ],
         ]);
 
         Comision::create([

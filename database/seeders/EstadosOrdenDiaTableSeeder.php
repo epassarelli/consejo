@@ -18,5 +18,6 @@ class EstadosOrdenDiaTableSeeder extends Seeder
         EstadoOrdenDia::create(['nombre' => 'Cerrada']);
         EstadoOrdenDia::create(['nombre' => 'En Sesión']);
         EstadoOrdenDia::create(['nombre' => 'Finalizada']);
+        EstadoOrdenDia::create(['nombre' => 'Sesionando']);
     }
 }

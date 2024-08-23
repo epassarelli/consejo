@@ -6,57 +6,157 @@
             </div>
             <div class="col-md-4 text-right">
                 @if($esAdmin)
-                <button wire:click="create" class="btn btn-success" data-toggle="modal" data-target="#roleModal"><i class="fas fa-plus-circle mr-2" style="color: white;"></i>Agregar
-                    Sesión</button>
+                <!-- Usar el método de Livewire para abrir el modal en vez de data-toggle y data-target -->
+                <button wire:click="create" class="btn btn-success"><i class="fas fa-plus-circle mr-2" style="color: white;"></i>Agregar Sesión</button>
                 @endif
             </div>
         </div>
 
         <div class="row mt-3">
             <div class="col-12">
-                <table id="basic-table" class="table table-hover table-bordered mt-3">
+            </div>
+            <div class="col-12">
+                <table id="" class="table table-hover table-bordered mt-3">
                     <thead>
                         <tr>
-                            <th class="text-center">Fecha</th>
-                            <th class="text-center">Estado</th>
-                            <th class="text-center">Fec. comunicación</th>
-                            <th class="text-center">Fec. finaiización</th>
-                            <th style="width: 15%" class="text-center">Acciones</th>
+                            <th  wire:click="sortBy('fecha')" class="text-center">
+                                Fecha
+                                @if($sortColumn == 'fecha')
+                                    @if($sortDirection == 'asc')
+                                        <i class="fas fa-sort-up"></i>
+                                    
+                                    @else
+                                        <i class="fas fa-sort-down"></i>
+                                    @endif
+                                @else
+                                    <i class="fas fa-sort"></i>
+                                @endif
+                            </th>
+                            <th style="width: 15%" wire:click="sortBy('estado')" class="text-center">
+                                Estado
+                                @if($sortColumn == 'estado')
+                                    @if($sortDirection == 'asc')
+                                        <i class="fas fa-sort-up"></i>
+                                    
+                                    @else
+                                        <i class="fas fa-sort-down"></i>
+                                    @endif
+                                @else
+                                    <i class="fas fa-sort"></i>
+                                @endif
+                            </th>
+                            <th wire:click="sortBy('fComunicacion')" class="text-center">
+                                Fec. comunicación
+                                @if($sortColumn == 'fComunicacion')
+                                    @if($sortDirection == 'asc')
+                                        <i class="fas fa-sort-up"></i>
+                                    
+                                    @else
+                                        <i class="fas fa-sort-down"></i>
+                                    @endif
+                                @else
+                                    <i class="fas fa-sort"></i>
+                                @endif
+                            </th>
+                            <th wire:click="sortBy('fFinalizada')" class="text-center">
+                                Fec. finalización
+                                @if($sortColumn == 'fFinalizada')
+                                    @if($sortDirection == 'asc')
+                                        <i class="fas fa-sort-up"></i>
+                                    @else
+                                        <i class="fas fa-sort-down"></i>
+                                    @endif
+                                @else
+                                    <i class="fas fa-sort"></i>
+                                @endif
+                            </th>
+                            <th style="width: 25%" class="text-center">Acciones</th>
+                        </tr>
+                        <tr>
+                            <th>
+                                <div class="row">
+                                    <label for="searchByDateStart" class="col-sm-2 col-form-label col-sm-4">Desde: </label>
+                                    <div class="col-sm-8">
+                                      <input wire:model="searchByDateStart" id="searchByDateStart" type="date" placeholder="Buscar por fecha desde" class="form-control form-control-sm">
+                                    </div>
+                                </div>
+                                <div class="mt-2 row">
+                                    <label for="searchByDateEnd" class="col-sm-2 col-form-label col-sm-4">Hasta: </label>
+                                    <div class="col-sm-8">
+                                        <input wire:model="searchByDateEnd" id="searchByDateEnd" type="date" placeholder="Buscar por fecha hasta" class="form-control form-control-sm">
+                                    </div>
+                                </div>
+                            </th>
+                            <th class="align-middle">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <input wire:model="searchByState" type="search" placeholder="Buscar por estado" class="form-control form-control-sm"></th>
+                                    </div>
+                                </div>
+
+                            <th>
+                                <div class="row">
+                                    <label for="searchByDateComStart" class="col-sm-2 col-form-label col-sm-4">Desde: </label>
+                                    <div class="col-sm-8">
+                                        <input wire:model="searchByDateComStart" id="searchByDateComStart" type="date" placeholder="Buscar por fecha desde" class="form-control form-control-sm">
+                                    </div>
+                                </div>
+                                <div class="mt-2 row">
+                                    <label for="searchByDateComEnd" class="col-sm-2 col-form-label col-sm-4">Hasta: </label>
+                                    <div class="col-sm-8">
+                                        <input wire:model="searchByDateComEnd" id="searchByDateComEnd" type="date" placeholder="Buscar por fecha hasta" class="form-control form-control-sm">
+                                    </div>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="row">
+                                    <label for="searchByDateFinishStart" class="col-sm-2 col-form-label col-sm-4">Desde: </label>
+                                    <div class="col-sm-8">
+                                      <input wire:model="searchByDateFinishStart" id="searchByDateFinishStart" type="date" placeholder="Buscar por fecha desde" class="form-control form-control-sm">
+                                    </div>
+                                </div>
+                                <div class="mt-2 row">
+                                    <label for="searchByDateFinishEnd" class="col-sm-2 col-form-label col-sm-4">Hasta: </label>
+                                    <div class="col-sm-8">
+                                        <input wire:model="searchByDateFinishEnd" id="searchByDateFinishEnd" type="date" placeholder="Buscar por fecha hasta" class="form-control form-control-sm">
+                                    </div>
+                                </div>
+                            </th>
+                            <th class="text-center align-middle">
+                                <button wire:click="resetSearchFields" class="btn btn-sm btn-secondary">Limpiar Búsqueda</button>
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($sesiones as $sesion)
                         <tr>
-                            <td>{{ date('d-m-Y', strtotime($sesion->fecha)) }}</td>
+                            <!-- Usar Carbon para formatear fechas -->
+                            <td class="text-center">{{ \Carbon\Carbon::parse($sesion->fecha)->format('d-m-Y') }}</td>
                             <td>{{ $estados[$sesion->estado - 1] }}</td>
-                            <td>
-                                {{ $sesion->fComunicacion ? date('d-m-Y', strtotime($sesion->fComunicacion)) : '' }}
+                            <td class="text-center">
+                                {{ $sesion->fComunicacion ? \Carbon\Carbon::parse($sesion->fComunicacion)->format('d-m-Y') : '' }}
                             </td>
-                            <td>
-                                {{ $sesion->fFinalizacion ? date('d-m-Y', strtotime($sesion->fFinalizacion)) : '' }}
+                            <td class="text-center">
+                                {{ $sesion->fFinalizada ? \Carbon\Carbon::parse($sesion->fFinalizada)->format('d-m-Y') : '' }}
                             </td>
                             <td class="p-1 text-center">
-                                <button wire:click="edit({{ $sesion->id }})" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#roleModal" title="Editar"><i class="fa fa-edit"></i></button>
-
-                                <button wire:click="openOrdenModal({{ $sesion->id }})" class="btn btn-sm btn-info" data-toggle="modal" data-target="#roleModal" title="Orden del dia"><i class="fas fa-file-alt"></i></button>
-
-                                <button wire:click="notificar({{ $sesion->id }})" class="btn btn-sm btn-warning" data-toggle="modal" data-target="#roleModal" title="notificar"><i class="far fa-bell"></i></button>
-
-                                <button wire:click="descargarPdf({{ $sesion->id }})" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#roleModal" title="Descargar pdf"><i class="far fa-file-pdf"></i></button>
-
+                                <!-- Simplificación del código eliminando data-toggle y data-target -->
+                                <button wire:click="edit({{ $sesion->id }})" class="btn btn-sm btn-primary" title="Editar"><i class="fa fa-edit"></i></button>
+                                <button wire:click="openOrdenModal({{ $sesion->id }})" class="btn btn-sm btn-info" title="Orden del día"><i class="fas fa-file-alt"></i></button>
+                                <button wire:click="notificar({{ $sesion->id }})" class="btn btn-sm btn-warning" title="Notificar"><i class="far fa-bell"></i></button>
+                                <button wire:click="descargarPdf({{ $sesion->id }})" class="btn btn-sm btn-danger" title="Descargar PDF"><i class="far fa-file-pdf"></i></button>
                                 @if($esAdmin && $sesion->estado == 1)
-                                <button wire:click="iniciarSesion({{ $sesion->id }})" class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#roleModal" title="Iniciar sesión"><i class="fas fa-users"></i></button>
+                                <button wire:click="iniciarSesion({{ $sesion->id }})" class="btn btn-sm btn-secondary" title="Iniciar sesión"><i class="fas fa-users"></i></button>
                                 @endif
                             </td>
                         </tr>
                         @endforeach
                     </tbody>
                 </table>
+                {{ $sesiones->links('layouts.paginator') }}
             </div>
         </div>
-
     </div>
-
 
     @if ($muestraModal == 'block')
     <!-- Role Form Modal -->
@@ -73,7 +173,7 @@
                         Crear Sesión
                         @endif
                     </h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" wire:click="closeModal" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>

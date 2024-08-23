@@ -16,9 +16,13 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Livewire\WithFileUploads;
+use Livewire\WithPagination;
+
 
 class ItemsTemario extends Component
 {
+    use WithPagination;
+
     public $id_item_temario;
     public $tema; // id del tema que viene desde el temario
     protected $facultades;
@@ -38,7 +42,7 @@ class ItemsTemario extends Component
     public $loading = false;
     public $readonly = false;
     public $votaciones = null;
-    public $items;
+    protected $items;
     /**** Propiedades Votacion Activa para edicion / asignacion Items   */
     public $votacionId = 0;
     public $votacionTitulo = "";
@@ -57,6 +61,27 @@ class ItemsTemario extends Component
 
     use WithFileUploads;
     public $file;
+
+
+    //campos de busqueda
+
+    public $searchByComision = '';
+    public $searchByFaculty = '';
+    public $searchByExp = '';
+    public $searchByResolution = '';
+
+    //Campos de ordenamiento
+
+    public $sortColumn = 'id';
+    public $sortDirection = 'desc';
+
+
+    protected $queryString = [
+        'searchByComision',
+        'searchByFaculty',
+        'searchByExp',
+        'searchByResolution',
+    ];
 
     public function guardarArchivos()
     {
@@ -116,7 +141,7 @@ class ItemsTemario extends Component
         }
         $esAdmin = Gate::allows("admin-sesion");
 
-        if ($emptySesion){
+        if ($emptySesion) {
             return view('livewire.admin.items-temario', [
                 'facultades' => null,
                 'comisiones' => null,
@@ -125,14 +150,19 @@ class ItemsTemario extends Component
         }
 
         $this->sesion = Sesion::with(["ordenDia", "temariosOrdenDia" => ["votacionesActivas"]])->withCount("asistentes")->find(session("id_sesion"));
-        $temario = $this->sesion->temariosOrdenDia()->find(session('id_temario'));
+        $this->temario = $this->sesion->temariosOrdenDia()->find(session('id_temario'));
 
-        if (empty($temario)){
+        if (empty($this->temario)) {
             $this->redirect("/admin/temarios");
         }
 
-        $this->votaciones = $temario->votaciones()->withCount(["participantes", "votaronAfirmativo", "votaronNegativo", "votaronAbstenerse"])->get();
-        if ((!$esAdmin && !in_array($this->sesion->ordenDia->id_estado, [2,3,5])) || empty($this->votacionActiva) )
+
+        if (empty($this->temario)) {
+            $this->redirect("/admin/temarios");
+        }
+
+        $this->votaciones = $this->temario->votaciones()->withCount(["participantes", "votaronAfirmativo", "votaronNegativo", "votaronAbstenerse"])->get();
+        if ((!$esAdmin && !in_array($this->sesion->ordenDia->id_estado, [2, 3, 5])) || empty($this->votacionActiva))
             $this->votacionActiva = $this->votaciones->where("estado", 2)->first();
         else $this->votacionActiva = $this->votaciones->where("id", $this->votacionActiva->id)->first();
         if (!$esAdmin) {
@@ -141,12 +171,63 @@ class ItemsTemario extends Component
             $this->votacionTitulo = !empty($this->votacionActiva) ? $this->votacionActiva->titulo : null;
             $this->votacionAceptacion = !empty($this->votacionActiva) ? $this->votacionActiva->aceptacion : null;
         }
-        $this->items = $temario->items()->with(["facultad", "comision", "tema"])->get();
+        $items = $this->temario->items()->with(["facultad", "comision", "tema", "votacion"])
+            ->whereHas('comision', function ($query) {
+                $query->where('name', 'like', '%' . $this->searchByComision . '%');
+            })
+            ->whereHas('facultad', function ($query) {
+                $query->where('name', 'like', '%' . $this->searchByFaculty . '%');
+            })
+            ->where('numero', 'like', '%' . $this->searchByExp . '%')
+            ->where('resolucion', 'like', '%' . $this->searchByResolution . '%')
+            ->orderBy($this->sortColumn, $this->sortDirection)
+            ->paginate(10);
+        // $items = $temario->items()
+        //     ->join('temas', 'items_temario.id_tema', '=', 'temas.id')
+        //     ->join('comisiones', 'items_temario.comision_id', '=', 'comisiones.id')
+        //     ->join('facultades', 'items_temario.facultad_id', '=', 'facultades.id')
+        //     ->leftJoin('votaciones', 'items_temario.id', '=', 'votaciones.id_temario')
+        //     ->with(['facultad', 'comision', 'tema', 'votacion'])
+        //     // ->where('comisiones.name','like','%'.$this->searchByComision.'%')
+        //     // ->where('facultades.name','like','%'.$this->searchByFaculty.'%')
+        //     // ->where('items_temario.numero','like','%'.$this->searchByExp.'%')
+        //     // ->where('items_temario.resolucion','like','%'.$this->searchByResolution.'%')
+        //     ->orderBy($this->sortColumn, $this->sortDirection)
+        //     ->select('*')
+        //     ->paginate(10);
+        // dd($items[1]->id);
         return view('livewire.admin.items-temario', [
+            'items' => $items,
             'facultades' => ModelsFacultad::all(),
-            'comisiones' => ModelsComision::all(),
+            'comisiones' => ModelsComision::where('status', true)->get(),
             'esAdmin' => $esAdmin
         ])->layout('layouts.adminlte');
+    }
+
+
+    public function updating($propertyName)
+    {
+        $this->resetPage();
+    }
+
+
+    public function resetSearchFields()
+    {
+        $this->searchByTopic = '';
+        $this->searchByComision = '';
+        $this->searchByFaculty = '';
+        $this->searchByExp = '';
+        $this->searchByResolution = '';
+    }
+
+    public function sortBy($column)
+    {
+        if ($this->sortColumn === $column) {
+            $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
+        } else {
+            $this->sortColumn = $column;
+            $this->sortDirection = 'asc';
+        }
     }
 
     public function storeItem()
@@ -370,8 +451,9 @@ class ItemsTemario extends Component
             if (in_array($votacion->estado, [2, 3]))
                 $this->votacionActiva = $votacion;
             else $this->votacionActiva = null;
-            $this->emit(['mensajePositivo', ['mensaje' => "Orden Dia con  estado 1 {$this->sesion->ordenDia->id_estado} - {$this->votacionActiva->id} - {$this->votacionActiva->estado}."]]);
-        } else $this->emit(['mensajeNegativo', ['mensaje' => "Orden Dia con  estado 2 {$this->sesion->ordenDia->id_estado}."]]);
+        }
+        // $this->emit(['mensajePositivo', ['mensaje' => "Orden Dia con  estado 1 {$this->sesion->ordenDia->id_estado} - {$this->votacionActiva->id} - {$this->votacionActiva->estado}."]]);
+        // } else $this->emit(['mensajeNegativo', ['mensaje' => "Orden Dia con  estado 2 {$this->sesion->ordenDia->id_estado}."]]);
     }
 
     public function removeVotacion($id)
@@ -400,7 +482,7 @@ class ItemsTemario extends Component
     public function addVotacion($itemId, $votacionId, $add)
     {
         if (Gate::allows("admin-sesion")) {
-            $item = $this->items->where("id", $itemId)->first();
+            $item = $this->temario->items()->where("id", $itemId)->first();
             if ($add) $item->id_votacion = $votacionId;
             elseif ($item->id_votacion == $votacionId) $item->id_votacion = null;
             $item->save();
@@ -427,7 +509,7 @@ class ItemsTemario extends Component
                 if ($votacionParticipantes == $sesionParticipantes) {
                     if ($votacion->aceptacion == "mayoria") $votacion->resultado = ($sesionParticipantes / 2) < $votacionAfirmativos;
                     elseif ($votacion->aceptacion == "absoluto") $votacion->resultado = $sesionParticipantes == $votacionAfirmativos;
-                    elseif ($votacion->aceptacion == "mayoria2/3") $votacion->resultado = ($sesionParticipantes * 2 / 3) <= $votacionAfirmativos;
+                    elseif ($votacion->aceptacion == "mayoria 2/3") $votacion->resultado = ($sesionParticipantes * 2 / 3) <= $votacionAfirmativos;
                     else $votacion->resultado = null;
                 } else $votacion->resultado = null;
             } else {

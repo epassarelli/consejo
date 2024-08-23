@@ -9,8 +9,8 @@
     ============================================= -->
                 <div id="logo">
                     <a href="{{ route('home') }}">
-                        <img class="logo-default" srcset="{{ asset('img/uba.png, img/uba.png 2x') }}" src="img/uba.png" alt="UBA">
-                        <img class="logo-dark" srcset="{{ asset('img/uba.png, img/uba.png 2x') }}" src="img/uba.png" alt="UBA">
+                        <img class="logo-default" src="{{ asset('img/logo_uba.svg') }}" alt="UBA">
+                        {{-- <img class="logo-dark" srcset="{{ asset('img/uba.png, img/uba.png 2x') }}" src="img/uba.png" alt="UBA"> --}}
                     </a>
                 </div><!-- #logo end -->
 

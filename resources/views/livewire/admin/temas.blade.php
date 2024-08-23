@@ -7,17 +7,52 @@
             </div>
 
             <div class="col-md-4 text-right">
-                <button class="btn btn-success" wire:click="openModal"><i class="fas fa-plus-circle mr-2" style="color: white;"></i>Agregar</button>
+                <button class="btn btn-success" wire:click="openCreateModal"><i class="fas fa-plus-circle mr-2" style="color: white;"></i>Agregar</button>
             </div>
 
             <div class="row w-100 mt-3">
                 <div class="col-12">
-                    <table id="basic-table" class="table table-hover table-bordered mt-3">
+                    <table class="table table-hover table-bordered mt-3">
                         <thead>
                             <tr>
-                                <th class="text-center">Id</th>
-                                <th class="text-center">Título</th>
+                                <th wire:click="sortBy('id')" class="text-center" style="width: 5%">Id
+                                    @if($sortColumn == 'id')
+                                        @if($sortDirection == 'asc')
+                                            <i class="fas fa-sort-up"></i>
+                                        
+                                        @else
+                                            <i class="fas fa-sort-down"></i>
+                                        @endif
+                                    @else
+                                        <i class="fas fa-sort"></i>
+                                    @endif
+                                </th>
+                                <th wire:click="sortBy('titulo')" class="text-center">Título
+                                    @if($sortColumn == 'titulo')
+                                        @if($sortDirection == 'asc')
+                                            <i class="fas fa-sort-up"></i>
+                                        
+                                        @else
+                                            <i class="fas fa-sort-down"></i>
+                                        @endif
+                                    @else
+                                        <i class="fas fa-sort"></i>
+                                    @endif
+                                </th>
                                 <th style="width: 15%" class="text-center">Acciones</th>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <th class="align-middle">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <input wire:model="searchByTitle" type="search" placeholder="Buscar por título" class="form-control form-control-sm"></th>
+                                        </div>
+                                    </div>
+                                </th>
+                                <th class="text-center align-middle">
+                                    <button wire:click="resetSearchFields" class="btn btn-sm btn-secondary">Limpiar Búsqueda</button>
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -33,6 +68,7 @@
                             @endforeach
                         </tbody>
                     </table>
+                    {{ $temas->links('layouts.paginator') }}
                 </div>
             </div>
         </div>
