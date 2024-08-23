@@ -7,7 +7,7 @@
             </div>
 
             <div class="col-md-4 text-right">
-                <button class="btn btn-success" wire:click="openModal"><i class="fas fa-plus-circle mr-2" style="color: white;"></i>Agregar</button>
+                <button class="btn btn-success" wire:click="openCreateModal"><i class="fas fa-plus-circle mr-2" style="color: white;"></i>Agregar</button>
             </div>
 
             <div class="row w-100 mt-3">

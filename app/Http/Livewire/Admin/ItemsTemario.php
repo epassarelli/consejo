@@ -172,16 +172,16 @@ class ItemsTemario extends Component
             $this->votacionAceptacion = !empty($this->votacionActiva) ? $this->votacionActiva->aceptacion : null;
         }
         $items = $this->temario->items()->with(["facultad", "comision", "tema", "votacion"])
-        ->whereHas('comision', function ($query) {
-            $query->where('name', 'like', '%'.$this->searchByComision.'%');
-        })
-        ->whereHas('facultad', function ($query) {
-            $query->where('name', 'like', '%'.$this->searchByFaculty.'%');
-        })
-        ->where('numero','like','%'.$this->searchByExp.'%')
-        ->where('resolucion','like','%'.$this->searchByResolution.'%')
-        ->orderBy($this->sortColumn, $this->sortDirection)
-        ->paginate(10);
+            ->whereHas('comision', function ($query) {
+                $query->where('name', 'like', '%' . $this->searchByComision . '%');
+            })
+            ->whereHas('facultad', function ($query) {
+                $query->where('name', 'like', '%' . $this->searchByFaculty . '%');
+            })
+            ->where('numero', 'like', '%' . $this->searchByExp . '%')
+            ->where('resolucion', 'like', '%' . $this->searchByResolution . '%')
+            ->orderBy($this->sortColumn, $this->sortDirection)
+            ->paginate(10);
         // $items = $temario->items()
         //     ->join('temas', 'items_temario.id_tema', '=', 'temas.id')
         //     ->join('comisiones', 'items_temario.comision_id', '=', 'comisiones.id')
@@ -199,7 +199,7 @@ class ItemsTemario extends Component
         return view('livewire.admin.items-temario', [
             'items' => $items,
             'facultades' => ModelsFacultad::all(),
-            'comisiones' => ModelsComision::all(),
+            'comisiones' => ModelsComision::where('status', true)->get(),
             'esAdmin' => $esAdmin
         ])->layout('layouts.adminlte');
     }

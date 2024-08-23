@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Admin;
 use App\Models\Comision;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Livewire\WithPagination;
 
 
@@ -50,6 +51,8 @@ class GestionComisiones extends Component
     public function render()
     {
         $comisiones = Comision::where('name', 'like', '%'.$this->searchByName.'%')
+        ->where('status', true)
+
         ->orderBy($this->sortColumn, $this->sortDirection)
         ->paginate(10);;
 
@@ -88,7 +91,19 @@ class GestionComisiones extends Component
 
         $validatedData = $this->validate([
             'name' => 'required|string',
-            'orden' => 'required|integer|unique:comisiones,orden',
+            'orden' => [
+                'required',
+                'integer',
+                function ($attribute, $value, $fail) {
+                    $exists = DB::table('comisiones')
+                        ->where('orden', $value)
+                        ->where('status', true) // Verifica que el estado sea 'true'
+                        ->exists();
+                    if ($exists) {
+                        $fail('El valor de ' . $attribute . ' ya está en uso.');
+                    }
+                },
+            ],
         ]);
 
         Comision::create([

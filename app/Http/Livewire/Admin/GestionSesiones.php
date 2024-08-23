@@ -21,7 +21,7 @@ class GestionSesiones extends Component
     public $fecha;
     public $urlYoutube;
     public $muestraModal = 'none';
-    public $estados = ['En revisión', 'Publicada', 'Cerrada', 'En sesión', 'Finalizada','Sesionando'];
+    public $estados = ['En revisión', 'Publicada', 'Cerrada', 'En sesión', 'Finalizada', 'Sesionando'];
 
     protected $sesiones;
     protected $listeners = ['delete'];
@@ -88,7 +88,7 @@ class GestionSesiones extends Component
 
         // Aplicar filtros adicionales como el del estado y la lógica de paginación.
         $esAdmin = Gate::allows("admin-sesion");
-        $this->sesiones = $esAdmin ? $query->orderBy($this->sortColumn,$this->sortDirection)->paginate(10) : $query->whereIn("estado", [2, 3, 4])->orderBy($this->sortColumn,$this->sortDirection)->paginate(10);
+        $this->sesiones = $esAdmin ? $query->orderBy($this->sortColumn, $this->sortDirection)->paginate(10) : $query->whereIn("estado", [2, 3, 4])->orderBy($this->sortColumn, $this->sortDirection)->paginate(10);
 
         $esAdmin = Gate::allows("admin-sesion");
         // $this->sesiones = $esAdmin  ? Sesion::whereIn("estado", $indicesAjustados ?: [])->paginate(10) : Sesion::whereIn("estado", [2, 3, 4])->get()->paginate(10);
@@ -217,7 +217,7 @@ class GestionSesiones extends Component
 
     public function notificar()
     {
-        echo 'A la espera de sprint';
+        dd('A la espera de sprint');
     }
     public function descargarPdf($id)
     {
@@ -225,12 +225,16 @@ class GestionSesiones extends Component
     }
     public function iniciarSesion(Sesion $sesion)
     {
-        $sesion->estado = 4;
-        $sesion->save();
-        $sesion->ordenDia->id_estado = 4;
-        $sesion->ordenDia->save();
-
-        $this->emit('mensajePositivo', ['mensaje' => "La sesion cambio a estado '{$this->estados[$sesion->estado - 1]}'"]);
+        $session_en_curso = Sesion::where('estado', '=', 4)->value('id');
+        if (!$session_en_curso) {
+            $sesion->estado = 4;
+            $sesion->save();
+            $sesion->ordenDia->id_estado = 4;
+            $sesion->ordenDia->save();
+            $this->emit('mensajePositivo', ['mensaje' => "La sesion cambio a estado '{$this->estados[$sesion->estado - 1]}'"]);
+        } else {
+            $this->emit('mensajeNegativo', ['mensaje' => "No es posible iniciar esta sesión porque ya hay una sesión en curso."]);
+        }
     }
 
 

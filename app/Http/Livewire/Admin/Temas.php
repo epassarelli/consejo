@@ -30,6 +30,11 @@ class Temas extends Component
         'searchByTitle',
     ];
 
+    private function resetInputFields()
+    {
+        $this->titulo = '';
+    }
+
     public function resetSearchFields()
     {
         $this->searchByTitle = '';
@@ -59,7 +64,7 @@ class Temas extends Component
     public function createTema()
     {
         $this->loading = true;
-    
+
         try {
             $params = $this->validate([
                 'titulo' => 'required|string|unique:temas,titulo',
@@ -77,8 +82,7 @@ class Temas extends Component
             $this->reset(['titulo']);
             $this->closeModal();
             $this->emit('mensajePositivo', ['mensaje' => 'El tema se agregó correctamente']);
-        }
-        catch (\Illuminate\Validation\ValidationException $e) {
+        } catch (\Illuminate\Validation\ValidationException $e) {
             $errors = $e->validator->getMessageBag();
             $this->emit('errorTitulo', ['errores' => $errors]);
         } catch (\Exception $e) {
@@ -95,7 +99,8 @@ class Temas extends Component
         $this->errorTitulo = $errores['errores']['titulo'];
     }
 
-    public function openEditModal($id){
+    public function openEditModal($id)
+    {
         $this->id_tema = $id;
         $temaToUpdate = ModelTemas::find($id);
 
@@ -103,14 +108,21 @@ class Temas extends Component
         if (!empty($temaToUpdate)) {
             $this->titulo = $temaToUpdate->titulo;
         }
-    
-        $this->openModal();
 
+        $this->openModal();
     }
 
-    public function updateTema(){
+    public function openCreateModal()
+    {
+        $this->id_tema = 0;
+        $this->resetInputFields();
+        $this->openModal();
+    }
+
+    public function updateTema()
+    {
         $this->loading = true;
-    
+
         try {
             $params = $this->validate([
                 'titulo' => 'required|string|unique:temas,titulo',
@@ -123,7 +135,7 @@ class Temas extends Component
 
             $temaToUpdate = ModelTemas::find($this->id_tema);
 
-            if(!empty($temaToUpdate)){
+            if (!empty($temaToUpdate)) {
                 $temaToUpdate->titulo =  $params["titulo"];
                 $temaToUpdate->save();
             }
@@ -131,8 +143,7 @@ class Temas extends Component
             $this->reset(['titulo']);
             $this->closeModal();
             $this->emit('mensajePositivo', ['mensaje' => 'El tema se modificó correctamente']);
-        }
-        catch (\Illuminate\Validation\ValidationException $e) {
+        } catch (\Illuminate\Validation\ValidationException $e) {
             $errors = $e->validator->getMessageBag();
             $this->emit('errorTitulo', ['errores' => $errors]);
         } catch (\Exception $e) {
@@ -155,21 +166,22 @@ class Temas extends Component
             }
 
             $this->emit('mensajePositivo', ['mensaje' => 'El tema se eliminó correctamente']);
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             // Manejar otros errores
-            $this->emit('mensajeNegativo', ['mensaje' => 'Error al eliminar el tema: ' . $e->getMessage()]);
+            if($e->getCode() == '23000' && $e->errorInfo[1] == 1451){
+                $this->emit('mensajeNegativo', ['mensaje' => 'No es posible eliminar este tema porque está siendo utilizado por otros módulos del sistema']);
+            }else{
+                $this->emit('mensajeNegativo', ['mensaje' => 'Error al eliminar el tema: ' . $e->getMessage()]);
+            }
         }
     }
 
     public function render()
     {
-        $temas = ModelTemas::where('titulo', 'like', '%'.$this->searchByTitle.'%')
-        ->orderBy($this->sortColumn, $this->sortDirection)
-        ->paginate(10);
+        $temas = ModelTemas::where('titulo', 'like', '%' . $this->searchByTitle . '%')
+            ->orderBy($this->sortColumn, $this->sortDirection)
+            ->paginate(10);
         return view('livewire.admin.temas', ['temas' => $temas])
             ->layout('layouts.adminlte');
     }
-    
-
 }

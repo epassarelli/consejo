@@ -58,6 +58,11 @@ class User extends Authenticatable
         return $this->belongsToMany(Role::class, 'users_roles', 'user_id', 'rol_id');
     }
 
+    public function getRolesAsStringAttribute()
+    {
+        return $this->roles->pluck('name')->implode(', ');
+    }
+
     public function facultad()
     {
         return $this->belongsTo(Facultad::class, 'facultad_id');

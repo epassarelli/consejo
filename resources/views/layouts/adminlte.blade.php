@@ -56,7 +56,7 @@
         //emit mensaje negativo
         Livewire.on('mensajeNegativo', function(mensaje) {
             Swal.fire({
-                title: 'Atencion',
+                title: 'Atención',
                 text: mensaje['mensaje'],
                 icon: 'warning',
                 showCloseButton: true
