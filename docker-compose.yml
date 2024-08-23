@@ -2,48 +2,61 @@ version: '3.8'
 services:
 
   app:
-    build: ./
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: ${APP_NAME}:${APP_VERSION}
+    env_file: .env
+    environment:
+      DB_CONNECTION: ${DB_CONNECTION}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      MAIL_MAILER: ${MAIL_MAILER}
+      MAIL_HOST: ${MAIL_HOST}
+      MAIL_PORT: ${MAIL_PORT}
+      MAIL_ENCRYPTION: ${MAIL_ENCRYPTION}
+      MAIL_AUTHMODE: ${MAIL_AUTHMODE}
+      MAIL_USER: ${MAIL_USER}
+      MAIL_ADMIN: ${MAIL_ADMIN}
+      MAIL_USERNAME: ${MAIL_USERNAME}
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
+      MAIL_FROM_ADDRESS: ${MAIL_FROM_ADDRESS}
+      MAIL_FROM_NAME: ${MAIL_FROM_NAME}
+    working_dir: /var/www/html/
+    volumes:
+      - storage:/var/www/html/storage
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+    networks:
+      - internal
     ports:
-      - 80:80
-      - 443:443
-      - 5173:5173
-    working_dir: /
-    image: consejo_app
-    # volumes:
-      # - ./:/var/www/html
-    #      - ./docker-files/backend/php.ini:/usr/local/etc/php/conf.d/local.ini
+      - ${APP_PORT}:80
     depends_on:
       - db
-    networks:
-      - app-network
 
   db:
     image: mariadb:10.8
-    ports:
-      - 3306:3306
+    # ports:
+    #   - 3306:3306
+    env_file: .env
     environment:
-      MYSQL_DATABASE: consejo
-      MYSQL_ROOT_PASSWORD: consejo
-      MYSQL_PASSWORD: consejo
-      MYSQL_USER: consejo
-    # volumes:
-      # - ./backend/docker-files/db/my.cnf:/etc/mysql/my.cnf
-      # - ./database_local:/var/lib/mysql
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PWD}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - dbdata:/var/lib/mysql/
     networks:
-      - app-network
-
-  # phpmyadmin:
-  #   image: phpmyadmin:5.1.1
-  #   environment:
-  #     PMA_HOST: db
-  #     PMA_USER: consejo
-  #     PMA_PASSWORD: consejo
-  #   ports:
-  #     - 8080:80
-  #   networks:
-  #     - app-network
-  #   links:
-  #     - db:db
+      - internal
 
 networks:
-  app-network:
+  internal:
+
+volumes:
+  storage:
+  dbdata:
