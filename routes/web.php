@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\BusquedaController;
 use Illuminate\Support\Facades\Route;
 
@@ -31,3 +33,8 @@ Route::get('/orden-del-dia/{fecha}/{comision_id}',[OrdendeldiaController::class,
 Route::get('/orden-del-dia/{fecha}',[OrdendeldiaController::class, 'Sesiones']);
 Route::get('/sesiones-anteriores/{fecha}',[OrdendeldiaController::class, 'SesionesAnteriores'])->name('SesionesAnteriores');
 Route::get('/buscador',BusquedaController::class)->name('busqueda');
+
+Route::get('/password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password/reset');
+Route::post('/password/reset', [ResetPasswordController::class, 'reset'])->name('password/reset');
+Route::get('/password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password/reset');
+Route::post('/password/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password/email');
