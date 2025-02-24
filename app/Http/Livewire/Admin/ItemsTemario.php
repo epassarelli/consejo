@@ -35,6 +35,7 @@ class ItemsTemario extends Component
     public $sesion;
     public $numero;
     public $resolucion;
+    public $orden;
     public $resumen;
     public $showModal = 'none';
     public $showActionModal = false;
@@ -69,6 +70,7 @@ class ItemsTemario extends Component
     public $searchByFaculty = '';
     public $searchByExp = '';
     public $searchByResolution = '';
+    public $searchByOrden = '';
 
     //Campos de ordenamiento
 
@@ -81,6 +83,7 @@ class ItemsTemario extends Component
         'searchByFaculty',
         'searchByExp',
         'searchByResolution',
+        'searchByOrden',
     ];
 
     public function guardarArchivos()
@@ -180,6 +183,7 @@ class ItemsTemario extends Component
             })
             ->where('numero', 'like', '%' . $this->searchByExp . '%')
             ->where('resolucion', 'like', '%' . $this->searchByResolution . '%')
+            ->where('orden', 'like', '%' . $this->searchByOrden . '%')
             ->orderBy($this->sortColumn, $this->sortDirection)
             ->paginate(10);
         // $items = $temario->items()
@@ -213,7 +217,6 @@ class ItemsTemario extends Component
 
     public function resetSearchFields()
     {
-        $this->searchByTopic = '';
         $this->searchByComision = '';
         $this->searchByFaculty = '';
         $this->searchByExp = '';
@@ -254,6 +257,7 @@ class ItemsTemario extends Component
                 'comision_id' => $this->comision_id,
                 'facultad_id' => $this->facultad_id,
                 'resolucion' => $this->resolucion,
+                'orden' => $this->orden,
                 'resumen' => $params["resumen"],
                 'tipo' => $params["tipo"]
             ]);
@@ -297,12 +301,13 @@ class ItemsTemario extends Component
                 $ItemToUpdate->comision_id = $this->comision_id; // $params["comision_id"];
                 $ItemToUpdate->facultad_id = $this->facultad_id; // $params["facultad_id"];
                 $ItemToUpdate->resolucion = $this->resolucion; // $params["resolucion"];
+                $ItemToUpdate->orden = $this->orden; // $params["resolucion"];
                 $ItemToUpdate->resumen = $params["resumen"];
                 $ItemToUpdate->tipo = $params["tipo"];
                 $ItemToUpdate->save();
             }
 
-            $this->reset(['numero', 'id_tema', 'comision_id', 'facultad_id', 'facultad_id', 'resolucion', 'resumen', 'tipo']);
+            $this->reset(['numero', 'id_tema', 'comision_id', 'facultad_id', 'facultad_id', 'resolucion','orden', 'resumen', 'tipo']);
             $this->closeModal();
             $this->emit('mensajePositivo', ['mensaje' => 'El item se modificó correctamente']);
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -350,6 +355,7 @@ class ItemsTemario extends Component
             $this->facultad_id = $ItemToUpdate->facultad_id;
             $this->numero = $ItemToUpdate->numero;
             $this->resolucion = $ItemToUpdate->resolucion;
+            $this->orden = $ItemToUpdate->orden;
             $this->tipo = $ItemToUpdate->tipo;
             $this->resumen = $ItemToUpdate->resumen;
             $this->comision_id = $ItemToUpdate->comision_id;
@@ -429,6 +435,7 @@ class ItemsTemario extends Component
         $this->tipo = '';
         $this->numero = '';
         $this->resolucion = '';
+        $this->orden = '';
         $this->resumen = '';
     }
 

@@ -16,18 +16,6 @@
                 <table class="table table-hover table-bordered mt-3">
                     <thead>
                         <tr>
-                            <th wire:click="sortBy('id')" class="text-center" style="width: 5%">Id
-                                @if($sortColumn == 'id')
-                                    @if($sortDirection == 'asc')
-                                        <i class="fas fa-sort-up"></i>
-                                    
-                                    @else
-                                        <i class="fas fa-sort-down"></i>
-                                    @endif
-                                @else
-                                    <i class="fas fa-sort"></i>
-                                @endif
-                            </th>
                             <th wire:click="sortBy('name')" class="text-center">Nombre
                                 @if($sortColumn == 'name')
                                     @if($sortDirection == 'asc')
@@ -55,7 +43,6 @@
                             <th style="width: 15%" class="text-center">Acciones</th>
                         </tr>
                         <tr>
-                            <th></th>
                             <th class="align-middle">
                                 <div class="row">
                                     <div class="col-sm-12">
@@ -63,7 +50,13 @@
                                     </div>
                                 </div>
                             </th>
-                            <th></th>
+                            <th>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <input wire:model="searchByOrden" type="search" placeholder="Buscar por orden" class="form-control form-control-sm"></th>
+                                    </div>
+                                </div>
+                            </th>
                             <th class="text-center align-middle">
                                 <button wire:click="resetSearchFields" class="btn btn-sm btn-secondary">Limpiar Búsqueda</button>
                             </th>
@@ -72,7 +65,6 @@
                     <tbody>
                         @foreach ($comisiones as $comision)
                             <tr>
-                                <td>{{ $comision->id }}</td>
                                 <td>{{ $comision->name }}</td>
                                 <td>{{ $comision->orden }}</td>
                                 <td class="p-1 text-center">

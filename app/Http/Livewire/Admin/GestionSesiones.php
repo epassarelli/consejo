@@ -24,7 +24,8 @@ class GestionSesiones extends Component
     public $estados = ['En revisión', 'Publicada', 'Cerrada', 'En sesión', 'Finalizada', 'Sesionando'];
 
     protected $sesiones;
-    protected $listeners = ['delete'];
+    protected $listeners = ['delete' => 'delete'];
+    
 
     // Campos de busqueda
     public $searchByState = '';
@@ -97,6 +98,30 @@ class GestionSesiones extends Component
             'esAdmin' => $esAdmin
         ])->layout('layouts.adminlte');
     }
+
+    public function delete($id)
+    {
+        try {
+            DB::transaction(function () use ($id) {
+                $sesion = Sesion::withTrashed()->find($id);
+
+                if ($sesion) {
+                    // Simplemente marcamos la sesión como eliminada
+                    $sesion->delete();
+                }
+            });
+
+            $this->emit('mensajePositivo', ['mensaje' => 'La sesión se ha marcado como eliminada correctamente.']);
+        } catch (\Exception $e) {
+            if ($e->getCode() == '23000' && $e->errorInfo[1] == 1451) {
+                $this->emit('mensajeNegativo', ['mensaje' => 'No es posible eliminar esta sesión porque está siendo utilizada por otros módulos del sistema']);
+            } else {
+                $this->emit('mensajeNegativo', ['mensaje' => 'Error al eliminar la sesión: ' . $e->getMessage()]);
+            }
+        }
+    }
+
+
 
 
     public function updating($propertyName)

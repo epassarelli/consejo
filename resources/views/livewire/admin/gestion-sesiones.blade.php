@@ -143,10 +143,38 @@
                                 <!-- Simplificación del código eliminando data-toggle y data-target -->
                                 <button wire:click="edit({{ $sesion->id }})" class="btn btn-sm btn-primary" title="Editar"><i class="fa fa-edit"></i></button>
                                 <button wire:click="openOrdenModal({{ $sesion->id }})" class="btn btn-sm btn-info" title="Orden del día"><i class="fas fa-file-alt"></i></button>
-                                <button wire:click="notificar({{ $sesion->id }})" class="btn btn-sm btn-warning" title="Notificar"><i class="far fa-bell"></i></button>
                                 <button wire:click="descargarPdf({{ $sesion->id }})" class="btn btn-sm btn-danger" title="Descargar PDF"><i class="far fa-file-pdf"></i></button>
+                                <button wire:click="notificar({{ $sesion->id }})" class="btn btn-sm btn-warning" title="Notificar"><i class="far fa-bell"></i></button>
                                 @if($esAdmin && $sesion->estado == 1)
                                 <button wire:click="iniciarSesion({{ $sesion->id }})" class="btn btn-sm btn-secondary" title="Iniciar sesión"><i class="fas fa-users"></i></button>
+                                @endif
+                                {{-- @if($esAdmin && $sesion->estado == 1) pidieron poder elimintar la sesion no importa el estado. --}} 
+                                @if($esAdmin)
+                                <button class="btn btn-sm btn-danger"
+                                    title="Eliminar sesión"
+                                    onclick="confirmarEliminacion({{ $sesion->id }})">
+                                    <i class="fas fa-trash-alt" style="color: white"></i>
+                                </button>
+
+                                <script>
+                                    function confirmarEliminacion(id) {
+                                        Swal.fire({
+                                            title: '¿Estás seguro?',
+                                            text: "Esta acción no se puede deshacer.",
+                                            icon: 'warning',
+                                            showCancelButton: true,
+                                            confirmButtonColor: '#d33',
+                                            cancelButtonColor: '#3085d6',
+                                            confirmButtonText: 'Sí, eliminar',
+                                            cancelButtonText: 'Cancelar'
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                Livewire.emitTo('admin.gestion-sesiones', 'delete', id);
+                                            }
+                                        });
+                                    }
+                                </script>
+
                                 @endif
                             </td>
                         </tr>

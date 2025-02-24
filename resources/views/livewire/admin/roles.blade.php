@@ -16,7 +16,6 @@
         <table class="table table-hover table-bordered mt-3">
             <thead>
                 <tr>
-                    <th class="text-center">Id</th>
                     <th class="text-center">Nombre</th>
                     <th class="text-center">Descripción</th>
                     <th style="width: 10%" class="text-center">Acciones</th>
@@ -25,7 +24,6 @@
             <tbody>
                 @foreach ($roles as $role)
                     <tr>
-                        <td>{{ $role->id }}</td>
                         <td>{{ $role->name }}</td>
                         <td>{{ $role->description }}</td>
                         <td class="p-1 text-center">

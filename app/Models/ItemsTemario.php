@@ -23,7 +23,8 @@ class ItemsTemario extends Model
         'resolucion',
         'resumen',
         'id_votacion',
-        'id_temario'
+        'id_temario',
+        'orden'
     ];
 
     public function tema(): HasOneThrough
@@ -49,7 +50,8 @@ class ItemsTemario extends Model
 
     public function votacion(): BelongsTo
     {
-        return $this->belongsTo(votacion::class, 'votacion_id');
+        return $this->belongsTo(Votacion::class, 'id_votacion'); 
     }
+
 
 }

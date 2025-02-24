@@ -45,6 +45,7 @@ class Users extends Component
     public $searchByLastname = '';
     public $searchByEmail = '';
     public $searchByRoles = '';
+    public $searchByOrden = '';
     //Campos de ordenamiento
 
     public $sortColumn = 'id';
@@ -54,7 +55,8 @@ class Users extends Component
         'searchByName',
         'searchByLastname',
         'searchByEmail',
-        'searchByRoles'
+        'searchByRoles',
+        'searchByOrden',
     ];
 
     protected $users, $roles, $users_roles;
@@ -68,6 +70,7 @@ class Users extends Component
         $query->where('estado', true)
             ->where('email', 'like', '%' . $this->searchByEmail . '%')
             ->where('lastname', 'like', '%' . $this->searchByLastname . '%')
+            ->where('orden', 'like', '%' . $this->searchByOrden . '%')
             ->where('name', 'like', '%' . $this->searchByName . '%');
 
         if (!empty($this->searchByRoles)) {
@@ -109,6 +112,7 @@ class Users extends Component
         $this->searchByName = '';
         $this->searchByLastname = '';
         $this->searchByEmail = '';
+        $this->searchByOrden = '';
     }
 
     public function sortBy($column)
@@ -186,7 +190,6 @@ class Users extends Component
 
     public function storeUser()
     {
-
         $validatedData = $this->validate([
             'lastname' => 'required|string',
             'name' => 'required|string',
@@ -199,6 +202,19 @@ class Users extends Component
             'orden' => 'integer|min:1|nullable',
             'password' => 'required|string|same:repassword',
             'repassword' => 'required|string'
+        ], [
+            'lastname.required' => 'El apellido del usuario es obligatorio.',
+            'name.required' => 'El nombre del usuario es obligatorio.',
+            'email.required' => 'El correo electrónico es obligatorio.',
+            'email.email' => 'El correo electrónico no tiene un formato válido.',
+            'email.unique' => 'El correo electrónico ya está en uso.',
+            'password.required' => 'La contraseña es obligatoria.',
+            'password.same' => 'Las contraseñas no coinciden.',
+            'repassword.required' => 'Debes repetir la contraseña.',
+            'rol_id.required' => 'Debes seleccionar un rol para el usuario.',
+            'rol_id.integer' => 'Debes seleccionar un rol para el usuario.',
+            'cargo_id.integer' => 'Debes seleccionar un cargo para el usuario.',
+            'facultad_id.integer' => 'Debes seleccionar una unidad académica para el usuario.'
         ]);
 
         User::create([
@@ -219,7 +235,7 @@ class Users extends Component
 
         $this->closeModal();
         $this->resetInputFields();
-        $this->emit('mensajePositivo', ['mensaje' => 'Operacion exitosa']);
+        $this->emit('mensajePositivo', ['mensaje' => 'Usuario creado exitosamente.']);
     }
 
     public function updateUser()
@@ -281,6 +297,7 @@ class Users extends Component
     public function closeModal()
     {
         // $this->isOpen = false;
+        $this->resetValidation();
         $this->muestraModal = 'none';
     }
 

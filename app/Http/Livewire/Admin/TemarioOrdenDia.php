@@ -28,6 +28,33 @@ class TemarioOrdenDia extends Component
     private $id_sesion = 0;
     protected $listeners = ['delete', 'update'];
 
+    public $searchByTema = '';
+    public $searchByOrden = '';
+    public $searchByWeb = '';
+    public $searchByItems = '';
+
+    // Campos de ordenamiento
+    public $sortColumn = 'orden';
+    public $sortDirection = 'asc';
+
+
+    protected $queryString = [
+        'searchByTema',
+        'searchByOrden',
+        'searchByWeb'
+    ];
+
+    public function sortBy($column)
+    {
+        if ($this->sortColumn === $column) {
+            $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
+        } else {
+            $this->sortColumn = $column;
+            $this->sortDirection = 'asc';
+        }
+    }
+
+
     public function openModal()
     {
         $this->showActionModal = true;
@@ -47,6 +74,7 @@ class TemarioOrdenDia extends Component
     public function render()
     {
         $this->id_sesion = session('id_sesion');
+
         if (empty($this->id_sesion)) {
             $this->redirect("/admin/sesiones");
             return view('livewire.admin.temario-orden-dia', [
@@ -55,23 +83,63 @@ class TemarioOrdenDia extends Component
             ])->layout('layouts.adminlte');
         }
 
-        $this->sesion = ModelSesion::with(['ordenDia'])
-            ->find($this->id_sesion);
+        $this->sesion = ModelSesion::with(['ordenDia'])->find($this->id_sesion);
 
-        $temariosOrdenDia = $this->sesion->temariosOrdenDia()
-            ->with(['items', 'tema', 'votacionesActivas'])
-            ->paginate(10);
-        // $this->sesion = ModelSesion::with(["temariosOrdenDia" => ["items", "tema", "votacionesActivas"], "ordenDia"])->find($this->id_sesion);
+        $query = ModelTemarioOrdenDia::query()
+            ->where('id_orden_dia', $this->sesion->ordenDia->id)
+            ->join('temas', 'temarios_ordenes_dia.id_tema', '=', 'temas.id')
+            ->select('temarios_ordenes_dia.*', 'temas.titulo as tema_titulo')
+            ->with(['items', 'tema', 'votacionesActivas']);
+
+        // 🔹 Filtro por tema
+        if (!empty($this->searchByTema)) {
+            $query->where('temas.titulo', 'like', '%' . $this->searchByTema . '%');
+        }
+
+        // 🔹 Filtro por Orden
+        if (!empty($this->searchByOrden)) {
+            $query->where('orden', $this->searchByOrden);
+        }
+
+        // 🔹 Filtro por Publicación en Web
+        if ($this->searchByWeb !== '') {
+            $query->where('web', $this->searchByWeb);
+        }
+
+        // 🔹 Filtro por Cantidad de Ítems
+        if (!empty($this->searchByItems)) {
+            $query->withCount('items')->having('items_count', '>=', $this->searchByItems);
+        }
+
+        // 🔹 Ordenamiento
+        if ($this->sortColumn === 'tema_titulo') {
+            $query->orderBy('tema_titulo', $this->sortDirection);
+        } elseif ($this->sortColumn === 'items_count') {
+            $query->withCount('items')->orderBy('items_count', $this->sortDirection);
+        } else {
+            $query->orderBy($this->sortColumn, $this->sortDirection);
+        }
+
+        $temariosOrdenDia = $query->paginate(10);
 
         return view('livewire.admin.temario-orden-dia', [
-            // 'sesion' => $this->sesion,
             'temariosOrdenDia' => $temariosOrdenDia,
-            'temas' => modelTemas::all(),
+            'temas' => ModelTemas::all(),
             "esAdmin" => Gate::allows("admin-sesion")
         ])->layout('layouts.adminlte');
     }
 
-    
+
+
+
+    public function resetFilters()
+    {
+        $this->searchByTema = '';
+        $this->searchByOrden = '';
+        $this->searchByWeb = '';
+        $this->searchByItems = '';
+    }
+
     public function toggleEstado($id)
     {
         $temarioOrdenDia = modelTemarioOrdenDia::find($id);

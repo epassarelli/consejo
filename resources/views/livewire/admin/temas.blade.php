@@ -15,18 +15,6 @@
                     <table class="table table-hover table-bordered mt-3">
                         <thead>
                             <tr>
-                                <th wire:click="sortBy('id')" class="text-center" style="width: 5%">Id
-                                    @if($sortColumn == 'id')
-                                        @if($sortDirection == 'asc')
-                                            <i class="fas fa-sort-up"></i>
-                                        
-                                        @else
-                                            <i class="fas fa-sort-down"></i>
-                                        @endif
-                                    @else
-                                        <i class="fas fa-sort"></i>
-                                    @endif
-                                </th>
                                 <th wire:click="sortBy('titulo')" class="text-center">Título
                                     @if($sortColumn == 'titulo')
                                         @if($sortDirection == 'asc')
@@ -42,7 +30,6 @@
                                 <th style="width: 15%" class="text-center">Acciones</th>
                             </tr>
                             <tr>
-                                <th></th>
                                 <th class="align-middle">
                                     <div class="row">
                                         <div class="col-sm-12">
@@ -58,7 +45,6 @@
                         <tbody>
                             @foreach ($temas as $tema)
                             <tr>
-                                <td>{{ $tema->id }}</td>
                                 <td>{{ $tema->titulo }}</td>
                                 <td class="p-1 text-center">
                                     <button wire:click="openEditModal({{ $tema->id }})" class="btn btn-sm btn-primary" title="Editar"><i class="fa fa-edit"></i></button>

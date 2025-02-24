@@ -66,7 +66,7 @@ class CargosTableSeeder extends Seeder
         
         Cargo::create([
             'id' => '10',
-            'name' => 'Representante no docente',
+            'name' => 'Representante nodocente',
             'status' => true
         ]);
         

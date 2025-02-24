@@ -33,6 +33,7 @@ class Temas extends Component
     private function resetInputFields()
     {
         $this->titulo = '';
+        $this->errorTitulo = [];
     }
 
     public function resetSearchFields()
@@ -52,11 +53,13 @@ class Temas extends Component
 
     public function openModal()
     {
+        $this->resetSearchFields();
         $this->showActionModal = true;
     }
 
     public function closeModal()
     {
+        $this->resetInputFields();
         $this->showActionModal = false;
         $this->loading = false;
     }
@@ -125,7 +128,7 @@ class Temas extends Component
 
         try {
             $params = $this->validate([
-                'titulo' => 'required|string|unique:temas,titulo',
+                'titulo' => 'required|string|unique:temas,titulo,' . $this->id_tema . ',id',
             ], [
                 'titulo.required' => 'El campo título es obligatorio.',
                 'titulo.string' => 'El campo título debe ser una cadena de texto.',
@@ -142,6 +145,7 @@ class Temas extends Component
 
             $this->reset(['titulo']);
             $this->closeModal();
+            $this->resetInputFields();
             $this->emit('mensajePositivo', ['mensaje' => 'El tema se modificó correctamente']);
         } catch (\Illuminate\Validation\ValidationException $e) {
             $errors = $e->validator->getMessageBag();

@@ -24,6 +24,7 @@ class GestionComisiones extends Component
 
     // Campos de busqueda
     public $searchByName = '';
+    public $searchByOrden = '';
     //Campos de ordenamiento
 
     public $sortColumn = 'id';
@@ -31,11 +32,13 @@ class GestionComisiones extends Component
 
     protected $queryString = [
         'searchByName',
+        'searchByOrden',
     ];
 
     public function resetSearchFields()
     {
         $this->searchByName = '';
+        $this->searchByOrden = '';
     }
 
     public function sortBy($column)
@@ -51,6 +54,7 @@ class GestionComisiones extends Component
     public function render()
     {
         $comisiones = Comision::where('name', 'like', '%'.$this->searchByName.'%')
+        ->where('orden', 'like', '%'.$this->searchByOrden.'%')
         ->where('status', true)
 
         ->orderBy($this->sortColumn, $this->sortDirection)
@@ -120,10 +124,23 @@ class GestionComisiones extends Component
 
     public function updateComision()
     {
-
         $validatedData = $this->validate([
             'name' => 'required|string',
-            'orden' => 'required|integer|unique:comisiones,orden,' . $this->comision_id
+            'orden' => [
+                'required',
+                'integer',
+                function ($attribute, $value, $fail) {
+                    $exists = DB::table('comisiones')
+                        ->where('orden', $value)
+                        ->where('status', 1) // Filtra solo registros activos
+                        ->where('id', '!=', $this->comision_id) // Ignora la comisión actual
+                        ->exists();
+
+                    if ($exists) {
+                        $fail('El número de orden ya está en uso por otra comisión activa.');
+                    }
+                },
+            ],
         ]);
 
         Comision::where('id', $this->comision_id)->update([
@@ -131,10 +148,12 @@ class GestionComisiones extends Component
             'name' => $validatedData['name'],
             'orden' => $validatedData['orden']
         ]);
+
         $this->closeModal();
         $this->resetInputFields();
-        $this->emit('mensajePositivo', ['mensaje' => 'Operacion exitosa']);
+        $this->emit('mensajePositivo', ['mensaje' => 'Operación exitosa']);
     }
+
 
 
     public function delete($id)
@@ -149,6 +168,7 @@ class GestionComisiones extends Component
     public function closeModal()
     {
         // $this->isOpen = false;
+        $this->resetValidation();
         $this->muestraModal = 'none';
     }
 
