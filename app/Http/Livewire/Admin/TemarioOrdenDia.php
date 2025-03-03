@@ -106,19 +106,25 @@ class TemarioOrdenDia extends Component
             $query->where('web', $this->searchByWeb);
         }
 
+        // Agregar withCount solo una vez si es necesario
+        if (!empty($this->searchByItems) || $this->sortColumn === 'items_count') {
+            $query->withCount('items');
+        }
+
         // 🔹 Filtro por Cantidad de Ítems
         if (!empty($this->searchByItems)) {
-            $query->withCount('items')->having('items_count', '>=', $this->searchByItems);
+            $query->having('items_count', '>=', $this->searchByItems);
         }
 
         // 🔹 Ordenamiento
         if ($this->sortColumn === 'tema_titulo') {
             $query->orderBy('tema_titulo', $this->sortDirection);
         } elseif ($this->sortColumn === 'items_count') {
-            $query->withCount('items')->orderBy('items_count', $this->sortDirection);
+            $query->orderBy('items_count', $this->sortDirection);
         } else {
             $query->orderBy($this->sortColumn, $this->sortDirection);
         }
+
 
         $temariosOrdenDia = $query->paginate(10);
 

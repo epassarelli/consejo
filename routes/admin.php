@@ -27,7 +27,7 @@ use App\Http\Controllers\PdfController;
 |
 */
 
-Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+Route::get('/', GestionSesiones::class, 'index')->name('sesiones');
 Route::get('/roles', Roles::class)->name('roles');
 Route::get('/users', Users::class)->name('users');
 Route::get('/comisiones', GestionComisiones::class)->name('comisiones');

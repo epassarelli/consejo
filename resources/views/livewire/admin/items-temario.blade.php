@@ -174,8 +174,8 @@
                         <thead>
                             <tr>
                                 <th class="text-center">TEMA</th>
-                                <th wire:click="sortBy('comision')" class="text-center">COMISIÓN
-                                    @if ($sortColumn == 'comision')
+                                <th wire:click="sortBy('comision_id')" class="text-center">COMISIÓN
+                                    @if ($sortColumn == 'comision_id')
                                         @if ($sortDirection == 'asc')
                                             <i class="fas fa-sort-up"></i>
                                         @else
@@ -185,8 +185,8 @@
                                         <i class="fas fa-sort"></i>
                                     @endif
                                 </th>
-                                <th wire:click="sortBy('faculty')" class="text-center">UNIDAD ACADÉMICA
-                                    @if ($sortColumn == 'faculty')
+                                <th wire:click="sortBy('facultad_id')" class="text-center">UNIDAD ACADÉMICA
+                                    @if ($sortColumn == 'facultad_id')
                                         @if ($sortDirection == 'asc')
                                             <i class="fas fa-sort-up"></i>
                                         @else

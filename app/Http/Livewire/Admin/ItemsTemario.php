@@ -181,7 +181,20 @@ class ItemsTemario extends Component
             ->whereHas('facultad', function ($query) {
                 $query->where('name', 'like', '%' . $this->searchByFaculty . '%');
             })
-            ->where('numero', 'like', '%' . $this->searchByExp . '%')
+            ->where(function ($query) {
+                $query->where('numero', 'like', '%' . $this->searchByExp . '%');
+            
+                // Filtrar por tipo de expediente o nota según el input
+                if (!empty($this->searchByExp)) {
+                    $searchLower = strtolower($this->searchByExp);
+            
+                    if (str_starts_with($searchLower, 'exp')) {
+                        $query->orWhere('tipo', 'EXPEDIENTE');
+                    } elseif (str_starts_with($searchLower, 'no') || str_starts_with($searchLower, 'not')) {
+                        $query->orWhere('tipo', 'NOTA');
+                    }
+                }
+            })
             ->where('resolucion', 'like', '%' . $this->searchByResolution . '%')
             ->where('orden', 'like', '%' . $this->searchByOrden . '%')
             ->orderBy($this->sortColumn, $this->sortDirection)
